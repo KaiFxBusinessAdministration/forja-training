@@ -1016,6 +1016,18 @@ button{
     cursor:pointer;
 }
 
+/* Estas fotos llevan el logotipo integrado; se conserva completo en sus heroes. */
+.page-hero img.profile-hero-image,
+.page-hero img.trainer-clients-hero{
+    object-position:center center;
+    object-fit:contain;
+    background:#050706;
+}
+
+.topbar .profile-clickable{
+    object-position:left top;
+}
+
 .profile-clickable:hover{
     filter:brightness(1.08);
     outline:2px solid rgba(215,249,138,.55);
