@@ -1,0 +1,130 @@
+{
+    "clienteId": 99,
+    "rutinaActual": {
+        "nombre": "Fuerza e hipertrofia 3 días",
+        "semana": [
+            {
+                "dia": "Lunes",
+                "enfoque": "Empuje",
+                "ejercicios": [
+                    {
+                        "nombre": "Press banca",
+                        "grupo": "Pecho",
+                        "series": 4,
+                        "repeticiones": "6-8",
+                        "peso": "82 kg",
+                        "descanso": "120 s",
+                        "indicacion": "Controla la bajada y deja 1-2 repeticiones en reserva."
+                    },
+                    {
+                        "nombre": "Press inclinado con mancuernas",
+                        "grupo": "Pecho",
+                        "series": 3,
+                        "repeticiones": "8-10",
+                        "peso": "28 kg",
+                        "descanso": "90 s",
+                        "indicacion": "Mantén escápulas firmes y recorrido limpio."
+                    },
+                    {
+                        "nombre": "Press militar",
+                        "grupo": "Hombros",
+                        "series": 3,
+                        "repeticiones": "6-8",
+                        "peso": "42 kg",
+                        "descanso": "120 s",
+                        "indicacion": "Evita arquear la espalda al bloquear arriba."
+                    }
+                ]
+            },
+            {
+                "dia": "Miércoles",
+                "enfoque": "Tracción",
+                "ejercicios": [
+                    {
+                        "nombre": "Dominadas asistidas",
+                        "grupo": "Espalda",
+                        "series": 4,
+                        "repeticiones": "6-8",
+                        "peso": "Asistencia ligera",
+                        "descanso": "120 s",
+                        "indicacion": "Inicia con depresión escapular antes de flexionar codos."
+                    },
+                    {
+                        "nombre": "Remo con barra",
+                        "grupo": "Espalda",
+                        "series": 4,
+                        "repeticiones": "8",
+                        "peso": "70 kg",
+                        "descanso": "120 s",
+                        "indicacion": "Tira hacia la cadera sin perder posición lumbar."
+                    },
+                    {
+                        "nombre": "Curl bíceps con barra",
+                        "grupo": "Bíceps",
+                        "series": 3,
+                        "repeticiones": "10-12",
+                        "peso": "30 kg",
+                        "descanso": "75 s",
+                        "indicacion": "Codos quietos, evita balanceo."
+                    }
+                ]
+            },
+            {
+                "dia": "Viernes",
+                "enfoque": "Piernas y core",
+                "ejercicios": [
+                    {
+                        "nombre": "Sentadilla trasera",
+                        "grupo": "Piernas",
+                        "series": 4,
+                        "repeticiones": "5-6",
+                        "peso": "110 kg",
+                        "descanso": "150 s",
+                        "indicacion": "Profundidad consistente y rodillas alineadas."
+                    },
+                    {
+                        "nombre": "Peso muerto rumano",
+                        "grupo": "Piernas",
+                        "series": 3,
+                        "repeticiones": "8",
+                        "peso": "90 kg",
+                        "descanso": "120 s",
+                        "indicacion": "Bisagra de cadera, barra cerca del cuerpo."
+                    },
+                    {
+                        "nombre": "Plancha",
+                        "grupo": "Core",
+                        "series": 3,
+                        "repeticiones": "45 s",
+                        "peso": "Peso corporal",
+                        "descanso": "60 s",
+                        "indicacion": "Glúteos activos y costillas abajo."
+                    }
+                ]
+            }
+        ]
+    },
+    "progreso": {
+        "fuerza": "+14%",
+        "pesoCorporal": "-1.8 kg",
+        "consistencia": "94%",
+        "fatiga": "Moderada",
+        "marcas": [
+            {
+                "ejercicio": "Sentadilla trasera",
+                "actual": "110 kg",
+                "anterior": "102.5 kg"
+            },
+            {
+                "ejercicio": "Press banca",
+                "actual": "82 kg",
+                "anterior": "77.5 kg"
+            },
+            {
+                "ejercicio": "Remo con barra",
+                "actual": "70 kg",
+                "anterior": "65 kg"
+            }
+        ]
+    }
+}

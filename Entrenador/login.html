@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="../Assets/img/forja-favicon.png?v=forja-favicon-2">
+<title>Login Entrenador | Flow Fitness</title>
+<link rel="stylesheet" href="../Assets/css/style.css?v=forja-logo-1">
+<script src="../Assets/js/vendor/supabase.min.js"></script>
+<script src="../Assets/js/backend-config.js"></script>
+<script src="../Assets/js/backend.js"></script>
+<script src="../Assets/js/auth.js?v=reset-3"></script>
+</head>
+<body class="landing auth-screen" style="--landing-image:url('../Assets/img/trainer-dashboard.jpg')">
+<img class="landing-bg" src="../Assets/img/trainer-dashboard.jpg" alt="Entrenador masculino gestionando el progreso de su cliente">
+<div class="landing-container">
+<div class="logo-box">
+<div class="auth-logo"><img src="../Assets/img/forja-training-logo.png?v=forja-logo-1" alt="FORJA TRAINING"></div>
+<p>Acceso de entrenador</p>
+</div>
+<form class="client-form" id="loginCliente" style="width:100%;max-width:460px;text-align:left">
+<div>
+<label for="loginEmail">Email</label>
+<input id="loginEmail" type="email" placeholder="entrenador@forjatraining.com" required>
+</div>
+<div>
+<label for="loginPassword">Contraseña</label>
+<input id="loginPassword" type="password" placeholder="••••••••" required>
+</div>
+<button class="btn-primary" type="submit">Entrar al panel</button>
+<button class="btn-secondary" type="button" id="recuperarPassword">Recuperar contraseña</button>
+<p class="form-status" id="loginEstado" aria-live="polite"></p>
+</form>
+<form class="client-form auth-reset-form" id="resetPasswordForm" hidden style="width:100%;max-width:460px;text-align:left">
+<div><label for="newPassword">Nueva contraseña</label><input id="newPassword" type="password" minlength="8" required></div>
+<div><label for="confirmPassword">Repetir contraseña</label><input id="confirmPassword" type="password" minlength="8" required></div>
+<button class="btn-primary" type="submit">Guardar nueva contraseña</button>
+<p class="form-status" id="resetEstado" aria-live="polite"></p>
+</form>
+<a class="btn-secondary" href="../role.html">Cambiar rol</a>
+</div>
+<script>
+const loginForm=document.getElementById("loginCliente");
+const loginEstado=document.getElementById("loginEstado");
+const resetForm=document.getElementById("resetPasswordForm");
+const resetEstado=document.getElementById("resetEstado");
+if(window.location.hash.includes("access_token") || new URLSearchParams(window.location.search).get("reset")==="1"){
+loginForm.hidden=true;
+document.getElementById("recuperarPassword").hidden=true;
+resetForm.hidden=false;
+document.querySelector(".logo-box p").textContent="Cambia tu contraseña";
+}
+loginForm.addEventListener("submit",async(event)=>{
+event.preventDefault();
+loginEstado.textContent="Comprobando acceso...";
+try{
+const profile=await window.FLOW_AUTH.signIn(document.getElementById("loginEmail").value.trim(),document.getElementById("loginPassword").value);
+window.location.href=window.FLOW_AUTH.destination(profile.role);
+}catch(error){
+loginEstado.textContent=error.message.includes("Invalid login credentials") ? "Correo o contraseña incorrectos." : error.message;
+}
+});
+document.getElementById("recuperarPassword").addEventListener("click",async()=>{
+const email=document.getElementById("loginEmail").value.trim();
+if(!email){loginEstado.textContent="Escribe tu correo para recuperar la contraseña.";return;}
+try{await window.FLOW_AUTH.resetPassword(email);loginEstado.textContent="Te enviamos un enlace para recuperar tu contraseña.";}catch(error){loginEstado.textContent=error.message;}
+});
+resetForm.addEventListener("submit",async(event)=>{
+event.preventDefault();
+const password=document.getElementById("newPassword").value;
+if(password!==document.getElementById("confirmPassword").value){resetEstado.textContent="Las contraseñas no coinciden.";return;}
+resetEstado.textContent="Guardando...";
+try{await window.FLOW_AUTH.updatePassword(password);resetEstado.textContent="Contraseña actualizada. Ya puedes iniciar sesión.";resetForm.reset();}catch(error){resetEstado.textContent=error.message;}
+});
+</script>
+</body>
+</html>
+
+
+
+
+

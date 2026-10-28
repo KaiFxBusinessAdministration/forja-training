@@ -1,0 +1,3 @@
+window.FLOW_CONFIG = {
+    WHATSAPP_NUMBER: "5930992506531"
+};

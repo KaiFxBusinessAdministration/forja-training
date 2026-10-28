@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="../Assets/img/forja-favicon.png?v=forja-favicon-2">
+
+<title>Alimentación | Flow Fitness</title>
+
+<link rel="stylesheet" href="../Assets/css/style.css">
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<div class="app-container">
+
+
+<aside class="sidebar">
+
+
+<div class="brand">
+
+<h2>FORJA TRAINING</h2>
+
+<span>Trainer System</span>
+
+</div>
+
+
+<nav>
+
+<a href="dashboard.html">
+Dashboard
+</a>
+
+<a href="clientes.html">
+Clientes
+</a>
+
+<a href="entrenamiento.html">
+Entrenamientos
+</a>
+
+<a class="active" href="alimentacion.html">
+Alimentación
+</a>
+
+<a href="reportes.html">
+Reportes
+</a>
+
+</nav>
+
+
+</aside>
+
+
+
+<main class="main-content">
+
+
+<header class="topbar">
+
+<div>
+
+<h1>
+Alimentación
+</h1>
+
+<p>
+Planes nutricionales personalizados
+</p>
+
+</div>
+
+</header>
+
+<section class="page-hero">
+<div class="page-hero-content">
+<h2>Nutrición guiada para sostener resultados</h2>
+<p>Relaciona cada plan alimenticio con el objetivo de entrenamiento y el contexto real del alumno.</p>
+</div>
+<img src="../Assets/img/trainer-nutrition.jpg" alt="Entrenador masculino explicando un plan de entrenamiento a un cliente masculino">
+</section>
+
+
+<section class="dashboard-panel">
+
+<h2>
+Información general del plan
+</h2>
+
+<form class="nutrition-form" id="planNutricionalForm">
+
+<div class="form-grid">
+
+<div>
+<label for="planCliente">Cliente</label>
+<select id="planCliente" required>
+<option value="">Seleccionar cliente</option>
+</select>
+</div>
+
+<div>
+<label for="objetivoNutricional">Objetivo nutricional</label>
+<select id="objetivoNutricional" required>
+<option value="">Seleccionar objetivo</option>
+<option>Hipertrofia</option>
+<option>Pérdida de grasa</option>
+<option>Mantenimiento</option>
+<option>Rendimiento</option>
+<option>Salud metabólica</option>
+</select>
+</div>
+
+<div>
+<label for="caloriasObjetivo">Calorías objetivo</label>
+<select id="caloriasObjetivo" required>
+<option value="">Seleccionar calorías</option>
+<option>1600</option>
+<option>1800</option>
+<option>2000</option>
+<option>2200</option>
+<option>2500</option>
+<option>2800</option>
+<option>3200</option>
+</select>
+</div>
+
+<div>
+<label for="proteinasPlan">Proteínas (g)</label>
+<select id="proteinasPlan" required>
+<option value="">Seleccionar proteínas</option>
+<option>90</option>
+<option>110</option>
+<option>130</option>
+<option>150</option>
+<option>180</option>
+<option>200</option>
+</select>
+</div>
+
+<div>
+<label for="carbohidratosPlan">Carbohidratos (g)</label>
+<select id="carbohidratosPlan" required>
+<option value="">Seleccionar carbohidratos</option>
+<option>120</option>
+<option>160</option>
+<option>200</option>
+<option>250</option>
+<option>300</option>
+<option>350</option>
+</select>
+</div>
+
+<div>
+<label for="grasasPlan">Grasas (g)</label>
+<select id="grasasPlan" required>
+<option value="">Seleccionar grasas</option>
+<option>45</option>
+<option>55</option>
+<option>65</option>
+<option>75</option>
+<option>90</option>
+</select>
+</div>
+
+<div>
+<label for="aguaPlan">Agua diaria (L)</label>
+<select id="aguaPlan" required>
+<option value="">Seleccionar agua</option>
+<option>2</option>
+<option>2.5</option>
+<option>3</option>
+<option>3.5</option>
+<option>4</option>
+</select>
+</div>
+
+</div>
+
+<div class="form-actions">
+<button type="button" class="btn-secondary" id="nuevoPlan">
++Nuevo Plan
+</button>
+
+<button type="submit" class="btn-primary">
+Guardar Plan
+</button>
+</div>
+
+<div class="form-status" id="planEstado" aria-live="polite"></div>
+
+</form>
+
+</section>
+
+
+<section class="dashboard-panel">
+
+<h2>
+Distribución diaria de comidas
+</h2>
+
+<div class="form-actions">
+<button type="button" class="btn-secondary" id="agregarComida">
++Agregar comida
+</button>
+</div>
+
+<div class="meal-list" id="listaComidas"></div>
+
+</section>
+
+
+
+<section class="dashboard-panel">
+
+
+<h2>
+Planes actuales
+</h2>
+
+
+<div class="activity">
+
+
+<p>Desayuno: Avena + proteína + fruta</p>
+
+<p>Almuerzo: Pollo + arroz + vegetales</p>
+
+<p>Cena: Proteína + ensalada</p>
+
+<p>Suplementación: Creatina + vitaminas</p>
+
+
+</div>
+
+
+</section>
+
+
+</main>
+
+
+</div>
+
+
+<script src="../Assets/js/app.js"></script>
+
+<script>
+const planForm = document.getElementById("planNutricionalForm");
+const planCliente = document.getElementById("planCliente");
+const planEstado = document.getElementById("planEstado");
+const listaComidas = document.getElementById("listaComidas");
+const agregarComida = document.getElementById("agregarComida");
+const nuevoPlan = document.getElementById("nuevoPlan");
+
+async function cargarClientesPlan(){
+try{
+const clientes = await window.flowLoadClientes("../Data/clientes.json");
+clientes.forEach(cliente=>{
+const option = document.createElement("option");
+option.value = cliente.id;
+option.textContent = cliente.nombre;
+planCliente.appendChild(option);
+});
+}catch(error){
+planEstado.textContent = "No se pudieron cargar los clientes.";
+}
+}
+
+function crearComida(){
+const row = document.createElement("div");
+row.className = "meal-row";
+const fieldId = `meal-${Date.now()}`;
+row.innerHTML = `
+<div>
+<label for="${fieldId}-comida">Comida</label>
+<select id="${fieldId}-comida" class="meal-comida" required>
+<option>Desayuno</option>
+<option>Media mañana</option>
+<option>Almuerzo</option>
+<option>Merienda</option>
+<option>Cena</option>
+<option>Post entrenamiento</option>
+</select>
+</div>
+<div>
+<label for="${fieldId}-hora">Hora</label>
+<select id="${fieldId}-hora" class="meal-hora" required>
+<option>06:00</option>
+<option>07:00</option>
+<option>08:00</option>
+<option>10:00</option>
+<option>12:00</option>
+<option>14:00</option>
+<option>16:00</option>
+<option>18:00</option>
+<option>20:00</option>
+<option>22:00</option>
+</select>
+</div>
+<div>
+<label for="${fieldId}-alimento">Alimento</label>
+<input id="${fieldId}-alimento" class="meal-input meal-alimento" type="text">
+</div>
+<div>
+<label for="${fieldId}-cantidad">Cantidad</label>
+<input id="${fieldId}-cantidad" class="meal-input meal-cantidad" type="text">
+</div>
+<div>
+<label for="${fieldId}-unidad">Unidad</label>
+<input id="${fieldId}-unidad" class="meal-input meal-unidad" type="text">
+</div>
+<div>
+<label for="${fieldId}-calorias">Calorías</label>
+<input id="${fieldId}-calorias" class="meal-input meal-calorias" type="text">
+</div>
+<div>
+<label for="${fieldId}-proteinas">Proteínas</label>
+<input id="${fieldId}-proteinas" class="meal-input meal-proteinas" type="text">
+</div>
+<div>
+<label for="${fieldId}-carbohidratos">Carbohidratos</label>
+<input id="${fieldId}-carbohidratos" class="meal-input meal-carbohidratos" type="text">
+</div>
+<div>
+<label for="${fieldId}-grasas">Grasas</label>
+<input id="${fieldId}-grasas" class="meal-input meal-grasas" type="text">
+</div>
+<div>
+<label for="${fieldId}-observaciones">Observaciones</label>
+<input id="${fieldId}-observaciones" class="meal-input meal-observaciones" type="text">
+</div>
+<button type="button" class="meal-remove" aria-label="Eliminar comida">X</button>
+`;
+row.querySelector(".meal-remove").addEventListener("click",()=>{
+row.remove();
+});
+listaComidas.appendChild(row);
+}
+
+function limpiarPlan(){
+planForm.reset();
+listaComidas.innerHTML = "";
+crearComida();
+planEstado.textContent = "";
+}
+
+function obtenerValor(row,selector){
+const field = row.querySelector(selector);
+return field ? field.value : "";
+}
+
+planForm.addEventListener("submit",(event)=>{
+event.preventDefault();
+const comidas = [...listaComidas.querySelectorAll(".meal-row")].map(row=>({
+comida: obtenerValor(row,".meal-comida"),
+hora: obtenerValor(row,".meal-hora"),
+alimento: obtenerValor(row,".meal-alimento"),
+cantidad: obtenerValor(row,".meal-cantidad"),
+unidad: obtenerValor(row,".meal-unidad"),
+calorias: obtenerValor(row,".meal-calorias"),
+proteinas: obtenerValor(row,".meal-proteinas"),
+carbohidratos: obtenerValor(row,".meal-carbohidratos"),
+grasas: obtenerValor(row,".meal-grasas"),
+observaciones: obtenerValor(row,".meal-observaciones")
+}));
+const plan = {
+id: `plan-${planCliente.value}`,
+cliente: planCliente.options[planCliente.selectedIndex].text,
+clienteId: planCliente.value,
+objetivoNutricional: document.getElementById("objetivoNutricional").value,
+caloriasObjetivo: document.getElementById("caloriasObjetivo").value,
+proteinas: document.getElementById("proteinasPlan").value,
+carbohidratos: document.getElementById("carbohidratosPlan").value,
+grasas: document.getElementById("grasasPlan").value,
+aguaDiaria: document.getElementById("aguaPlan").value,
+comidas,
+fecha: new Date().toISOString()
+};
+const planes = JSON.parse(localStorage.getItem("flowPlanesNutricionales") || "[]");
+const indicePlan = planes.findIndex(item=>String(item.clienteId)===String(plan.clienteId));
+if(indicePlan >= 0){
+planes[indicePlan] = plan;
+}else{
+planes.push(plan);
+}
+localStorage.setItem("flowPlanesNutricionales",JSON.stringify(planes));
+planEstado.textContent = indicePlan >= 0 ? "Plan actualizado correctamente." : "Plan guardado correctamente.";
+});
+
+nuevoPlan.addEventListener("click",limpiarPlan);
+agregarComida.addEventListener("click",crearComida);
+
+cargarClientesPlan();
+crearComida();
+</script>
+
+</body>
+
+</html>

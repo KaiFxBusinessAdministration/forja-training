@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="../Assets/img/forja-favicon.png?v=forja-favicon-2">
+
+<title>Perfil Cliente | Flow Fitness</title>
+
+<link rel="stylesheet" href="../Assets/css/style.css">
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<div class="app-container">
+
+
+<aside class="sidebar">
+
+<div class="brand">
+
+<h2>FORJA TRAINING</h2>
+
+<span>Trainer System</span>
+
+</div>
+
+
+<nav>
+
+<a href="dashboard.html">
+Dashboard
+</a>
+
+<a class="active" href="clientes.html">
+Clientes
+</a>
+
+<a href="entrenamiento.html">
+Entrenamientos
+</a>
+
+<a href="alimentacion.html">
+Alimentación
+</a>
+
+<a href="reportes.html">
+Reportes
+</a>
+
+</nav>
+
+</aside>
+
+
+
+<main class="main-content">
+
+
+<header class="topbar">
+
+<div>
+
+<h1>
+Perfil Cliente
+</h1>
+
+<p>
+Ficha completa del alumno
+</p>
+
+</div>
+
+
+<a href="clientes.html" class="btn-primary">
+Volver
+</a>
+
+
+</header>
+
+
+
+<section class="profile-header dashboard-panel">
+
+
+<img 
+src="../Assets/img/trainer-profile-client.jpg"
+class="client-photo"
+alt="Cliente"
+>
+
+
+<div>
+
+<h2 id="nombreCliente">
+Cargando...
+</h2>
+
+<p>
+Objetivo:
+<strong id="objetivoCliente">
+-
+</strong>
+</p>
+
+</div>
+
+
+</section>
+
+<section class="visual-panel">
+<img src="../Assets/img/trainer-profile-client.jpg" alt="Entrenador masculino corrigiendo la ejecución de un cliente masculino durante entrenamiento">
+<div>
+<h2>Plan activo con seguimiento técnico</h2>
+<p>La ficha concentra datos físicos, objetivo y evolución para facilitar decisiones de entrenamiento en cada revisión.</p>
+</div>
+</section>
+
+
+
+<section class="kpi-grid">
+
+
+<div class="kpi-card">
+
+<h3>
+Peso
+</h3>
+
+<strong id="pesoCliente">
+-
+</strong>
+
+</div>
+
+
+
+<div class="kpi-card">
+
+<h3>
+Altura
+</h3>
+
+<strong id="alturaCliente">
+-
+</strong>
+
+</div>
+
+
+
+<div class="kpi-card">
+
+<h3>
+IMC
+</h3>
+
+<strong id="imcCliente">
+-
+</strong>
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+<h2>
+Datos Físicos
+</h2>
+
+
+<div class="activity">
+
+
+<p>
+Edad:
+<strong id="edadCliente">
+-
+</strong>
+años
+</p>
+
+
+<p>
+Estado:
+<strong id="estadoCliente">
+-
+</strong>
+</p>
+
+
+<p>
+Entrenador:
+Andrés Vega
+</p>
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+<h2>
+Historial
+</h2>
+
+
+<div class="activity">
+
+
+<p>
+<svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2.25a9.75 9.75 0 0 0-8.43 14.64L2.2 21.8l5.08-1.33A9.75 9.75 0 1 0 12 2.25Zm0 17.8a8.02 8.02 0 0 1-4.1-1.12l-.3-.18-3.02.79.81-2.94-.2-.31A8.05 8.05 0 1 1 12 20.05Zm4.42-5.98c-.24-.12-1.42-.7-1.64-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.94-1.2-.72-.64-1.2-1.42-1.34-1.66-.14-.24-.02-.37.1-.49.1-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.26-.74-1.69-.2-.44-.42-.5-.58-.5h-.5c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.32.98 2.48c.12.16 1.69 2.58 4.1 3.62.58.25 1.04.4 1.4.52.59.19 1.13.16 1.55.1.48-.07 1.48-.6 1.69-1.18.2-.58.2-1.08.14-1.18-.06-.1-.22-.16-.46-.28Z"/></svg>
+Registro inicial creado
+</p>
+
+<p>
+<svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2.25a9.75 9.75 0 0 0-8.43 14.64L2.2 21.8l5.08-1.33A9.75 9.75 0 1 0 12 2.25Zm0 17.8a8.02 8.02 0 0 1-4.1-1.12l-.3-.18-3.02.79.81-2.94-.2-.31A8.05 8.05 0 1 1 12 20.05Zm4.42-5.98c-.24-.12-1.42-.7-1.64-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.94-1.2-.72-.64-1.2-1.42-1.34-1.66-.14-.24-.02-.37.1-.49.1-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.26-.74-1.69-.2-.44-.42-.5-.58-.5h-.5c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.32.98 2.48c.12.16 1.69 2.58 4.1 3.62.58.25 1.04.4 1.4.52.59.19 1.13.16 1.55.1.48-.07 1.48-.6 1.69-1.18.2-.58.2-1.08.14-1.18-.06-.1-.22-.16-.46-.28Z"/></svg>
+Seguimiento semanal activo
+</p>
+
+<p>
+<svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2.25a9.75 9.75 0 0 0-8.43 14.64L2.2 21.8l5.08-1.33A9.75 9.75 0 1 0 12 2.25Zm0 17.8a8.02 8.02 0 0 1-4.1-1.12l-.3-.18-3.02.79.81-2.94-.2-.31A8.05 8.05 0 1 1 12 20.05Zm4.42-5.98c-.24-.12-1.42-.7-1.64-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.94-1.2-.72-.64-1.2-1.42-1.34-1.66-.14-.24-.02-.37.1-.49.1-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.26-.74-1.69-.2-.44-.42-.5-.58-.5h-.5c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.32.98 2.48c.12.16 1.69 2.58 4.1 3.62.58.25 1.04.4 1.4.52.59.19 1.13.16 1.55.1.48-.07 1.48-.6 1.69-1.18.2-.58.2-1.08.14-1.18-.06-.1-.22-.16-.46-.28Z"/></svg>
+Control de progreso mensual
+</p>
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+<h2>
+Entrenamiento Actual
+</h2>
+
+
+<div class="activity">
+
+
+<p>
+Pecho: Press banca, aperturas, fondos
+</p>
+
+
+<p>
+Espalda: Dominadas, remo, jalones
+</p>
+
+
+<p>
+Piernas: Sentadilla, prensa, extensiones
+</p>
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+<h2>
+Alimentación
+</h2>
+
+
+<div class="activity">
+
+
+<p>
+Desayuno: Avena + proteína + fruta
+</p>
+
+
+<p>
+Almuerzo: Pollo + arroz + vegetales
+</p>
+
+
+<p>
+Cena: Proteína + ensalada
+</p>
+
+
+<p>
+Agua diaria: 3 litros
+</p>
+
+
+</div>
+
+
+</section>
+
+
+<section class="dashboard-panel" id="rendimientoCliente" hidden>
+<div class="panel-heading-row"><div><h2>Seguimiento de rendimiento</h2><p>Datos avanzados para atletas con objetivos competitivos.</p></div><span class="status-badge" id="tipoSeguimientoCliente"></span></div><div class="performance-grid"><p><strong>Objetivo deportivo</strong><span id="objetivoDeportivoCliente">-</span></p><p><strong>Suplementación declarada</strong><span id="suplementacionCliente">-</span></p><p><strong>Seguimiento médico declarado</strong><span id="seguimientoMedicoCliente">-</span></p><p><strong>Observaciones</strong><span id="notasRendimientoCliente">-</span></p></div><small class="form-help">Registrar información declarada no sustituye la valoración de un profesional de salud.</small>
+</section>
+</main>
+
+
+</div>
+
+
+
+<script src="../Assets/js/app.js"></script>
+
+
+<script>
+
+
+const parametros =
+new URLSearchParams(window.location.search);
+
+
+
+const clienteId =
+Number(parametros.get("id"));
+
+
+
+async function cargarPerfil(){
+
+
+const clientes = await window.flowLoadClientes("../Data/clientes.json");
+
+
+
+const cliente =
+clientes.find(
+item=>item.id===clienteId
+);
+
+
+
+if(!cliente){
+
+return;
+
+}
+
+
+
+document
+.getElementById("nombreCliente")
+.textContent=cliente.nombre;
+
+
+
+document
+.getElementById("objetivoCliente")
+.textContent=cliente.objetivo;
+
+
+
+document
+.getElementById("pesoCliente")
+.textContent=
+cliente.peso+" kg";
+
+
+
+document
+.getElementById("alturaCliente")
+.textContent=
+cliente.altura+" m";
+
+
+
+document
+.getElementById("edadCliente")
+.textContent=
+cliente.edad;
+
+
+
+document
+.getElementById("estadoCliente")
+.textContent=
+cliente.estado;
+
+
+
+const imc =
+(
+cliente.peso /
+(cliente.altura * cliente.altura)
+)
+.toFixed(1);
+
+
+
+document
+.getElementById("imcCliente")
+.textContent=imc;
+const esRendimiento=["Rendimiento","Preparación para competencia"].includes(cliente.tipoSeguimiento);
+const panelRendimiento=document.getElementById("rendimientoCliente");
+if(panelRendimiento){
+ panelRendimiento.hidden=!esRendimiento;
+ if(esRendimiento){
+  document.getElementById("tipoSeguimientoCliente").textContent=cliente.tipoSeguimiento;
+  document.getElementById("objetivoDeportivoCliente").textContent=cliente.objetivoDeportivo || "-";
+  document.getElementById("suplementacionCliente").textContent=cliente.suplementacion || "-";
+  document.getElementById("seguimientoMedicoCliente").textContent=cliente.seguimientoMedico || "-";
+  document.getElementById("notasRendimientoCliente").textContent=cliente.notasRendimiento || "-";
+ }
+}
+
+
+
+}
+
+
+
+cargarPerfil();
+
+
+</script>
+
+
+</body>
+
+</html>
+
+
+
+

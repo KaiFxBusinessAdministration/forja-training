@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="../Assets/img/forja-favicon.png?v=forja-favicon-2">
+<title>Rutina Cliente | Flow Fitness</title>
+<link rel="stylesheet" href="../Assets/css/style.css">
+</head>
+<body class="dashboard-body">
+<div class="app-container">
+<aside class="sidebar">
+<div class="brand"><div><h2>FORJA TRAINING</h2><span>Client Portal</span></div></div>
+<nav>
+<a href="dashboard.html">Dashboard</a>
+<a href="perfil.html">Perfil</a>
+<a href="progreso.html">Progreso</a>
+<a class="active" href="rutina.html">Rutina</a>
+<a href="alimentacion.html">Alimentación</a>
+<a href="../role.html">Cambiar rol</a>
+</nav>
+<a class="whatsapp-cta client-support" href="#" data-whatsapp-message="Hola, soy cliente de Flow Fitness y necesito ayuda con mi entrenamiento.">
+<svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2.25a9.75 9.75 0 0 0-8.43 14.64L2.2 21.8l5.08-1.33A9.75 9.75 0 1 0 12 2.25Zm0 17.8a8.02 8.02 0 0 1-4.1-1.12l-.3-.18-3.02.79.81-2.94-.2-.31A8.05 8.05 0 1 1 12 20.05Zm4.42-5.98c-.24-.12-1.42-.7-1.64-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.94-1.2-.72-.64-1.2-1.42-1.34-1.66-.14-.24-.02-.37.1-.49.1-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.26-.74-1.69-.2-.44-.42-.5-.58-.5h-.5c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.32.98 2.48c.12.16 1.69 2.58 4.1 3.62.58.25 1.04.4 1.4.52.59.19 1.13.16 1.55.1.48-.07 1.48-.6 1.69-1.18.2-.58.2-1.08.14-1.18-.06-.1-.22-.16-.46-.28Z"/></svg>
+<span>Soporte<small>Contactar entrenador</small></span>
+</a>
+</aside>
+<main class="main-content">
+<header class="topbar"><div><h1>Rutina</h1><p>Plan semanal asignado</p></div></header>
+<section class="page-hero">
+<div class="page-hero-content">
+<h2>Técnica supervisada en cada bloque</h2>
+<p>Tu rutina prioriza buena ejecución, progresión de cargas y recuperación entre sesiones.</p>
+</div>
+<img src="../Assets/img/client-routine.jpg" alt="Entrenador masculino asistiendo a un cliente masculino con una rutina en gimnasio">
+</section>
+<section class="split-grid">
+<div class="dashboard-panel">
+<h2>Hoy</h2>
+<div class="activity" id="rutinaHoy">
+<p>Press banca: 4 x 8</p>
+<p>Remo con barra: 4 x 10</p>
+<p>Press militar: 3 x 8</p>
+<p>Plancha: 3 x 45 segundos</p>
+</div>
+</div>
+<div class="dashboard-panel">
+<h2>Indicaciones</h2>
+<div class="activity">
+<p>Calienta 10 minutos antes de cargar.</p>
+<p>Mantén 2 repeticiones en reserva.</p>
+<p>Registra molestias o fatiga al finalizar.</p>
+</div>
+</div>
+</section>
+<section class="dashboard-panel">
+<h2>Semana de entrenamiento</h2>
+<div class="routine-week" id="rutinaSemana"></div>
+</section>
+</main>
+</div>
+<script src="../Assets/js/config.js"></script>
+<script src="../Assets/js/backend-config.js"></script>
+<script src="../Assets/js/vendor/supabase.min.js"></script>
+<script src="../Assets/js/backend.js"></script>
+<script src="../Assets/js/routine-sync.js"></script>
+<script src="../Assets/js/app.js"></script>
+<script src="../Data/openGym-demo.js"></script>
+<script>
+const rutinaHoy = document.getElementById("rutinaHoy");
+const rutinaSemana = document.getElementById("rutinaSemana");
+
+function ejercicioMarkup(ejercicio){
+const videoLink = ejercicio.videoUrl ? `<a class="exercise-video-link" href="${ejercicio.videoUrl}" target="_blank" rel="noopener">Ver demostración</a>` : "";
+const avanceId = ejercicio.avanceId || ejercicio.nombre;
+return `
+<div class="exercise-row" data-avance-id="${avanceId}">
+<div>
+<strong>${ejercicio.nombre}</strong>
+<span>${ejercicio.grupo}</span>
+</div>
+<div>${ejercicio.series} series</div>
+<div>${ejercicio.repeticiones}</div>
+<div>${ejercicio.peso}</div>
+<div>${ejercicio.descanso}</div>
+</div>
+<p class="exercise-note">${ejercicio.indicacion}${videoLink}</p>
+<button type="button" class="btn-secondary exercise-progress-trigger" data-avance-id="${avanceId}" data-exercise-name="${ejercicio.nombre}">Registrar avance</button>
+`;
+}
+
+function rutinaAsignadaMarkup(rutina){
+const peso = rutina.peso === "Sin peso" ? "Peso corporal" : `${rutina.peso} kg`;
+const observacion = rutina.observaciones || "Asignación directa del entrenador.";
+return ejercicioMarkup({
+nombre: rutina.ejercicio,
+grupo: rutina.grupoMuscular,
+series: rutina.series,
+repeticiones: rutina.repeticiones,
+peso,
+descanso: rutina.descanso,
+indicacion: rutina.indicacion ? `${observacion} ${rutina.indicacion}` : observacion,
+videoUrl: rutina.videoUrl,
+avanceId: rutina.id
+});
+}
+
+async function registrarAvance(exerciseId,exerciseName){
+const peso=prompt(`Peso utilizado en ${exerciseName} (kg):`);
+if(peso===null){return;}
+const repeticiones=prompt("Repeticiones logradas:");
+if(repeticiones===null){return;}
+const avances=JSON.parse(localStorage.getItem("flowAvancesRutina") || "[]");
+const clienteId=sessionStorage.getItem("flowClienteActivoId") || "99";
+avances.push({clienteId,exerciseId,exerciseName,peso:peso.trim() || "Sin peso",repeticiones:repeticiones.trim() || "-",fecha:new Date().toLocaleDateString("es-EC")});
+localStorage.setItem("flowAvancesRutina",JSON.stringify(avances));
+try{await window.FLOW_ROUTINE_SYNC?.recordProgress({clientId,routineExerciseId:exerciseId,exerciseName,weight:peso.trim(),repetitions:repeticiones.trim()});}
+catch(error){console.error("No se pudo sincronizar el avance",error);}
+const boton=document.querySelector(`[data-avance-id="${CSS.escape(exerciseId)}"]`);
+if(boton){boton.textContent="Avance guardado";}
+}
+
+function rutinasAsignadasCliente(){
+const activeClientId = sessionStorage.getItem("flowClienteActivoId") || "99";
+return JSON.parse(localStorage.getItem("flowRutinasAsignadas") || "[]")
+.filter(rutina=>String(rutina.clienteId)===String(activeClientId));
+}
+
+async function rutinasCloudCliente(){
+const clientId=sessionStorage.getItem("flowClienteActivoId");
+if(!clientId||!window.FLOW_ROUTINE_SYNC)return null;
+try{return await window.FLOW_ROUTINE_SYNC.listForClient(clientId);}catch(error){console.error("No se pudieron cargar rutinas de Supabase",error);return null;}
+}
+
+function convertirRutinasCloud(rutinas){
+return (rutinas||[]).flatMap(rutina=>(rutina.routine_exercises||[]).map(exercise=>({
+id:exercise.id,dia:rutina.day_name,ejercicio:exercise.exercise_name,grupoMuscular:exercise.muscle_group||"General",series:exercise.sets,repeticiones:exercise.reps,peso:exercise.weight??"Sin peso",descanso:exercise.rest_seconds?`${exercise.rest_seconds} segundos`:"Sin definir",observaciones:exercise.notes||rutina.notes||"Asignación directa del entrenador.",calentamiento:rutina.warmup_steps||[]
+})));
+}
+
+fetch("../Data/openGym-demo.json")
+.then(response=>response.json())
+.then(async data=>{
+const plan = data.rutinaActual;
+const hoy = plan.semana[0];
+const cloud = await rutinasCloudCliente();
+const asignadas = cloud ? convertirRutinasCloud(cloud) : rutinasAsignadasCliente();
+rutinaHoy.innerHTML = hoy.ejercicios.map(ejercicio=>
+`<p>${ejercicio.nombre}: ${ejercicio.series} x ${ejercicio.repeticiones} · ${ejercicio.peso}</p>`
+).join("");
+const planBase = plan.semana.map(dia=>{
+const delDia=asignadas.filter(rutina=>rutina.dia===dia.dia);
+const calentamiento=delDia[0]?.calentamiento;
+return `
+<article class="routine-day">
+<header>
+<h3>${dia.dia}</h3>
+<span>${dia.enfoque}</span>
+</header>
+${calentamiento?.length ? `<div class="client-warmup"><strong>Calentamiento del día</strong><ol>${calentamiento.map(paso=>`<li>${paso}</li>`).join("")}</ol></div>` : ""}
+${dia.ejercicios.map(ejercicioMarkup).join("")}
+</article>
+`;}).join("");
+const asignadasMarkup = asignadas.length ? `
+<article class="routine-day routine-assigned">
+<header>
+<h3>Asignado por entrenador</h3>
+<span>${asignadas.length} ejercicio${asignadas.length === 1 ? "" : "s"}</span>
+</header>
+${asignadas.filter((rutina,index)=>rutina.calentamiento?.length && !asignadas.slice(0,index).some(item=>item.dia===rutina.dia)).map(rutina=>`<div class="client-warmup"><strong>${rutina.dia}: calentamiento del día</strong><ol>${rutina.calentamiento.map(paso=>`<li>${paso}</li>`).join("")}</ol></div>`).join("")}
+${asignadas.map(rutinaAsignadaMarkup).join("")}
+</article>
+` : "";
+rutinaSemana.innerHTML = asignadasMarkup + planBase;
+rutinaSemana.addEventListener("click",event=>{const boton=event.target.closest(".exercise-progress-trigger"); if(boton){registrarAvance(boton.dataset.avanceId,boton.dataset.exerciseName);}});
+})
+.catch(()=>{
+const data = window.FLOW_OPEN_GYM_DEMO;
+const plan = data.rutinaActual;
+const hoy = plan.semana[0];
+const asignadas = rutinasAsignadasCliente();
+rutinaHoy.innerHTML = hoy.ejercicios.map(ejercicio=>`<p>${ejercicio.nombre}: ${ejercicio.series} x ${ejercicio.repeticiones} · ${ejercicio.peso}</p>`).join("");
+rutinaSemana.innerHTML = plan.semana.map(dia=>`<article class="routine-day"><header><h3>${dia.dia}</h3><span>${dia.enfoque}</span></header>${dia.ejercicios.map(ejercicioMarkup).join("")}</article>`).join("");
+});
+</script>
+</body>
+</html>

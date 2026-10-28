@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="../Assets/img/forja-favicon.png?v=forja-favicon-2">
+
+<title>Clientes | Flow Fitness</title>
+
+<link rel="stylesheet" href="../Assets/css/style.css">
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<div class="app-container">
+
+
+<aside class="sidebar">
+
+
+<div class="brand">
+
+<h2>FORJA TRAINING</h2>
+
+<span>Trainer System</span>
+
+</div>
+
+
+<nav>
+
+<a href="dashboard.html">
+Dashboard
+</a>
+
+<a class="active" href="clientes.html">
+Clientes
+</a>
+
+<a href="entrenamiento.html">
+Entrenamientos
+</a>
+
+<a href="alimentacion.html">
+Alimentación
+</a>
+
+<a href="reportes.html">
+Reportes
+</a>
+
+</nav>
+
+
+</aside>
+
+
+
+<main class="main-content">
+
+
+<header class="topbar">
+
+
+<div>
+
+<h1>
+Clientes
+</h1>
+
+<p>
+Gestión completa de alumnos
+</p>
+
+</div>
+
+
+<a href="nuevo-cliente.html" class="btn-primary">
+
++ Nuevo Cliente
+
+</a>
+
+
+</header>
+
+<section class="page-hero compact">
+<div class="page-hero-content">
+<h2>Seguimiento claro para cada alumno</h2>
+<p>Visualiza estados, objetivos y próximos pasos con una experiencia más cuidada para la gestión diaria.</p>
+</div>
+<img src="../Assets/img/trainer-clients.jpg" alt="Entrenador masculino supervisando a un cliente masculino en entrenamiento de fuerza">
+</section>
+
+
+
+<section class="dashboard-panel">
+
+
+<div class="filters">
+
+
+<input 
+type="text"
+id="buscarCliente"
+placeholder="Buscar cliente..."
+>
+
+
+<select id="filtroEstado">
+
+<option>
+Todos
+</option>
+
+<option>
+Activo
+</option>
+
+<option>
+Pendiente
+</option>
+
+</select>
+
+
+</div>
+
+
+
+<div class="table-container">
+
+
+<table class="client-table">
+
+
+<thead>
+
+<tr>
+
+<th>
+Nombre
+</th>
+
+<th>
+Edad
+</th>
+
+<th>
+Peso
+</th>
+
+<th>
+Objetivo
+</th>
+
+<th>
+Estado
+</th>
+
+<th>Seguimiento</th>
+
+<th>
+Acción
+</th>
+
+</tr>
+
+</thead>
+
+
+<tbody id="tablaClientes">
+
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+</section>
+
+
+</main>
+
+
+</div>
+
+
+<script src="../Assets/js/app.js"></script>
+
+<script src="../Assets/js/clientes.js"></script>
+
+
+</body>
+
+</html>
+
+

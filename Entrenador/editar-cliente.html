@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="../Assets/img/forja-favicon.png?v=forja-favicon-2">
+
+<title>Editar Cliente | Flow Fitness</title>
+
+<link rel="stylesheet" href="../Assets/css/style.css">
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<div class="app-container">
+
+
+<aside class="sidebar">
+
+
+<div class="brand">
+
+<h2>FORJA TRAINING</h2>
+
+<span>Trainer System</span>
+
+</div>
+
+
+<nav>
+
+<a href="dashboard.html">
+Dashboard
+</a>
+
+<a class="active" href="clientes.html">
+Clientes
+</a>
+
+<a href="entrenamiento.html">
+Entrenamientos
+</a>
+
+<a href="alimentacion.html">
+Alimentación
+</a>
+
+<a href="reportes.html">
+Reportes
+</a>
+
+</nav>
+
+
+</aside>
+
+
+
+<main class="main-content">
+
+
+<header class="topbar">
+
+
+<div>
+
+<h1>
+Editar Cliente
+</h1>
+
+<p>
+Actualización de información del alumno
+</p>
+
+</div>
+
+
+<a href="clientes.html" class="btn-primary">
+
+Volver
+
+</a>
+
+
+</header>
+
+<section class="page-hero compact">
+<div class="page-hero-content">
+<h2>Ajustes del plan del alumno</h2>
+<p>Actualiza medidas, objetivos y estado para mantener el entrenamiento alineado con su evolución.</p>
+</div>
+<img src="../Assets/img/trainer-edit-client.jpg" alt="Entrenador asistiendo a un cliente con mancuernas">
+</section>
+
+
+
+
+<section class="dashboard-panel">
+
+
+<form class="client-form" id="editarCliente">
+
+
+<div class="form-grid">
+
+
+<div>
+
+<label>
+Nombre completo
+</label>
+
+<input 
+type="text"
+id="nombre"
+required
+>
+
+</div>
+
+
+
+<div>
+
+<label>
+Edad
+</label>
+
+<input 
+type="number"
+id="edad"
+min="13"
+max="100"
+required
+>
+
+</div>
+
+
+
+<div>
+
+<label>
+Peso (kg)
+</label>
+
+<input 
+type="number"
+id="peso"
+min="20"
+max="300"
+required
+>
+
+</div>
+
+
+
+<div>
+
+<label>
+Altura (m)
+</label>
+
+<input 
+type="number"
+step="0.01"
+id="altura"
+min="1"
+max="2.5"
+required
+>
+
+</div>
+
+
+
+<div>
+
+<label>
+Objetivo
+</label>
+
+<select id="objetivo">
+
+<option>
+Hipertrofia
+</option>
+
+<option>
+Pérdida de grasa
+</option>
+
+<option>
+Fuerza
+</option>
+
+<option>
+Tonificación
+</option>
+
+</select>
+
+</div>
+
+
+
+<div>
+
+<label>
+Estado
+</label>
+
+
+<select id="estado">
+
+
+<option>
+Activo
+</option>
+
+<option>
+Pendiente
+</option>
+
+
+</select>
+
+
+</div>
+
+
+</div>
+
+
+<div>
+<label for="tipoSeguimiento">Tipo de seguimiento</label>
+<select id="tipoSeguimiento">
+<option>General</option>
+<option>Rendimiento</option>
+<option>Preparación para competencia</option>
+</select>
+</div>
+
+<div id="rendimientoFields" class="performance-fields" hidden>
+<label for="objetivoDeportivo">Objetivo deportivo</label>
+<select id="objetivoDeportivo">
+<option value="Mejorar composición corporal">Mejorar composición corporal</option>
+<option value="Aumentar fuerza">Aumentar fuerza</option>
+<option value="Ganar masa muscular">Ganar masa muscular</option>
+<option value="Preparación para competencia">Preparación para competencia</option>
+<option value="Otro">Añadir objetivo...</option>
+</select>
+<input type="text" id="objetivoDeportivoOtro" placeholder="Escribe el objetivo" hidden>
+
+<label for="suplementacion">Suplementación declarada</label>
+<select id="suplementacion">
+<option value="Ninguna declarada">Ninguna declarada</option>
+<option value="Proteína">Proteína</option>
+<option value="Creatina">Creatina</option>
+<option value="Proteína y creatina">Proteína y creatina</option>
+<option value="Otro">Añadir suplemento...</option>
+</select>
+<input type="text" id="suplementacionOtro" placeholder="Escribe la suplementación" hidden>
+
+<label for="seguimientoMedico">Seguimiento médico declarado</label>
+<select id="seguimientoMedico">
+<option value="No declarado">No declarado</option>
+<option value="Control médico deportivo">Control médico deportivo</option>
+<option value="Nutricionista deportivo">Nutricionista deportivo</option>
+<option value="Médico especialista">Médico especialista</option>
+<option value="Otro">Añadir seguimiento...</option>
+</select>
+<input type="text" id="seguimientoMedicoOtro" placeholder="Escribe el seguimiento" hidden>
+
+<label for="notasRendimiento">Observaciones de rendimiento</label>
+<textarea id="notasRendimiento" rows="3" placeholder="Recuperación, sueño, prioridades..."></textarea>
+<p class="form-help">La plataforma registra información declarada; no prescribe dosis ni tratamientos.</p>
+</div><button class="btn-primary" type="submit">
+
+Actualizar Cliente
+
+</button>
+
+
+</form>
+
+
+</section>
+
+
+</main>
+
+
+</div>
+
+
+
+<script src="../Assets/js/app.js"></script>
+
+
+<script>
+
+
+let clientes=[]; function activarOpcionPersonalizada(selectId){const select=document.getElementById(selectId); const custom=document.getElementById(selectId+"Otro"); select.addEventListener("change",()=>{custom.hidden=select.value!=="Otro";});} ["objetivoDeportivo","suplementacion","seguimientoMedico"].forEach(activarOpcionPersonalizada); function actualizarCamposRendimiento(){document.getElementById("rendimientoFields").hidden=document.getElementById("tipoSeguimiento").value==="General";}
+
+
+function seleccionarValor(id,valor){const select=document.getElementById(id); const custom=document.getElementById(id+"Otro"); const existe=[...select.options].some(option=>option.value===valor); if(existe){select.value=valor;}else if(valor){select.value="Otro"; custom.value=valor; custom.hidden=false;}}
+document.getElementById("tipoSeguimiento").addEventListener("change",actualizarCamposRendimiento);
+
+const parametros =
+new URLSearchParams(window.location.search);
+
+
+const id =
+Number(parametros.get("id"));
+
+
+
+async function cargarCliente(){
+
+
+clientes = await window.flowLoadClientes("../Data/clientes.json");
+
+
+
+const cliente =
+clientes.find(c=>c.id===id);
+
+
+
+if(cliente){
+
+
+document.getElementById("nombre").value=cliente.nombre;
+
+document.getElementById("edad").value=cliente.edad;
+
+document.getElementById("peso").value=cliente.peso;
+
+document.getElementById("altura").value=cliente.altura;
+
+document.getElementById("objetivo").value=cliente.objetivo;
+
+document.getElementById("estado").value=cliente.estado; document.getElementById("tipoSeguimiento").value=cliente.tipoSeguimiento || "General"; seleccionarValor("objetivoDeportivo",cliente.objetivoDeportivo); seleccionarValor("suplementacion",cliente.suplementacion); seleccionarValor("seguimientoMedico",cliente.seguimientoMedico); document.getElementById("notasRendimiento").value=cliente.notasRendimiento || ""; actualizarCamposRendimiento();
+
+
+}
+
+
+}
+
+
+
+document
+.getElementById("editarCliente")
+.addEventListener("submit",(e)=>{
+
+
+e.preventDefault();
+
+const actualizado = {
+id,
+nombre: document.getElementById("nombre").value.trim(),
+edad: Number(document.getElementById("edad").value),
+peso: Number(document.getElementById("peso").value),
+altura: Number(document.getElementById("altura").value),
+objetivo: document.getElementById("objetivo").value,
+estado: document.getElementById("estado").value,
+entrenador: "Andrés Vega", tipoSeguimiento: document.getElementById("tipoSeguimiento").value, objetivoDeportivo: (document.getElementById("objetivoDeportivo").value==="Otro" ? document.getElementById("objetivoDeportivoOtro").value : document.getElementById("objetivoDeportivo").value).trim(), suplementacion: (document.getElementById("suplementacion").value==="Otro" ? document.getElementById("suplementacionOtro").value : document.getElementById("suplementacion").value).trim(), seguimientoMedico: (document.getElementById("seguimientoMedico").value==="Otro" ? document.getElementById("seguimientoMedicoOtro").value : document.getElementById("seguimientoMedico").value).trim(), notasRendimiento: document.getElementById("notasRendimiento").value.trim()
+};
+const actualizados = JSON.parse(localStorage.getItem("flowClientesActualizados") || "[]");
+const indice = actualizados.findIndex(cliente=>String(cliente.id)===String(id));
+if(indice >= 0){
+actualizados[indice] = actualizado;
+}else{
+actualizados.push(actualizado);
+}
+localStorage.setItem("flowClientesActualizados",JSON.stringify(actualizados));
+
+
+window.location.href="clientes.html";
+
+
+});
+
+
+
+cargarCliente();
+
+
+</script>
+
+
+
+</body>
+
+</html>
+
+
+

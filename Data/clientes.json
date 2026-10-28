@@ -1,0 +1,61 @@
+[
+  {
+    "id": 1,
+    "nombre": "Juan Pérez",
+    "edad": 28,
+    "peso": 82,
+    "altura": 1.78,
+    "objetivo": "Hipertrofia",
+    "estado": "Activo",
+    "entrenador": "Andrés Vega",
+    "tipoSeguimiento": "General"
+  },
+  {
+    "id": 2,
+    "nombre": "María López",
+    "edad": 32,
+    "peso": 65,
+    "altura": 1.65,
+    "objetivo": "Pérdida de grasa",
+    "estado": "Activo",
+    "entrenador": "Andrés Vega",
+    "tipoSeguimiento": "General"
+  },
+  {
+    "id": 3,
+    "nombre": "Carlos Andrade",
+    "edad": 35,
+    "peso": 90,
+    "altura": 1.82,
+    "objetivo": "Fuerza",
+    "estado": "Activo",
+    "entrenador": "Andrés Vega",
+    "tipoSeguimiento": "General"
+  },
+  {
+    "id": 4,
+    "nombre": "Ana Torres",
+    "edad": 25,
+    "peso": 58,
+    "altura": 1.6,
+    "objetivo": "Tonificación",
+    "estado": "Pendiente",
+    "entrenador": "Andrés Vega",
+    "tipoSeguimiento": "General"
+  },
+  {
+    "id": 99,
+    "nombre": "Carlos Demo",
+    "edad": 34,
+    "peso": 88,
+    "altura": 1.8,
+    "objetivo": "Hipertrofia",
+    "estado": "Activo",
+    "entrenador": "Andrés Vega",
+    "tipoSeguimiento": "Preparación para competencia",
+    "objetivoDeportivo": "Mejorar composición corporal y rendimiento",
+    "suplementacion": "Proteína y creatina, según planificación profesional",
+    "seguimientoMedico": "Registro declarado por el atleta; validar con médico especialista",
+    "notasRendimiento": "Priorizar recuperación, técnica y progresión controlada"
+  }
+]

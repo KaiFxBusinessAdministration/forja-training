@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="../Assets/img/forja-favicon.png?v=forja-favicon-2">
+
+<title>Reportes | Flow Fitness</title>
+
+<link rel="stylesheet" href="../Assets/css/style.css">
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<div class="app-container">
+
+
+<aside class="sidebar">
+
+
+<div class="brand">
+
+<h2>FORJA TRAINING</h2>
+
+<span>Trainer System</span>
+
+</div>
+
+
+<nav>
+
+<a href="dashboard.html">
+Dashboard
+</a>
+
+<a href="clientes.html">
+Clientes
+</a>
+
+<a href="entrenamiento.html">
+Entrenamientos
+</a>
+
+<a href="alimentacion.html">
+Alimentación
+</a>
+
+<a class="active" href="reportes.html">
+Reportes
+</a>
+
+</nav>
+
+
+</aside>
+
+
+
+<main class="main-content">
+
+
+<header class="topbar">
+
+<div>
+
+<h1>
+Reportes
+</h1>
+
+<p>
+Métricas del negocio fitness
+</p>
+
+</div>
+
+</header>
+
+<section class="page-hero">
+<div class="page-hero-content">
+<h2>Indicadores para mejorar decisiones</h2>
+<p>Revisa retención, progreso e ingresos con una presentación más clara y orientada a rendimiento.</p>
+</div>
+<img src="../Assets/img/trainer-reports.jpg" alt="Entrenador y cliente revisando métricas de progreso en una tablet">
+</section>
+
+
+<section class="dashboard-panel">
+
+<h2>
+Filtros
+</h2>
+
+<div class="report-filters">
+
+<div>
+<label for="reporteCliente">Cliente</label>
+<select id="reporteCliente">
+<option value="Todos">Todos</option>
+</select>
+</div>
+
+<div>
+<label for="reporteMusculo">Grupo muscular / Músculo</label>
+<select id="reporteMusculo">
+<option>Todos</option>
+<option>Pecho</option>
+<option>Espalda</option>
+<option>Piernas</option>
+<option>Hombros</option>
+<option>Bíceps</option>
+<option>Tríceps</option>
+<option>Core</option>
+</select>
+</div>
+
+<div>
+<label for="reporteDia">Día</label>
+<select id="reporteDia">
+<option>Todos</option>
+<option>Lunes</option>
+<option>Martes</option>
+<option>Miércoles</option>
+<option>Jueves</option>
+<option>Viernes</option>
+<option>Sábado</option>
+<option>Domingo</option>
+</select>
+</div>
+
+<div>
+<label for="reporteEstado">Estado de clientes</label>
+<select id="reporteEstado">
+<option>Todos</option>
+<option>Continúan</option>
+<option>Se fueron</option>
+</select>
+</div>
+
+</div>
+
+</section>
+
+
+
+<section class="kpi-grid">
+
+
+<div class="kpi-card">
+
+<h3>
+Retención clientes
+</h3>
+
+<strong>
+94%
+</strong>
+
+</div>
+
+
+<div class="kpi-card">
+
+<h3>
+Progreso promedio
+</h3>
+
+<strong>
++12%
+</strong>
+
+</div>
+
+
+<div class="kpi-card">
+
+<h3>
+Ingresos mensual
+</h3>
+
+<strong>
+$2450
+</strong>
+
+</div>
+
+
+</section>
+
+
+<section class="kpi-grid report-summary">
+
+<div class="kpi-card">
+<h3>Clientes totales</h3>
+<strong id="reporteTotalClientes">0</strong>
+</div>
+
+<div class="kpi-card">
+<h3>Clientes que continúan</h3>
+<strong id="reporteContinuan">0</strong>
+</div>
+
+<div class="kpi-card">
+<h3>Clientes que se fueron</h3>
+<strong id="reporteSeFueron">0</strong>
+</div>
+
+</section>
+
+
+<section class="dashboard-panel">
+
+<h2>
+Detalle filtrado
+</h2>
+
+<div class="table-container">
+<table class="report-table">
+<thead>
+<tr>
+<th>Cliente</th>
+<th>Estado</th>
+<th>Día</th>
+<th>Grupo muscular</th>
+<th>Actividad</th>
+</tr>
+</thead>
+<tbody id="reporteTabla"></tbody>
+</table>
+</div>
+
+<p class="report-empty" id="reporteVacio" hidden>
+No hay resultados para los filtros seleccionados.
+</p>
+
+</section>
+
+
+</main>
+
+
+</div>
+
+
+<script src="../Assets/js/app.js"></script>
+
+<script>
+const reporteCliente = document.getElementById("reporteCliente");
+const reporteMusculo = document.getElementById("reporteMusculo");
+const reporteDia = document.getElementById("reporteDia");
+const reporteEstado = document.getElementById("reporteEstado");
+const reporteTabla = document.getElementById("reporteTabla");
+const reporteVacio = document.getElementById("reporteVacio");
+const reporteTotalClientes = document.getElementById("reporteTotalClientes");
+const reporteContinuan = document.getElementById("reporteContinuan");
+const reporteSeFueron = document.getElementById("reporteSeFueron");
+
+let reporteClientes = [];
+let reporteActividades = [];
+
+function estadoReporte(cliente){
+return cliente.estado === "Activo" ? "Continúan" : "Se fueron";
+}
+
+function actividadBase(cliente,index){
+const actividades = [
+{dia:"Lunes",grupo:"Pecho",actividad:"Press banca y control técnico"},
+{dia:"Martes",grupo:"Piernas",actividad:"Sentadilla y fuerza base"},
+{dia:"Miércoles",grupo:"Espalda",actividad:"Remo y tracción"},
+{dia:"Jueves",grupo:"Hombros",actividad:"Press militar y estabilidad"},
+{dia:"Viernes",grupo:"Core",actividad:"Trabajo de control central"},
+{dia:"Sábado",grupo:"Bíceps",actividad:"Accesorios de fuerza"},
+{dia:"Domingo",grupo:"Tríceps",actividad:"Recuperación activa"}
+];
+const base = actividades[index % actividades.length];
+return {
+clienteId:String(cliente.id),
+cliente:cliente.nombre,
+estado:estadoReporte(cliente),
+dia:base.dia,
+grupo:base.grupo,
+actividad:base.actividad
+};
+}
+
+function rutinasGuardadas(){
+const rutinas = JSON.parse(localStorage.getItem("flowRutinasAsignadas") || "[]");
+return rutinas.map(rutina=>({
+clienteId:String(rutina.clienteId),
+cliente:rutina.cliente,
+estado:"Continúan",
+dia:rutina.dia,
+grupo:rutina.grupoMuscular,
+actividad:rutina.ejercicio
+}));
+}
+
+function aplicarFiltrosReportes(){
+const cliente = reporteCliente.value;
+const musculo = reporteMusculo.value;
+const dia = reporteDia.value;
+const estado = reporteEstado.value;
+const resultados = reporteActividades.filter(item=>{
+const coincideCliente = cliente === "Todos" || item.clienteId === cliente;
+const coincideMusculo = musculo === "Todos" || item.grupo === musculo;
+const coincideDia = dia === "Todos" || item.dia === dia;
+const coincideEstado = estado === "Todos" || item.estado === estado;
+return coincideCliente && coincideMusculo && coincideDia && coincideEstado;
+});
+
+const clientesFiltrados = reporteClientes.filter(clienteItem=>{
+const estadoCliente = estadoReporte(clienteItem);
+const coincideCliente = cliente === "Todos" || String(clienteItem.id) === cliente;
+const coincideEstado = estado === "Todos" || estadoCliente === estado;
+return coincideCliente && coincideEstado;
+});
+
+reporteTotalClientes.textContent = clientesFiltrados.length;
+reporteContinuan.textContent = clientesFiltrados.filter(item=>estadoReporte(item)==="Continúan").length;
+reporteSeFueron.textContent = clientesFiltrados.filter(item=>estadoReporte(item)==="Se fueron").length;
+
+reporteTabla.innerHTML = resultados.map(item=>`
+<tr>
+<td>${item.cliente}</td>
+<td>${item.estado}</td>
+<td>${item.dia}</td>
+<td>${item.grupo}</td>
+<td>${item.actividad}</td>
+</tr>
+`).join("");
+
+reporteVacio.hidden = resultados.length > 0;
+}
+
+async function cargarReportes(){
+reporteClientes = await window.flowLoadClientes("../Data/clientes.json");
+reporteClientes.forEach(cliente=>{
+const option = document.createElement("option");
+option.value = cliente.id;
+option.textContent = cliente.nombre;
+reporteCliente.appendChild(option);
+});
+reporteActividades = [
+...reporteClientes.map(actividadBase),
+...rutinasGuardadas()
+];
+aplicarFiltrosReportes();
+}
+
+[reporteCliente,reporteMusculo,reporteDia,reporteEstado].forEach(select=>{
+select.addEventListener("change",aplicarFiltrosReportes);
+});
+
+cargarReportes();
+</script>
+
+
+</body>
+
+</html>

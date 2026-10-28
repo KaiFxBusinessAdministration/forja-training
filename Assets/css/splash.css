@@ -1,0 +1,10 @@
+:root { background: #030504; }
+* { box-sizing: border-box; }
+html, body { min-height: 100%; margin: 0; }
+body.splash-page { min-height: 100vh; min-height: 100svh; overflow: hidden; background: #030504; color: #f4f7f4; font-family: Arial, sans-serif; }
+.splash-main { min-height: 100vh; min-height: 100svh; display: grid; place-items: center; padding: 24px; }
+.splash-mark { display: grid; place-items: center; width: clamp(180px, 28vw, 330px); aspect-ratio: 1; border-radius: 50%; outline: none; cursor: pointer; transition: transform 280ms cubic-bezier(.2,.75,.25,1), filter 280ms ease; }
+.splash-mark:hover, .splash-mark:focus-visible { transform: scale(1.08); filter: drop-shadow(0 0 28px rgba(183,243,74,.18)); }
+.splash-mark:active { transform: scale(.98); }
+.splash-mark img { display: block; width: 86%; height: 86%; object-fit: contain; }
+@media (prefers-reduced-motion: reduce) { .splash-mark { transition: none; } }

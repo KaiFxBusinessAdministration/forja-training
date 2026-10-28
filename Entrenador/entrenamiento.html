@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="../Assets/img/forja-favicon.png?v=forja-favicon-2">
+
+<title>Entrenamientos | Flow Fitness</title>
+
+<link rel="stylesheet" href="../Assets/css/style.css">
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<div class="app-container">
+
+
+<aside class="sidebar">
+
+<div class="brand">
+
+<h2>FORJA TRAINING</h2>
+
+<span>Trainer System</span>
+
+</div>
+
+
+<nav>
+
+<a href="dashboard.html">
+Dashboard
+</a>
+
+<a href="clientes.html">
+Clientes
+</a>
+
+<a class="active" href="entrenamiento.html">
+Entrenamientos
+</a>
+
+<a href="alimentacion.html">
+Alimentación
+</a>
+
+<a href="reportes.html">
+Reportes
+</a>
+
+</nav>
+
+</aside>
+
+
+
+<main class="main-content">
+
+
+<header class="topbar">
+
+<div>
+
+<h1>
+Entrenamientos
+</h1>
+
+<p>
+Control de rutinas y planificación semanal
+</p>
+
+</div>
+
+</header>
+
+<section class="page-hero">
+<div class="page-hero-content">
+<h2>Técnica, progresión y control semanal</h2>
+<p>Organiza rutinas con una lectura rápida del volumen de trabajo y las sesiones programadas.</p>
+</div>
+<img src="../Assets/img/trainer-workouts.jpg" alt="Entrenador masculino corrigiendo la técnica de un cliente masculino con mancuernas">
+</section>
+
+
+
+<section class="kpi-grid">
+
+
+<div class="kpi-card">
+
+<h3>
+Rutinas Activas
+</h3>
+
+<strong>
+120
+</strong>
+
+</div>
+
+
+<div class="kpi-card">
+
+<h3>
+Entrenamientos Hoy
+</h3>
+
+<strong>
+35
+</strong>
+
+</div>
+
+
+<div class="kpi-card">
+
+<h3>
+Programas
+</h3>
+
+<strong>
+18
+</strong>
+
+</div>
+
+
+</section>
+
+
+<section class="dashboard-panel">
+
+<h2>
+Constructor de Rutinas
+</h2>
+
+<p class="panel-description">
+Completa los campos del ejercicio para asignarlo correctamente al cliente.
+</p>
+
+<div class="template-panel">
+<div>
+<label for="rutinaPlantilla">Plantilla rápida</label>
+<select id="rutinaPlantilla">
+<option value="">Seleccionar plantilla</option>
+<option value="hipertrofia-gym">Hipertrofia gym · 3 días</option>
+<option value="fuerza-piernas">Fuerza piernas · 2 días</option>
+<option value="casa-inicial">Casa inicial · 3 días</option>
+<option value="pecho-triceps">Pecho y tríceps · 1 día</option>
+<option value="espalda-biceps">Espalda y bíceps · 1 día</option>
+<option value="piernas-completo">Piernas completo · 1 día</option>
+<option value="hombros-core">Hombros y core · 1 día</option>
+<option value="split-5-dias">Rutina dividida · 5 días</option>
+<option value="torso-pierna-4">Torso / Pierna · 4 días</option>
+</select>
+</div>
+<div class="template-preview" id="plantillaPreview">
+<strong>Plantillas listas para asignar</strong>
+<p>Selecciona un cliente y una plantilla para cargar una rutina base completa con ejercicios recomendados.</p>
+</div>
+<button type="button" class="btn-secondary" id="asignarPlantillaBtn">
+Cargar plantilla
+</button>
+</div>
+<div class="template-manage" id="plantillaGestion" hidden>
+<input id="nuevoNombrePlantilla" type="text" placeholder="Nuevo nombre de plantilla">
+<button type="button" class="btn-secondary" id="renombrarPlantillaBtn">Renombrar</button>
+<button type="button" class="btn-secondary danger" id="eliminarPlantillaBtn">Eliminar plantilla</button>
+</div>
+
+<div class="template-editor" id="plantillaEditor" hidden>
+<div class="template-editor-header">
+<div>
+<h3>Rutina editable</h3>
+<p>Revisa, cambia o elimina bloques antes de asignar la rutina al cliente.</p>
+</div>
+<div class="template-editor-actions">
+<input id="nombrePlantillaPersonalizada" type="text" placeholder="Nombre de plantilla personalizada">
+<button type="button" class="btn-secondary" id="guardarComoPlantillaBtn">
+Guardar como plantilla
+</button>
+<button type="button" class="btn-primary" id="guardarPlantillaBtn">
+Guardar rutina completa
+</button>
+</div>
+</div>
+<div class="template-add">
+<div>
+<label for="bloqueDia">Día</label>
+<select id="bloqueDia">
+<option>Lunes</option>
+<option>Martes</option>
+<option>Miércoles</option>
+<option>Jueves</option>
+<option>Viernes</option>
+<option>Sábado</option>
+<option>Domingo</option>
+</select>
+</div>
+<div>
+<label for="bloqueGrupo">Grupo</label>
+<select id="bloqueGrupo">
+<option>Pecho</option>
+<option>Espalda</option>
+<option>Piernas</option>
+<option>Hombros</option>
+<option>Brazos</option>
+<option>Core</option>
+<option>Full body</option>
+</select>
+</div>
+<div>
+<label for="bloqueEjercicio">Ejercicio</label>
+<select id="bloqueEjercicio"></select>
+</div>
+<button type="button" class="btn-secondary" id="agregarBloqueBtn">Agregar bloque</button>
+</div>
+<div class="template-blocks" id="plantillaBloques"></div>
+</div>
+
+<form class="builder-form" id="rutinaForm">
+
+<div class="form-grid">
+
+<div>
+<label for="rutinaCliente">Cliente</label>
+<select id="rutinaCliente" required>
+<option value="">Seleccionar cliente</option>
+</select>
+</div>
+
+<div>
+<label for="rutinaDia">Día</label>
+<select id="rutinaDia" required>
+<option value="">Seleccionar día</option>
+<option>Lunes</option>
+<option>Martes</option>
+<option>Miércoles</option>
+<option>Jueves</option>
+<option>Viernes</option>
+<option>Sábado</option>
+<option>Domingo</option>
+</select>
+</div>
+
+<div>
+<label for="rutinaEntorno">Entorno</label>
+<select id="rutinaEntorno" required>
+<option value="">Seleccionar entorno</option>
+<option>Gym</option>
+<option>Casa</option>
+<option>Mixto</option>
+</select>
+</div>
+
+<div>
+<label for="rutinaGrupo">Grupo muscular</label>
+<select id="rutinaGrupo" required>
+<option value="">Seleccionar grupo</option>
+<option>Pecho</option>
+<option>Espalda</option>
+<option>Piernas</option>
+<option>Hombros</option>
+<option>Brazos</option>
+<option>Core</option>
+<option>Full body</option>
+</select>
+</div>
+
+<div>
+<label for="rutinaSubgrupo">Variedad / subgrupo</label>
+<select id="rutinaSubgrupo">
+<option value="">Todas las variedades</option>
+</select>
+</div>
+
+<div>
+<label for="rutinaNivel">Nivel</label>
+<select id="rutinaNivel">
+<option value="">Todos los niveles</option>
+<option>Inicial</option>
+<option>Intermedio</option>
+<option>Avanzado</option>
+<option>General</option>
+</select>
+</div>
+
+<div>
+<label for="rutinaObjetivo">Objetivo</label>
+<select id="rutinaObjetivo">
+<option value="">Todos los objetivos</option>
+<option>Fuerza</option>
+<option>Hipertrofia</option>
+<option>Resistencia</option>
+<option>Core / estabilidad</option>
+<option>Movilidad / técnica</option>
+</select>
+</div>
+
+<div>
+<label for="rutinaEquipo">Equipo</label>
+<select id="rutinaEquipo">
+<option value="">Todo el equipo</option>
+</select>
+</div>
+
+<div>
+<label for="rutinaBiblioteca">Biblioteca</label>
+<select id="rutinaBiblioteca">
+<option value="todos">Todos los ejercicios</option>
+<option value="recomendados">Recomendados por entrenador</option>
+</select>
+</div>
+
+<div>
+<label for="rutinaBusqueda">Buscar ejercicio</label>
+<input id="rutinaBusqueda" type="search" placeholder="Nombre, equipo, objetivo o subgrupo">
+</div>
+
+<div>
+<label for="rutinaEjercicio">Ejercicio</label>
+<select id="rutinaEjercicio" required>
+<option value="">Seleccionar ejercicio</option>
+</select>
+<div class="field-hint" id="ejercicioConteo">Selecciona un grupo para ver ejercicios disponibles.</div>
+</div>
+
+<div>
+<label for="rutinaDescanso">Descanso</label>
+<select id="rutinaDescanso" required>
+<option value="">Seleccionar descanso</option>
+<option>30 segundos</option>
+<option>45 segundos</option>
+<option>60 segundos</option>
+<option>90 segundos</option>
+<option>120 segundos</option>
+</select>
+</div>
+
+<div>
+<label for="rutinaSeries">Series</label>
+<select id="rutinaSeries" required>
+<option value="">Seleccionar series</option>
+<option>2</option>
+<option>3</option>
+<option>4</option>
+<option>5</option>
+<option>6</option>
+</select>
+</div>
+
+<div>
+<label for="rutinaRepeticiones">Repeticiones</label>
+<select id="rutinaRepeticiones" required>
+<option value="">Seleccionar repeticiones</option>
+<option>6</option>
+<option>8</option>
+<option>10</option>
+<option>12</option>
+<option>15</option>
+<option>20</option>
+</select>
+</div>
+
+<div>
+<label for="rutinaPeso">Peso (kg)</label>
+<select id="rutinaPeso" required>
+<option value="">Seleccionar peso</option>
+<option>Sin peso</option>
+<option>5</option>
+<option>10</option>
+<option>15</option>
+<option>20</option>
+<option>30</option>
+<option>40</option>
+<option>50</option>
+<option>60</option>
+<option>80</option>
+<option>100</option>
+</select>
+</div>
+
+</div>
+
+<aside class="exercise-preview" id="exercisePreview" aria-live="polite">
+<strong>Vista previa del ejercicio</strong>
+<p>Selecciona entorno, grupo muscular y ejercicio para revisar el equipo, nivel e indicación técnica antes de asignarlo.</p>
+</aside>
+
+<div>
+<label for="rutinaObservaciones">Observaciones</label>
+<textarea id="rutinaObservaciones" rows="4" placeholder="Indicaciones técnicas, molestias, progresión o ajustes del ejercicio."></textarea>
+</div>
+
+<button type="submit" class="btn-primary">
+Asignar Rutina
+</button>
+
+<div class="form-status" id="rutinaEstado" aria-live="polite"></div>
+
+</form>
+
+</section>
+
+
+
+<section class="dashboard-panel">
+
+<h2>
+Historial de rutinas asignadas
+</h2>
+
+<p class="panel-description">
+Revisa las asignaciones guardadas por cliente y elimina únicamente la rutina que necesites corregir.
+</p>
+
+<div class="assigned-history-toolbar">
+<label for="historialCliente">Cliente</label>
+<select id="historialCliente">
+<option value="">Todos los clientes</option>
+</select>
+</div>
+
+<div class="assigned-history" id="historialRutinas"></div>
+
+</section>
+
+
+</main>
+
+
+</div>
+
+
+<script src="../Assets/js/app.js"></script>
+<script src="../Assets/js/backend-config.js"></script>
+<script src="../Assets/js/vendor/supabase.min.js"></script>
+<script src="../Assets/js/backend.js"></script>
+<script src="../Assets/js/routine-sync.js"></script>
+<script src="../Data/exercise-library.js"></script>
+
+<script>
+const rutinaForm = document.getElementById("rutinaForm");
+const rutinaCliente = document.getElementById("rutinaCliente");
+const historialCliente = document.getElementById("historialCliente");
+const historialRutinas = document.getElementById("historialRutinas");
+const rutinaEstado = document.getElementById("rutinaEstado");
+const rutinaEntorno = document.getElementById("rutinaEntorno");
+const rutinaGrupo = document.getElementById("rutinaGrupo");
+const rutinaSubgrupo = document.getElementById("rutinaSubgrupo");
+const rutinaNivel = document.getElementById("rutinaNivel");
+const rutinaObjetivo = document.getElementById("rutinaObjetivo");
+const rutinaEquipo = document.getElementById("rutinaEquipo");
+const rutinaBiblioteca = document.getElementById("rutinaBiblioteca");
+const rutinaBusqueda = document.getElementById("rutinaBusqueda");
+const rutinaEjercicio = document.getElementById("rutinaEjercicio");
+const ejercicioConteo = document.getElementById("ejercicioConteo");
+const exercisePreview = document.getElementById("exercisePreview");
+const rutinaPlantilla = document.getElementById("rutinaPlantilla");
+const plantillaPreview = document.getElementById("plantillaPreview");
+const asignarPlantillaBtn = document.getElementById("asignarPlantillaBtn");
+const plantillaGestion = document.getElementById("plantillaGestion");
+const nuevoNombrePlantilla = document.getElementById("nuevoNombrePlantilla");
+const renombrarPlantillaBtn = document.getElementById("renombrarPlantillaBtn");
+const eliminarPlantillaBtn = document.getElementById("eliminarPlantillaBtn");
+const plantillaEditor = document.getElementById("plantillaEditor");
+const plantillaBloques = document.getElementById("plantillaBloques");
+const guardarPlantillaBtn = document.getElementById("guardarPlantillaBtn");
+const guardarComoPlantillaBtn = document.getElementById("guardarComoPlantillaBtn");
+const nombrePlantillaPersonalizada = document.getElementById("nombrePlantillaPersonalizada");
+const bloqueDia = document.getElementById("bloqueDia");
+const bloqueGrupo = document.getElementById("bloqueGrupo");
+const bloqueEjercicio = document.getElementById("bloqueEjercicio");
+const agregarBloqueBtn = document.getElementById("agregarBloqueBtn");
+
+const bibliotecaFallback = [
+{id:"pecho-press-banca",grupo:"Pecho",subgrupo:"Pecho medio",nombre:"Press banca",equipo:"Barra y banco",nivel:"Intermedio",entorno:"Gym",objetivo:"Fuerza",indicacion:"Escápulas firmes, pies apoyados y barra controlada hasta el pecho sin rebote.",fuente:"Referencia externa: YouTube",videoUrl:"https://www.youtube.com/results?search_query=Powerexplosive+press+banca+tecnica"},
+{id:"espalda-remo-barra",grupo:"Espalda",subgrupo:"Espalda media",nombre:"Remo con barra",equipo:"Barra",nivel:"Intermedio",entorno:"Gym",objetivo:"Fuerza",indicacion:"Mantén columna neutra y lleva la barra hacia el abdomen con control.",fuente:"Referencia externa: YouTube",videoUrl:"https://www.youtube.com/results?search_query=Powerexplosive+remo+con+barra+tecnica"},
+{id:"piernas-sentadilla",grupo:"Piernas",subgrupo:"Cuádriceps",nombre:"Sentadilla",equipo:"Barra",nivel:"Intermedio",entorno:"Gym",objetivo:"Fuerza",indicacion:"Rodillas alineadas con pies, torso firme y profundidad controlada.",fuente:"Referencia externa: YouTube",videoUrl:"https://www.youtube.com/results?search_query=Powerexplosive+sentadilla+tecnica"},
+{id:"hombros-press-militar",grupo:"Hombros",subgrupo:"Deltoide anterior",nombre:"Press militar",equipo:"Barra o mancuernas",nivel:"Intermedio",entorno:"Mixto",objetivo:"Fuerza",indicacion:"Core firme, trayectoria vertical y bloqueo controlado sin hiperextender lumbar.",fuente:"Referencia externa: YouTube",videoUrl:"https://www.youtube.com/results?search_query=Powerexplosive+press+militar+tecnica"},
+{id:"brazos-curl-barra",grupo:"Brazos",subgrupo:"Bíceps",nombre:"Curl bíceps con barra",equipo:"Barra",nivel:"Inicial",entorno:"Gym",objetivo:"Hipertrofia",indicacion:"Codos fijos, muñecas neutras y subida sin balanceo.",fuente:"Referencia externa: YouTube",videoUrl:"https://www.youtube.com/results?search_query=curl+biceps+barra+tecnica"},
+{id:"core-plancha",grupo:"Core",subgrupo:"Estabilidad",nombre:"Plancha",equipo:"Peso corporal",nivel:"Inicial",entorno:"Casa",objetivo:"Core / estabilidad",indicacion:"Mantén pelvis neutra, abdomen activo y respiración controlada.",fuente:"Referencia externa: YouTube",videoUrl:"https://www.youtube.com/results?search_query=plancha+abdominal+tecnica"},
+{id:"fullbody-peso-muerto",grupo:"Full body",subgrupo:"Fuerza global",nombre:"Peso muerto",equipo:"Barra",nivel:"Avanzado",entorno:"Gym",objetivo:"Fuerza",indicacion:"Prioriza tensión corporal completa y barra pegada durante toda la subida.",fuente:"Referencia externa: YouTube",videoUrl:"https://www.youtube.com/results?search_query=Powerexplosive+peso+muerto+tecnica"}
+];
+
+let bibliotecaEjercicios = window.FLOW_EXERCISE_LIBRARY || bibliotecaFallback;
+let plantillaEditable = [];
+let plantillaEditableNombre = "";
+
+const plantillasRutina = {
+"hipertrofia-gym":{
+nombre:"Hipertrofia gym · 3 días",
+descripcion:"Base equilibrada para ganancia muscular con empujes, jalones y pierna.",
+entorno:"Gym",
+ejercicios:[
+{dia:"Lunes",grupo:"Pecho",objetivo:"Hipertrofia",series:"4",repeticiones:"8",peso:"20",descanso:"90 segundos"},
+{dia:"Lunes",grupo:"Brazos",subgrupo:"Tríceps",objetivo:"Hipertrofia",series:"3",repeticiones:"12",peso:"10",descanso:"60 segundos"},
+{dia:"Miércoles",grupo:"Espalda",objetivo:"Hipertrofia",series:"4",repeticiones:"10",peso:"20",descanso:"90 segundos"},
+{dia:"Miércoles",grupo:"Brazos",subgrupo:"Bíceps",objetivo:"Hipertrofia",series:"3",repeticiones:"12",peso:"10",descanso:"60 segundos"},
+{dia:"Viernes",grupo:"Piernas",objetivo:"Hipertrofia",series:"4",repeticiones:"10",peso:"30",descanso:"90 segundos"},
+{dia:"Viernes",grupo:"Hombros",objetivo:"Hipertrofia",series:"3",repeticiones:"12",peso:"10",descanso:"60 segundos"}
+]
+},
+"fuerza-piernas":{
+nombre:"Fuerza piernas · 2 días",
+descripcion:"Rutina corta para priorizar cuádriceps, cadena posterior y estabilidad.",
+entorno:"Gym",
+ejercicios:[
+{dia:"Martes",grupo:"Piernas",subgrupo:"Cuádriceps",objetivo:"Fuerza",series:"5",repeticiones:"6",peso:"40",descanso:"120 segundos"},
+{dia:"Martes",grupo:"Piernas",subgrupo:"Glúteos",objetivo:"Fuerza",series:"4",repeticiones:"8",peso:"30",descanso:"90 segundos"},
+{dia:"Jueves",grupo:"Piernas",subgrupo:"Isquiosurales",objetivo:"Fuerza",series:"4",repeticiones:"8",peso:"30",descanso:"90 segundos"},
+{dia:"Jueves",grupo:"Core",objetivo:"Core / estabilidad",series:"3",repeticiones:"15",peso:"Sin peso",descanso:"60 segundos"}
+]
+},
+"casa-inicial":{
+nombre:"Casa inicial · 3 días",
+descripcion:"Plan simple para comenzar en casa con peso corporal, banda y técnica controlada.",
+entorno:"Casa",
+ejercicios:[
+{dia:"Lunes",grupo:"Full body",objetivo:"Resistencia",series:"3",repeticiones:"12",peso:"Sin peso",descanso:"60 segundos"},
+{dia:"Lunes",grupo:"Core",objetivo:"Core / estabilidad",series:"3",repeticiones:"15",peso:"Sin peso",descanso:"45 segundos"},
+{dia:"Miércoles",grupo:"Piernas",objetivo:"Resistencia",series:"3",repeticiones:"15",peso:"Sin peso",descanso:"60 segundos"},
+{dia:"Miércoles",grupo:"Pecho",objetivo:"Hipertrofia",series:"3",repeticiones:"12",peso:"Sin peso",descanso:"60 segundos"},
+{dia:"Viernes",grupo:"Espalda",objetivo:"Movilidad / técnica",series:"3",repeticiones:"12",peso:"Sin peso",descanso:"60 segundos"},
+{dia:"Viernes",grupo:"Hombros",objetivo:"Movilidad / técnica",series:"3",repeticiones:"12",peso:"Sin peso",descanso:"45 segundos"}
+]
+},
+"pecho-triceps":{
+nombre:"Pecho y tríceps · 1 día",
+descripcion:"Sesión de empuje con trabajo principal de pecho y accesorios de tríceps.",
+entorno:"Gym",
+ejercicios:[
+{dia:"Lunes",grupo:"Pecho",objetivo:"Hipertrofia",series:"4",repeticiones:"8",peso:"20",descanso:"90 segundos"},
+{dia:"Lunes",grupo:"Pecho",subgrupo:"Pecho superior",objetivo:"Hipertrofia",series:"3",repeticiones:"10",peso:"15",descanso:"75 segundos"},
+{dia:"Lunes",grupo:"Brazos",subgrupo:"Tríceps",objetivo:"Hipertrofia",series:"3",repeticiones:"12",peso:"10",descanso:"60 segundos"}
+]
+},
+"espalda-biceps":{
+nombre:"Espalda y bíceps · 1 día",
+descripcion:"Sesión de tracción para dorsales, espalda media y bíceps.",
+entorno:"Gym",
+ejercicios:[
+{dia:"Martes",grupo:"Espalda",subgrupo:"Dorsales",objetivo:"Hipertrofia",series:"4",repeticiones:"8",peso:"30",descanso:"90 segundos"},
+{dia:"Martes",grupo:"Espalda",subgrupo:"Espalda media",objetivo:"Hipertrofia",series:"4",repeticiones:"10",peso:"20",descanso:"90 segundos"},
+{dia:"Martes",grupo:"Brazos",subgrupo:"Bíceps",objetivo:"Hipertrofia",series:"3",repeticiones:"12",peso:"10",descanso:"60 segundos"}
+]
+},
+"piernas-completo":{
+nombre:"Piernas completo · 1 día",
+descripcion:"Trabajo completo de cuádriceps, femoral, glúteos y gemelos.",
+entorno:"Gym",
+ejercicios:[
+{dia:"Miércoles",grupo:"Piernas",subgrupo:"Cuádriceps",objetivo:"Fuerza",series:"4",repeticiones:"8",peso:"40",descanso:"120 segundos"},
+{dia:"Miércoles",grupo:"Piernas",subgrupo:"Femoral",objetivo:"Hipertrofia",series:"4",repeticiones:"10",peso:"30",descanso:"90 segundos"},
+{dia:"Miércoles",grupo:"Piernas",subgrupo:"Glúteos",objetivo:"Hipertrofia",series:"3",repeticiones:"12",peso:"30",descanso:"90 segundos"},
+{dia:"Miércoles",grupo:"Piernas",subgrupo:"Gemelos",objetivo:"Resistencia",series:"4",repeticiones:"15",peso:"20",descanso:"60 segundos"}
+]
+},
+"hombros-core":{
+nombre:"Hombros y core · 1 día",
+descripcion:"Sesión de estabilidad, deltoides y control central.",
+entorno:"Gym",
+ejercicios:[
+{dia:"Jueves",grupo:"Hombros",subgrupo:"Deltoide anterior",objetivo:"Hipertrofia",series:"4",repeticiones:"8",peso:"20",descanso:"90 segundos"},
+{dia:"Jueves",grupo:"Hombros",subgrupo:"Deltoide lateral",objetivo:"Hipertrofia",series:"3",repeticiones:"12",peso:"8",descanso:"60 segundos"},
+{dia:"Jueves",grupo:"Core",subgrupo:"Abdominales",objetivo:"Core / estabilidad",series:"3",repeticiones:"15",peso:"Sin peso",descanso:"60 segundos"}
+]
+},
+"split-5-dias":{
+nombre:"Torso / Pierna / Empuje / Tirón · 5 días",
+descripcion:"Split semanal con torso, dos estímulos de pierna y días específicos de empuje y tirón.",
+entorno:"Gym",
+calentamiento:[
+"Calor: 1 minuto en bici reclinada, nivel L1 y velocidad constante.",
+"Articulaciones: movilidad controlada de hombros, cadera, rodillas y tobillos.",
+"Activación: 10 repeticiones del primer patrón del día con carga mínima.",
+"Sistema nervioso: 5 repeticiones explosivas y técnicamente limpias con carga mínima."
+],
+notasSeguridad:"Ajusta el rango y la carga según la técnica, molestias y antecedentes del cliente. En caso de lesión, valida la selección con un profesional de salud.",
+ejercicios:[
+{dia:"Lunes",grupo:"Pecho",objetivo:"Hipertrofia",series:"4",repeticiones:"8",peso:"20",descanso:"90 segundos"},
+{dia:"Lunes",grupo:"Espalda",objetivo:"Hipertrofia",series:"4",repeticiones:"10",peso:"20",descanso:"90 segundos"},
+{dia:"Lunes",grupo:"Hombros",objetivo:"Hipertrofia",series:"3",repeticiones:"12",peso:"10",descanso:"60 segundos"},
+{dia:"Martes",grupo:"Piernas",subgrupo:"Cuádriceps",objetivo:"Fuerza",series:"5",repeticiones:"6",peso:"40",descanso:"120 segundos"},
+{dia:"Martes",grupo:"Piernas",subgrupo:"Cuádriceps",objetivo:"Hipertrofia",series:"4",repeticiones:"10",peso:"30",descanso:"90 segundos"},
+{dia:"Martes",grupo:"Piernas",subgrupo:"Gemelos",objetivo:"Resistencia",series:"4",repeticiones:"15",peso:"20",descanso:"60 segundos"},
+{dia:"Miércoles",grupo:"Hombros",objetivo:"Hipertrofia",series:"4",repeticiones:"8",peso:"20",descanso:"90 segundos"},
+{dia:"Miércoles",grupo:"Brazos",subgrupo:"Tríceps",objetivo:"Hipertrofia",series:"4",repeticiones:"10",peso:"10",descanso:"60 segundos"},
+{dia:"Miércoles",grupo:"Core",subgrupo:"Abdominales",objetivo:"Core / estabilidad",series:"3",repeticiones:"15",peso:"Sin peso",descanso:"60 segundos"},
+{dia:"Jueves",grupo:"Espalda",objetivo:"Hipertrofia",series:"4",repeticiones:"8",peso:"25",descanso:"90 segundos"},
+{dia:"Jueves",grupo:"Brazos",subgrupo:"Bíceps",objetivo:"Hipertrofia",series:"4",repeticiones:"10",peso:"10",descanso:"60 segundos"},
+{dia:"Viernes",grupo:"Piernas",subgrupo:"Glúteos",objetivo:"Hipertrofia",series:"4",repeticiones:"10",peso:"30",descanso:"90 segundos"},
+{dia:"Viernes",grupo:"Piernas",subgrupo:"Femoral",objetivo:"Fuerza",series:"4",repeticiones:"8",peso:"35",descanso:"120 segundos"},
+{dia:"Viernes",grupo:"Piernas",subgrupo:"Gemelos",objetivo:"Resistencia",series:"4",repeticiones:"15",peso:"20",descanso:"60 segundos"}
+]
+},
+"torso-pierna-4":{
+nombre:"Torso / Pierna · 4 días",
+descripcion:"Alterna torso y pierna con dos estímulos semanales y recuperación organizada.",
+entorno:"Gym",
+ejercicios:[
+{dia:"Lunes",grupo:"Pecho",objetivo:"Hipertrofia",series:"4",repeticiones:"8",peso:"20",descanso:"90 segundos"},
+{dia:"Lunes",grupo:"Espalda",objetivo:"Hipertrofia",series:"4",repeticiones:"10",peso:"20",descanso:"90 segundos"},
+{dia:"Lunes",grupo:"Hombros",objetivo:"Hipertrofia",series:"3",repeticiones:"12",peso:"10",descanso:"60 segundos"},
+{dia:"Lunes",grupo:"Brazos",subgrupo:"Tríceps",objetivo:"Hipertrofia",series:"3",repeticiones:"12",peso:"10",descanso:"60 segundos"},
+{dia:"Martes",grupo:"Piernas",subgrupo:"Cuádriceps",objetivo:"Fuerza",series:"4",repeticiones:"8",peso:"40",descanso:"120 segundos"},
+{dia:"Martes",grupo:"Piernas",subgrupo:"Femoral",objetivo:"Hipertrofia",series:"4",repeticiones:"10",peso:"30",descanso:"90 segundos"},
+{dia:"Martes",grupo:"Piernas",subgrupo:"Gemelos",objetivo:"Resistencia",series:"4",repeticiones:"15",peso:"20",descanso:"60 segundos"},
+{dia:"Jueves",grupo:"Pecho",objetivo:"Hipertrofia",series:"3",repeticiones:"10",peso:"15",descanso:"75 segundos"},
+{dia:"Jueves",grupo:"Espalda",objetivo:"Hipertrofia",series:"4",repeticiones:"8",peso:"25",descanso:"90 segundos"},
+{dia:"Jueves",grupo:"Brazos",subgrupo:"Bíceps",objetivo:"Hipertrofia",series:"3",repeticiones:"12",peso:"10",descanso:"60 segundos"},
+{dia:"Jueves",grupo:"Core",subgrupo:"Abdominales",objetivo:"Core / estabilidad",series:"3",repeticiones:"15",peso:"Sin peso",descanso:"60 segundos"},
+{dia:"Viernes",grupo:"Piernas",subgrupo:"Glúteos",objetivo:"Hipertrofia",series:"4",repeticiones:"10",peso:"30",descanso:"90 segundos"},
+{dia:"Viernes",grupo:"Piernas",subgrupo:"Femoral",objetivo:"Fuerza",series:"3",repeticiones:"8",peso:"35",descanso:"120 segundos"},
+{dia:"Viernes",grupo:"Piernas",subgrupo:"Cuádriceps",objetivo:"Hipertrofia",series:"3",repeticiones:"12",peso:"25",descanso:"75 segundos"}
+]
+}
+};
+
+const splitPersonalizado = plantillasRutina["split-5-dias"];
+splitPersonalizado.calentamientosPorDia = {
+"Lunes":[
+"Calor: 1 minuto en bici reclinada, nivel L1 y velocidad constante.",
+"Articulaciones: 10 círculos de brazos hacia adelante, 10 hacia atrás y 10 rotaciones externas de manguito rotador con polea vacía.",
+"Activación: 10 flexiones suaves contra la pared, lentas y controladas.",
+"Sistema nervioso: 5 aperturas rápidas en Pec Deck con peso mínimo, empuja rápido y regresa despacio."
+],
+"Martes":[
+"Calor: 1 minuto en bici reclinada, nivel L1 y velocidad constante.",
+"Articulaciones: 10 círculos de cadera hacia afuera con cada pierna, suaves y controlados.",
+"Activación: 10 repeticiones lentas en prensa a 45° completamente vacía.",
+"Sistema nervioso: 5 empujes explosivos en prensa vacía, frenando antes de bloquear la rodilla."
+],
+"Miércoles":[
+"Calor: 1 minuto en bici reclinada, nivel L1 y velocidad constante.",
+"Articulaciones: 10 elevaciones laterales en polea sin peso y 10 circunducciones de muñeca por lado.",
+"Activación: 10 repeticiones de press militar en Smith solo con la barra.",
+"Sistema nervioso: 5 extensiones de tríceps en polea alta con soga y peso mínimo."
+],
+"Jueves":[
+"Calor: 1 minuto en bici reclinada, nivel L1 y velocidad constante.",
+"Articulaciones: 10 rotaciones de hombros hacia atrás y 10 giros suaves de torso fijando la cadera.",
+"Activación: 10 jalones al pecho en dorsalera con una sola placa.",
+"Sistema nervioso: 5 remos sentados en polea con peso mínimo, tirando rápido y reteniendo atrás."
+],
+"Viernes":[
+"Calor: 1 minuto en bici reclinada, nivel L1 y velocidad constante.",
+"Articulaciones: 10 puentes de glúteo sin peso, apretando arriba.",
+"Activación: 10 curls de piernas con peso mínimo y bajada lenta.",
+"Sistema nervioso: 5 patadas de glúteo o tirones femorales rápidos con peso mínimo."
+]
+};
+
+splitPersonalizado.ejercicios = [
+{dia:"Lunes",grupo:"Pecho",ejercicioNombre:"Press plano con mancuernas",objetivo:"Hipertrofia",series:"4",repeticiones:"8-10",peso:"15",ultimaSerie:"17.5 kg",descanso:"90 segundos"},
+{dia:"Lunes",grupo:"Espalda",ejercicioNombre:"Jalón al pecho con agarre neutro",objetivo:"Hipertrofia",series:"4",repeticiones:"10-12",peso:"30",ultimaSerie:"50 kg",descanso:"90 segundos"},
+{dia:"Lunes",grupo:"Pecho",subgrupo:"Pecho superior",ejercicioNombre:"Press inclinado con mancuernas",objetivo:"Hipertrofia",series:"4",repeticiones:"10-12",peso:"15",ultimaSerie:"17.5 kg",descanso:"90 segundos"},
+{dia:"Lunes",grupo:"Espalda",subgrupo:"Espalda media",ejercicioNombre:"Remo sentado en polea",objetivo:"Hipertrofia",series:"4",repeticiones:"10-12",peso:"30",ultimaSerie:"50 kg",descanso:"90 segundos"},
+{dia:"Lunes",grupo:"Pecho",ejercicioNombre:"Pec Deck sentado",objetivo:"Hipertrofia",series:"4",repeticiones:"12",peso:"30",ultimaSerie:"50 kg",descanso:"60 segundos"},
+{dia:"Lunes",grupo:"Espalda",subgrupo:"Dorsales",ejercicioNombre:"Pullover con mancuerna en banca",objetivo:"Hipertrofia",series:"3",repeticiones:"12",peso:"15",descanso:"90 segundos"},
+{dia:"Martes",grupo:"Piernas",subgrupo:"Cuádriceps",ejercicioNombre:"Prensa de piernas a 45°",objetivo:"Fuerza",series:"4",repeticiones:"10-12",peso:"35",ultimaSerie:"40 kg",descanso:"90-120 segundos"},
+{dia:"Martes",grupo:"Piernas",subgrupo:"Cuádriceps",ejercicioNombre:"Extensión de piernas en máquina",objetivo:"Hipertrofia",series:"4",repeticiones:"12",peso:"30",ultimaSerie:"40 kg",descanso:"60 segundos"},
+{dia:"Martes",grupo:"Piernas",subgrupo:"Cuádriceps",ejercicioNombre:"Sentadilla Hack en máquina",objetivo:"Fuerza",series:"3",repeticiones:"10-12",peso:"35",ultimaSerie:"40 kg",descanso:"90 segundos"},
+{dia:"Miércoles",grupo:"Hombros",subgrupo:"Deltoide anterior",ejercicioNombre:"Elevación frontal en polea baja con soga",objetivo:"Hipertrofia",series:"3",repeticiones:"10-12",peso:"20",ultimaSerie:"25 kg",descanso:"60 segundos"},
+{dia:"Miércoles",grupo:"Hombros",subgrupo:"Deltoide lateral",ejercicioNombre:"Elevación lateral unilateral en polea baja",objetivo:"Hipertrofia",series:"4",repeticiones:"12 por lado",peso:"10",descanso:"90 segundos"},
+{dia:"Miércoles",grupo:"Hombros",subgrupo:"Deltoide posterior",ejercicioNombre:"Face pull en polea alta",objetivo:"Hipertrofia",series:"4",repeticiones:"12-15",peso:"30",ultimaSerie:"40 kg",descanso:"60-75 segundos"},
+{dia:"Miércoles",grupo:"Brazos",subgrupo:"Tríceps",ejercicioNombre:"Extensión de tríceps con cuerda en polea alta",objetivo:"Hipertrofia",series:"4",repeticiones:"12",peso:"20",ultimaSerie:"30 kg",descanso:"60 segundos"},
+{dia:"Miércoles",grupo:"Brazos",subgrupo:"Tríceps",ejercicioNombre:"Press francés tras nuca en polea alta con soga",objetivo:"Hipertrofia",series:"3",repeticiones:"12",peso:"25",ultimaSerie:"35 kg",descanso:"60 segundos"},
+{dia:"Miércoles",grupo:"Core",subgrupo:"Abdominales",ejercicioNombre:"Crunch de abdomen en polea alta",objetivo:"Core / estabilidad",series:"3",repeticiones:"12-15",peso:"55",ultimaSerie:"66 kg",descanso:"60 segundos"},
+{dia:"Jueves",grupo:"Espalda",subgrupo:"Espalda media",ejercicioNombre:"Remo en máquina con soporte en el pecho",objetivo:"Hipertrofia",series:"4",repeticiones:"12",peso:"30",ultimaSerie:"50 kg",descanso:"90 segundos"},
+{dia:"Jueves",grupo:"Brazos",subgrupo:"Bíceps",ejercicioNombre:"Curl Bayesian con polea a la cintura",objetivo:"Hipertrofia",series:"3",repeticiones:"12",peso:"10",ultimaSerie:"15 kg",descanso:"75 segundos"},
+{dia:"Jueves",grupo:"Brazos",subgrupo:"Bíceps",ejercicioNombre:"Curl predicador en máquina",objetivo:"Hipertrofia",series:"4",repeticiones:"12",peso:"5",ultimaSerie:"7.5 kg",descanso:"90 segundos"},
+{dia:"Jueves",grupo:"Brazos",subgrupo:"Bíceps",ejercicioNombre:"Curl martillo con soga en polea baja",objetivo:"Hipertrofia",series:"3",repeticiones:"12",peso:"20",ultimaSerie:"30 kg",descanso:"60-75 segundos"},
+{dia:"Viernes",grupo:"Piernas",subgrupo:"Glúteos",ejercicioNombre:"Hip thrust en máquina",objetivo:"Hipertrofia",series:"4",repeticiones:"8",peso:"30",descanso:"90 segundos"},
+{dia:"Viernes",grupo:"Piernas",subgrupo:"Femoral",ejercicioNombre:"Curl de piernas acostado",objetivo:"Hipertrofia",series:"4",repeticiones:"12",peso:"30",descanso:"90 segundos"},
+{dia:"Viernes",grupo:"Piernas",subgrupo:"Glúteos",ejercicioNombre:"Abductores en máquina",objetivo:"Hipertrofia",series:"4",repeticiones:"12",peso:"30",descanso:"60 segundos"},
+{dia:"Viernes",grupo:"Piernas",subgrupo:"Gemelos",ejercicioNombre:"Pantorrilla sentado en máquina",objetivo:"Resistencia",series:"4",repeticiones:"15",peso:"20",descanso:"60 segundos"}
+];
+
+const ejerciciosPorGrupoLegacy = {
+Pecho:[
+"Press banca",
+"Press inclinado con mancuernas",
+"Aperturas con mancuernas",
+"Fondos en paralelas",
+"Press en máquina"
+],
+Espalda:[
+"Remo con barra",
+"Dominadas",
+"Jalón al pecho",
+"Remo sentado",
+"Peso muerto"
+],
+Piernas:[
+"Sentadilla",
+"Prensa",
+"Peso muerto rumano",
+"Zancadas",
+"Extensión de cuádriceps"
+],
+Hombros:[
+"Press militar",
+"Elevaciones laterales",
+"Face pull",
+"Press Arnold",
+"Pájaros con mancuernas"
+],
+Brazos:[
+"Curl bíceps con barra",
+"Curl martillo",
+"Extensión de tríceps en polea",
+"Press cerrado",
+"Fondos en banco"
+],
+Core:[
+"Plancha",
+"Elevación de piernas",
+"Crunch en polea",
+"Russian twist",
+"Rueda abdominal"
+],
+"Full body":[
+"Sentadilla",
+"Peso muerto",
+"Press banca",
+"Remo con barra",
+"Press militar"
+]
+};
+
+function ejerciciosPorGrupo(grupo){
+const ejercicios = bibliotecaEjercicios.filter(ejercicio=>ejercicio.grupo === grupo);
+if(ejercicios.length){
+return ejercicios;
+}
+return (ejerciciosPorGrupoLegacy[grupo] || []).map(nombre=>({
+id:nombre.toLowerCase().replace(/\s+/g,"-"),
+grupo,
+nombre,
+equipo:"Por definir",
+nivel:"General",
+objetivo:"Hipertrofia",
+subgrupo:"General",
+indicacion:"Revisar técnica con el entrenador antes de aumentar la carga.",
+fuente:"",
+videoUrl:"",
+entorno:"Mixto"
+}));
+}
+
+function opcionesEjerciciosPlantilla(bloque, entornoPlantilla){
+return ejerciciosPorGrupo(bloque.grupo).filter(ejercicio=>
+(!bloque.subgrupo || ejercicio.subgrupo === bloque.subgrupo) &&
+(ejercicio.entorno === entornoPlantilla || ejercicio.entorno === "Mixto")
+).sort((a,b)=>a.nombre.localeCompare(b.nombre,"es"));
+}
+
+function buscarEjercicioPlantilla(bloque, entornoPlantilla, usados){
+const grupo = ejerciciosPorGrupo(bloque.grupo);
+if(bloque.ejercicioNombre){
+const normalizar = valor=>valor.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g," ").trim();
+const nombreSolicitado = normalizar(bloque.ejercicioNombre);
+const exacto = grupo.find(ejercicio=>normalizar(ejercicio.nombre) === nombreSolicitado && !usados.has(ejercicio.id));
+if(exacto){
+usados.add(exacto.id);
+return exacto;
+}
+return {
+id:`plantilla-${nombreSolicitado.replace(/\s+/g,"-")}`,
+nombre:bloque.ejercicioNombre,
+grupo:bloque.grupo,
+subgrupo:bloque.subgrupo || "General",
+equipo:"Según máquina o maneral indicado",
+nivel:"General",
+objetivo:bloque.objetivo || "Hipertrofia",
+entorno:entornoPlantilla,
+indicacion:"Confirma la técnica y el ajuste de la máquina antes de aumentar la carga.",
+fuente:"Plantilla del entrenador",
+videoUrl:""
+};
+}
+if(bloque.ejercicioId){
+const ejercicioGuardado = grupo.find(ejercicio=>ejercicio.id === bloque.ejercicioId && !usados.has(ejercicio.id));
+if(ejercicioGuardado){
+usados.add(ejercicioGuardado.id);
+return ejercicioGuardado;
+}
+}
+const filtros = [
+ejercicio=>(!bloque.subgrupo || ejercicio.subgrupo === bloque.subgrupo) && (!bloque.objetivo || ejercicio.objetivo === bloque.objetivo) && (ejercicio.entorno === entornoPlantilla || ejercicio.entorno === "Mixto"),
+ejercicio=>(!bloque.subgrupo || ejercicio.subgrupo === bloque.subgrupo) && (ejercicio.entorno === entornoPlantilla || ejercicio.entorno === "Mixto"),
+ejercicio=>(!bloque.objetivo || ejercicio.objetivo === bloque.objetivo) && (ejercicio.entorno === entornoPlantilla || ejercicio.entorno === "Mixto"),
+ejercicio=>ejercicio.entorno === entornoPlantilla || ejercicio.entorno === "Mixto",
+ejercicio=>Boolean(ejercicio)
+];
+for(const filtro of filtros){
+const candidatos = grupo.filter(ejercicio=>filtro(ejercicio) && !usados.has(ejercicio.id));
+const recomendado = candidatos.find(ejercicio=>ejercicio.recomendadoEntrenador);
+if(recomendado){
+usados.add(recomendado.id);
+return recomendado;
+}
+if(candidatos[0]){
+usados.add(candidatos[0].id);
+return candidatos[0];
+}
+}
+return null;
+}
+
+function detalleTecnicoPlantilla(ejercicio,bloque){
+const nombre = ejercicio.nombre.toLowerCase();
+if(nombre.includes("press") && ejercicio.grupo === "Pecho"){
+return "Agarre semi-prono; controla la bajada y mantén las escápulas estables.";
+}
+if(ejercicio.grupo === "Espalda"){
+if(nombre.includes("jalón") || nombre.includes("jalon")){
+return "Maneral neutro cerrado; lleva los codos hacia abajo y atrás sin balancear el torso.";
+}
+return "Usa agarre neutro o supino según el maneral; inicia el movimiento con las escápulas.";
+}
+if(ejercicio.subgrupo === "Tríceps"){
+return "Soga o maneral individual; codos estables y extensión completa sin balanceo.";
+}
+if(ejercicio.subgrupo === "Bíceps"){
+return "Agarre supino o neutro; codos quietos y recorrido controlado.";
+}
+if(ejercicio.subgrupo === "Cuádriceps"){
+return "Usa respaldo y manijas de seguridad; rodillas alineadas con los pies.";
+}
+if(ejercicio.subgrupo === "Glúteos" || ejercicio.subgrupo === "Femoral" || ejercicio.subgrupo === "Gemelos"){
+return "Ajusta el apoyo de la máquina y evita rebotes; controla especialmente la fase excéntrica.";
+}
+if(ejercicio.grupo === "Hombros"){
+return "Maneral individual o mancuernas; eleva sin encoger el cuello y controla el retorno.";
+}
+if(ejercicio.grupo === "Core"){
+return "Mantén pelvis y costillas controladas; no compenses con la zona lumbar.";
+}
+return `Agarre y maneral según la máquina; prioriza control técnico. ${bloque.enfoque || ""}`.trim();
+}
+
+function rutinaDesdePlantilla(bloque, ejercicio, plantillaNombre){
+return {
+id:`rutina-${Date.now()}-${Math.random().toString(36).slice(2,8)}`,
+cliente: rutinaCliente.options[rutinaCliente.selectedIndex].text,
+clienteId: rutinaCliente.value,
+dia: bloque.dia,
+entorno: bloque.entorno,
+grupoMuscular: ejercicio.grupo,
+subgrupo: ejercicio.subgrupo || bloque.subgrupo || "General",
+ejercicioId: ejercicio.id,
+ejercicio: ejercicio.nombre,
+equipo: ejercicio.equipo || "",
+nivel: ejercicio.nivel || "General",
+entornoEjercicio: ejercicio.entorno || bloque.entorno,
+objetivo: ejercicio.objetivo || bloque.objetivo || "",
+indicacion: ejercicio.indicacion || "",
+agarre: detalleTecnicoPlantilla(ejercicio,bloque),
+calentamiento: plantillasRutina[rutinaPlantilla.value]?.calentamientosPorDia?.[bloque.dia] || plantillasRutina[rutinaPlantilla.value]?.calentamiento || [],
+ultimaSerie: bloque.ultimaSerie || "",
+videoUrl: ejercicio.videoUrl || "",
+fuente: ejercicio.fuente || "",
+descanso: bloque.descanso,
+series: bloque.series,
+repeticiones: bloque.repeticiones,
+peso: bloque.peso,
+ultimaSerie: bloque.ultimaSerie || "",
+observaciones:`Plantilla: ${plantillaNombre}. ${plantillasRutina[rutinaPlantilla.value]?.notasSeguridad || ""}`,
+fecha: new Date().toISOString()
+};
+}
+
+function rutinasAsignadasGuardadas(){
+return JSON.parse(localStorage.getItem("flowRutinasAsignadas") || "[]");
+}
+
+function guardarRutinasAsignadas(rutinas){
+localStorage.setItem("flowRutinasAsignadas",JSON.stringify(rutinas));
+}
+
+function etiquetaFecha(fecha){
+if(!fecha){
+return "Sin fecha";
+}
+return new Date(fecha).toLocaleDateString("es-EC",{day:"2-digit",month:"short",year:"numeric"});
+}
+
+function renderHistorialRutinas(){
+const clienteFiltro = historialCliente.value;
+const rutinas = rutinasAsignadasGuardadas()
+.map((rutina,index)=>({...rutina,id:String(rutina.id || `legacy-${index}`)}))
+.filter(rutina=>!clienteFiltro || String(rutina.clienteId) === String(clienteFiltro))
+.sort((a,b)=>new Date(b.fecha || 0) - new Date(a.fecha || 0));
+if(!rutinas.length){
+historialRutinas.innerHTML = `<p class="history-empty">No hay rutinas asignadas para este filtro.</p>`;
+return;
+}
+historialRutinas.innerHTML = rutinas.map(rutina=>`
+<article class="assigned-routine">
+<div>
+<strong>${rutina.ejercicio}</strong>
+<span>${rutina.cliente} · ${rutina.dia || "Día sin definir"} · ${etiquetaFecha(rutina.fecha)}</span>
+</div>
+<div class="assigned-routine-meta">
+<span>${rutina.grupoMuscular || "Grupo sin definir"}</span>
+<span>${rutina.series || "-"} series</span>
+<span>${rutina.repeticiones || "-"} reps</span>
+<span>${rutina.descanso || "Descanso sin definir"}</span>
+</div>
+<button type="button" class="meal-remove assigned-remove" data-id="${rutina.id}" data-index="${rutina.id.startsWith("legacy-") ? rutina.id.replace("legacy-","") : ""}" aria-label="Eliminar rutina asignada">X</button>
+</article>
+`).join("");
+}
+
+function eliminarRutinaAsignada(id,indexLegacy){
+let rutinas = rutinasAsignadasGuardadas();
+if(id.startsWith("legacy-")){
+rutinas = rutinas.filter((rutina,index)=>String(index) !== String(indexLegacy));
+}else{
+rutinas = rutinas.filter(rutina=>rutina.id !== id);
+}
+guardarRutinasAsignadas(rutinas);
+renderHistorialRutinas();
+rutinaEstado.textContent = "Rutina asignada eliminada del historial y del portal del cliente.";
+}
+
+function actualizarVistaPlantilla(){
+const plantilla = plantillasRutina[rutinaPlantilla.value];
+if(!plantilla){
+plantillaPreview.innerHTML = "<strong>Plantillas listas para asignar</strong><p>Selecciona un cliente y una plantilla para cargar una rutina base completa con ejercicios recomendados.</p>";
+plantillaGestion.hidden = true;
+return;
+}
+const resumenDias = [...new Set(plantilla.ejercicios.map(ejercicio=>ejercicio.dia))].join(", ");
+plantillaPreview.innerHTML = `
+<strong>${plantilla.nombre}</strong>
+<p>${plantilla.descripcion}</p>
+${plantilla.calentamientosPorDia ? `<p><strong>Calentamientos por día:</strong> ${Object.keys(plantilla.calentamientosPorDia).join(", ")}</p>` : plantilla.calentamiento ? `<p><strong>Calentamiento:</strong> ${plantilla.calentamiento.join(" ")}</p>` : ""}
+<div class="exercise-preview-tags">
+<span>${plantilla.entorno}</span>
+<span>${plantilla.ejercicios.length} ejercicios</span>
+<span>${resumenDias}</span>
+</div>
+`;
+plantillaGestion.hidden = !rutinaPlantilla.value.startsWith("custom-");
+nuevoNombrePlantilla.value = rutinaPlantilla.value.startsWith("custom-") ? plantilla.nombre : "";
+}
+
+function plantillasPersonalizadasGuardadas(){
+return JSON.parse(localStorage.getItem("flowPlantillasRutina") || "[]");
+}
+
+function guardarPlantillasPersonalizadas(plantillas){
+localStorage.setItem("flowPlantillasRutina",JSON.stringify(plantillas));
+}
+
+function registrarPlantillasPersonalizadas(){
+const plantillas = plantillasPersonalizadasGuardadas();
+plantillas.forEach(plantilla=>{
+plantillasRutina[plantilla.id] = plantilla;
+});
+const idsActuales = new Set([...rutinaPlantilla.options].map(option=>option.value));
+plantillas.forEach(plantilla=>{
+if(idsActuales.has(plantilla.id)){
+return;
+}
+const option = document.createElement("option");
+option.value = plantilla.id;
+option.textContent = `${plantilla.nombre} · Personalizada`;
+rutinaPlantilla.appendChild(option);
+});
+}
+
+function actualizarOptionPlantilla(id,nombre){
+const option = [...rutinaPlantilla.options].find(item=>item.value === id);
+if(option){
+option.textContent = `${nombre} · Personalizada`;
+}
+}
+
+function renombrarPlantillaPersonalizada(){
+const id = rutinaPlantilla.value;
+if(!id.startsWith("custom-")){
+rutinaEstado.textContent = "Solo puedes renombrar plantillas personalizadas.";
+return;
+}
+const nombre = nuevoNombrePlantilla.value.trim();
+if(!nombre){
+rutinaEstado.textContent = "Escribe un nombre para renombrar la plantilla.";
+return;
+}
+const plantillas = plantillasPersonalizadasGuardadas();
+const actualizadas = plantillas.map(plantilla=>plantilla.id === id ? {...plantilla,nombre} : plantilla);
+guardarPlantillasPersonalizadas(actualizadas);
+plantillasRutina[id] = {...plantillasRutina[id],nombre};
+actualizarOptionPlantilla(id,nombre);
+actualizarVistaPlantilla();
+rutinaEstado.textContent = `${nombre} actualizada correctamente.`;
+}
+
+function eliminarPlantillaPersonalizada(){
+const id = rutinaPlantilla.value;
+if(!id.startsWith("custom-")){
+rutinaEstado.textContent = "Solo puedes eliminar plantillas personalizadas.";
+return;
+}
+const nombre = plantillasRutina[id]?.nombre || "Plantilla personalizada";
+const plantillas = plantillasPersonalizadasGuardadas().filter(plantilla=>plantilla.id !== id);
+guardarPlantillasPersonalizadas(plantillas);
+delete plantillasRutina[id];
+const option = [...rutinaPlantilla.options].find(item=>item.value === id);
+if(option){
+option.remove();
+}
+rutinaPlantilla.value = "";
+plantillaEditable = [];
+plantillaEditableNombre = "";
+renderPlantillaEditable();
+actualizarVistaPlantilla();
+rutinaEstado.textContent = `${nombre} eliminada.`;
+}
+
+function crearPlantillaEditable(){
+const plantilla = plantillasRutina[rutinaPlantilla.value];
+if(!plantilla){
+rutinaEstado.textContent = "Selecciona una plantilla antes de cargar.";
+return;
+}
+const usados = new Set();
+plantillaEditableNombre = plantilla.nombre;
+plantillaEditable = plantilla.ejercicios.map((bloque,index)=>{
+const ejercicio = buscarEjercicioPlantilla(bloque, plantilla.entorno, usados);
+return {
+id:`bloque-${Date.now()}-${index}`,
+...bloque,
+entorno:plantilla.entorno,
+ejercicioId:ejercicio ? ejercicio.id : "",
+agarre:ejercicio ? detalleTecnicoPlantilla(ejercicio,bloque) : "",
+calentamiento:plantilla.calentamientosPorDia?.[bloque.dia] || plantilla.calentamiento || [],
+ejercicio
+};
+}).filter(bloque=>bloque.ejercicio);
+if(!plantillaEditable.length){
+rutinaEstado.textContent = "No se encontraron ejercicios disponibles para esta plantilla.";
+return;
+}
+rutinaEstado.textContent = `${plantilla.nombre} cargada. Revisa los bloques antes de guardar.`;
+renderPlantillaEditable();
+}
+
+function guardarComoPlantillaPersonalizada(){
+if(!plantillaEditable.length){
+rutinaEstado.textContent = "Carga o arma una rutina antes de guardarla como plantilla.";
+return;
+}
+const nombre = nombrePlantillaPersonalizada.value.trim() || `${plantillaEditableNombre} personalizada`;
+const id = `custom-${Date.now()}`;
+const entorno = plantillaEditable[0]?.entorno || "Mixto";
+const nuevaPlantilla = {
+id,
+nombre,
+descripcion:"Plantilla personalizada creada desde el constructor de rutinas.",
+entorno,
+calentamiento:plantillasRutina[rutinaPlantilla.value]?.calentamiento || [],
+calentamientosPorDia:plantillasRutina[rutinaPlantilla.value]?.calentamientosPorDia || {},
+notasSeguridad:plantillasRutina[rutinaPlantilla.value]?.notasSeguridad || "",
+ejercicios:plantillaEditable.map(bloque=>({
+dia:bloque.dia,
+grupo:bloque.grupo,
+subgrupo:bloque.subgrupo,
+objetivo:bloque.objetivo,
+series:bloque.series,
+repeticiones:bloque.repeticiones,
+peso:bloque.peso,
+ultimaSerie:bloque.ultimaSerie || "",
+descanso:bloque.descanso,
+agarre:bloque.agarre,
+ejercicioId:bloque.ejercicioId
+}))
+};
+const plantillas = plantillasPersonalizadasGuardadas();
+guardarPlantillasPersonalizadas([...plantillas,nuevaPlantilla]);
+plantillasRutina[id] = nuevaPlantilla;
+const option = document.createElement("option");
+option.value = id;
+option.textContent = `${nombre} · Personalizada`;
+rutinaPlantilla.appendChild(option);
+rutinaPlantilla.value = id;
+nombrePlantillaPersonalizada.value = "";
+actualizarVistaPlantilla();
+rutinaEstado.textContent = `${nombre} guardada como plantilla personalizada.`;
+}
+
+function renderPlantillaEditable(){
+if(!plantillaEditable.length){
+plantillaEditor.hidden = true;
+plantillaBloques.innerHTML = "";
+return;
+}
+plantillaEditor.hidden = false;
+plantillaBloques.innerHTML = plantillaEditable.map((bloque,index)=>{
+const opciones = opcionesEjerciciosPlantilla(bloque, bloque.entorno);
+const ejercicioActual = bloque.ejercicio;
+const existeEjercicioActual = opciones.some(ejercicio=>ejercicio.id === bloque.ejercicioId);
+const opcionesCompletas = existeEjercicioActual ? opciones : [ejercicioActual,...opciones];
+const opcionesMarkup = opcionesCompletas.map(ejercicio=>`
+<option value="${ejercicio.id}" ${ejercicio.id === bloque.ejercicioId ? "selected" : ""}>${ejercicio.nombre}${ejercicio.recomendadoEntrenador ? " — Recomendado" : ""}</option>
+`).join("");
+const inicioDia = index === 0 || plantillaEditable[index - 1].dia !== bloque.dia;
+const calentamientoDia = inicioDia ? `
+<div class="template-day-start">
+<h4>${bloque.dia}: calentamiento editable</h4>
+<label>Pasos del calentamiento (uno por línea)</label>
+<textarea class="template-warmup" data-dia="${bloque.dia}" rows="4">${(bloque.calentamiento || []).join("\n")}</textarea>
+<small class="form-help">Puedes cambiar, agregar o quitar pasos antes de guardar la rutina.</small>
+</div>` : "";
+const repeticiones = [...new Set(["6","8","8-10","10","10-12","12","12-15","12 por lado","15","20",bloque.repeticiones].filter(Boolean))];
+return `
+${inicioDia ? calentamientoDia : ""}
+<article class="template-block" data-index="${index}">
+<header>
+<div>
+<strong>${bloque.dia}</strong>
+<span>${bloque.grupo}${bloque.subgrupo ? ` · ${bloque.subgrupo}` : ""}</span>
+</div>
+<button type="button" class="meal-remove template-remove" data-index="${index}" aria-label="Eliminar bloque">X</button>
+</header>
+<div class="template-block-grid">
+<div>
+<label>Ejercicio</label>
+<select class="template-exercise" data-index="${index}">${opcionesMarkup}</select>
+</div>
+<div>
+<label>Series</label>
+<select class="template-series" data-index="${index}">
+${["2","3","4","5","6"].map(valor=>`<option ${valor === bloque.series ? "selected" : ""}>${valor}</option>`).join("")}
+</select>
+</div>
+<div>
+<label>Repeticiones</label>
+<select class="template-reps" data-index="${index}">
+${repeticiones.map(valor=>`<option ${valor === bloque.repeticiones ? "selected" : ""}>${valor}</option>`).join("")}
+</select>
+</div>
+<div>
+<label>Peso</label>
+<select class="template-weight" data-index="${index}">
+${["Sin peso","5","10","15","20","30","40","50","60","80","100"].map(valor=>`<option ${valor === bloque.peso ? "selected" : ""}>${valor}</option>`).join("")}
+</select>
+</div>
+<div>
+<label>Descanso</label>
+<select class="template-rest" data-index="${index}">
+${["30 segundos","45 segundos","60 segundos","90 segundos","120 segundos"].map(valor=>`<option ${valor === bloque.descanso ? "selected" : ""}>${valor}</option>`).join("")}
+</select>
+</div>
+</div>
+<p>${bloque.ejercicio.indicacion || "Revisar técnica antes de aumentar la carga."}</p>
+<p><strong>Agarre / maneral:</strong> ${bloque.agarre || detalleTecnicoPlantilla(bloque.ejercicio,bloque)}</p>
+${bloque.ultimaSerie ? `<p><strong>Última serie registrada:</strong> ${bloque.ultimaSerie}</p>` : ""}
+</article>
+`;
+}).join("");
+actualizarEjerciciosBloqueExtra();
+document.querySelectorAll(".template-warmup").forEach(input=>input.addEventListener("input",()=>actualizarCalentamientoDia(input.dataset.dia,input.value)));
+}
+
+function actualizarCalentamientoDia(dia,valor){
+const pasos=valor.split(/\r?\n/).map(paso=>paso.trim()).filter(Boolean);
+plantillaEditable.filter(bloque=>bloque.dia===dia).forEach(bloque=>{bloque.calentamiento=pasos;});
+}
+
+function actualizarBloquePlantilla(index,campo,valor){
+const bloque = plantillaEditable[index];
+if(!bloque){
+return;
+}
+if(campo === "ejercicioId"){
+const ejercicio = ejerciciosPorGrupo(bloque.grupo).find(item=>item.id === valor);
+if(ejercicio){
+bloque.ejercicioId = ejercicio.id;
+bloque.ejercicio = ejercicio;
+}
+return;
+}
+bloque[campo] = valor;
+}
+
+function actualizarEjerciciosBloqueExtra(){
+const grupo = bloqueGrupo.value;
+const entorno = plantillaEditable[0]?.entorno || "Gym";
+const usados = new Set(plantillaEditable.map(bloque=>bloque.ejercicioId));
+const ejercicios = ejerciciosPorGrupo(grupo)
+.filter(ejercicio=>ejercicio.entorno === entorno && !usados.has(ejercicio.id))
+.sort((a,b)=>{
+if(Boolean(b.recomendadoEntrenador) !== Boolean(a.recomendadoEntrenador)){
+return Number(b.recomendadoEntrenador) - Number(a.recomendadoEntrenador);
+}
+return a.nombre.localeCompare(b.nombre,"es");
+});
+bloqueEjercicio.innerHTML = ejercicios.map(ejercicio=>`
+<option value="${ejercicio.id}">${ejercicio.nombre}${ejercicio.recomendadoEntrenador ? " — Recomendado" : ""}</option>
+`).join("");
+bloqueEjercicio.disabled = ejercicios.length === 0;
+}
+
+function agregarBloqueEditable(){
+if(!plantillaEditable.length){
+rutinaEstado.textContent = "Carga una plantilla antes de agregar bloques.";
+return;
+}
+const ejercicio = ejerciciosPorGrupo(bloqueGrupo.value).find(item=>item.id === bloqueEjercicio.value);
+if(!ejercicio){
+rutinaEstado.textContent = "Selecciona un ejercicio disponible para agregar.";
+return;
+}
+plantillaEditable.push({
+id:`bloque-extra-${Date.now()}`,
+dia:bloqueDia.value,
+grupo:ejercicio.grupo,
+subgrupo:ejercicio.subgrupo || "General",
+objetivo:ejercicio.objetivo || "Hipertrofia",
+entorno:plantillaEditable[0]?.entorno || ejercicio.entorno || "Mixto",
+series:"3",
+repeticiones:"12",
+peso:ejercicio.equipo === "Peso corporal" ? "Sin peso" : "10",
+descanso:"60 segundos",
+ejercicioId:ejercicio.id,
+ejercicio,
+calentamiento:plantillaEditable.find(bloque=>bloque.dia===bloqueDia.value)?.calentamiento || []
+});
+rutinaEstado.textContent = "Bloque agregado. Revisa la rutina antes de guardar.";
+renderPlantillaEditable();
+}
+
+async function guardarPlantillaEditable(){
+if(!rutinaCliente.value){
+rutinaEstado.textContent = "Selecciona un cliente antes de guardar la rutina completa.";
+return;
+}
+if(!plantillaEditable.length){
+rutinaEstado.textContent = "Carga una plantilla antes de guardar.";
+return;
+}
+const bloquesParaSync = plantillaEditable.slice();
+const nuevasRutinas = plantillaEditable
+.map(bloque=>bloque.ejercicio ? rutinaDesdePlantilla(bloque, bloque.ejercicio, plantillaEditableNombre) : null)
+.filter(Boolean);
+const rutinas = JSON.parse(localStorage.getItem("flowRutinasAsignadas") || "[]");
+guardarRutinasAsignadas([...rutinas,...nuevasRutinas]);
+rutinaEstado.textContent = `${plantillaEditableNombre} guardada localmente. Sincronizando...`;
+try{
+const result = await window.FLOW_ROUTINE_SYNC?.saveAssignment({clientId:rutinaCliente.value,name:plantillaEditableNombre,blocks:bloquesParaSync});
+rutinaEstado.textContent = result?.synced ? `${plantillaEditableNombre} guardada y sincronizada con el portal del cliente.` : `${plantillaEditableNombre} guardada en este navegador.`;
+}catch(error){
+console.error("No se pudo sincronizar la plantilla",error);
+rutinaEstado.textContent = "La rutina quedó guardada localmente, pero la sincronización falló.";
+}
+plantillaEditable = [];
+plantillaEditableNombre = "";
+renderPlantillaEditable();
+renderHistorialRutinas();
+}
+
+function actualizarEjercicios(){
+const grupo = rutinaGrupo.value;
+const subgrupo = rutinaSubgrupo.value;
+const entorno = rutinaEntorno.value;
+const nivel = rutinaNivel.value;
+const objetivo = rutinaObjetivo.value;
+const equipo = rutinaEquipo.value;
+const biblioteca = rutinaBiblioteca.value;
+const busqueda = rutinaBusqueda.value.trim().toLowerCase();
+const coincideFiltros = ejercicio=>
+(!subgrupo || ejercicio.subgrupo === subgrupo) &&
+(!entorno || ejercicio.entorno === entorno) &&
+(!nivel || ejercicio.nivel === nivel || ejercicio.nivel === "General") &&
+(!objetivo || ejercicio.objetivo === objetivo) &&
+(!equipo || ejercicio.equipo === equipo) &&
+(!busqueda || [
+ejercicio.nombre,
+ejercicio.grupo,
+ejercicio.subgrupo,
+ejercicio.equipo,
+ejercicio.objetivo,
+ejercicio.nivel,
+ejercicio.entorno
+].filter(Boolean).some(valor=>valor.toLowerCase().includes(busqueda)));
+const baseEjercicios = ejerciciosPorGrupo(grupo).filter(coincideFiltros);
+let ejercicios = baseEjercicios.filter(ejercicio=>biblioteca !== "recomendados" || ejercicio.recomendadoEntrenador);
+if(!ejercicios.length && biblioteca === "recomendados" && baseEjercicios.length){
+rutinaBiblioteca.value = "todos";
+ejercicios = baseEjercicios;
+}
+ejercicios.sort((a,b)=>a.nombre.localeCompare(b.nombre,"es"));
+rutinaEjercicio.innerHTML = '<option value="">Seleccionar ejercicio</option>';
+ejercicios.forEach(ejercicio=>{
+const option = document.createElement("option");
+option.value = ejercicio.id;
+option.textContent = ejercicio.recomendadoEntrenador ? `${ejercicio.nombre} — Recomendado` : ejercicio.nombre;
+option.dataset.nombre = ejercicio.nombre;
+option.dataset.equipo = ejercicio.equipo;
+option.dataset.nivel = ejercicio.nivel;
+option.dataset.entorno = ejercicio.entorno;
+option.dataset.objetivo = ejercicio.objetivo;
+option.dataset.subgrupo = ejercicio.subgrupo;
+option.dataset.indicacion = ejercicio.indicacion;
+option.dataset.fuente = ejercicio.fuente;
+option.dataset.videoUrl = ejercicio.videoUrl;
+option.dataset.recomendado = ejercicio.recomendadoEntrenador ? "true" : "false";
+rutinaEjercicio.appendChild(option);
+});
+rutinaEjercicio.disabled = ejercicios.length === 0;
+if(!grupo){
+ejercicioConteo.textContent = "Selecciona un grupo para ver ejercicios disponibles.";
+}else{
+const filtroTexto = subgrupo ? `${grupo} · ${subgrupo}` : grupo;
+ejercicioConteo.textContent = `${ejercicios.length} ejercicio${ejercicios.length === 1 ? "" : "s"} disponibles para ${filtroTexto}.`;
+}
+actualizarVistaPrevia();
+}
+
+function actualizarEquipos(){
+const grupo = rutinaGrupo.value;
+const subgrupo = rutinaSubgrupo.value;
+const entorno = rutinaEntorno.value;
+const nivel = rutinaNivel.value;
+const objetivo = rutinaObjetivo.value;
+const equipoActual = rutinaEquipo.value;
+const equipos = [...new Set(ejerciciosPorGrupo(grupo)
+.filter(ejercicio=>
+(!subgrupo || ejercicio.subgrupo === subgrupo) &&
+(!entorno || ejercicio.entorno === entorno) &&
+(!nivel || ejercicio.nivel === nivel || ejercicio.nivel === "General") &&
+(!objetivo || ejercicio.objetivo === objetivo)
+)
+.map(ejercicio=>ejercicio.equipo)
+.filter(Boolean))]
+.sort((a,b)=>a.localeCompare(b,"es"));
+rutinaEquipo.innerHTML = '<option value="">Todo el equipo</option>';
+equipos.forEach(equipo=>{
+const option = document.createElement("option");
+option.value = equipo;
+option.textContent = equipo;
+rutinaEquipo.appendChild(option);
+});
+if(equipos.includes(equipoActual)){
+rutinaEquipo.value = equipoActual;
+}
+}
+
+function actualizarSubgrupos(){
+const grupo = rutinaGrupo.value;
+const subgrupoActual = rutinaSubgrupo.value;
+const subgrupos = [...new Set(ejerciciosPorGrupo(grupo).map(ejercicio=>ejercicio.subgrupo).filter(Boolean))]
+.sort((a,b)=>a.localeCompare(b,"es"));
+rutinaSubgrupo.innerHTML = '<option value="">Todas las variedades</option>';
+subgrupos.forEach(subgrupo=>{
+const option = document.createElement("option");
+option.value = subgrupo;
+option.textContent = subgrupo;
+rutinaSubgrupo.appendChild(option);
+});
+if(subgrupos.includes(subgrupoActual)){
+rutinaSubgrupo.value = subgrupoActual;
+}
+}
+
+function limpiarFiltrosDependientes(){
+rutinaEquipo.value = "";
+rutinaBusqueda.value = "";
+}
+
+function actualizarFiltros(){
+actualizarSubgrupos();
+actualizarEquipos();
+actualizarEjercicios();
+}
+
+function actualizarFiltrosSinReconstruirSubgrupos(){
+actualizarEquipos();
+actualizarEjercicios();
+}
+
+function manejarCambioGrupo(){
+rutinaSubgrupo.value = "";
+rutinaNivel.value = "";
+rutinaObjetivo.value = "";
+limpiarFiltrosDependientes();
+actualizarFiltros();
+}
+
+function manejarCambioSubgrupo(){
+limpiarFiltrosDependientes();
+actualizarFiltrosSinReconstruirSubgrupos();
+}
+
+function actualizarVistaPrevia(){
+const ejercicioSeleccionado = rutinaEjercicio.options[rutinaEjercicio.selectedIndex];
+if(!ejercicioSeleccionado || !rutinaEjercicio.value){
+exercisePreview.innerHTML = `<strong>Vista previa del ejercicio</strong><p>Selecciona entorno, grupo muscular y ejercicio para revisar el equipo, nivel e indicación técnica antes de asignarlo.</p>`;
+return;
+}
+const videoUrl = ejercicioSeleccionado.dataset.videoUrl;
+const videoLink = videoUrl ? `<a class="exercise-video-link" href="${videoUrl}" target="_blank" rel="noopener">Ver demostración</a>` : "";
+const recomendadoTag = ejercicioSeleccionado.dataset.recomendado === "true" ? "<span>Recomendado</span>" : "";
+exercisePreview.innerHTML = `
+<strong>${ejercicioSeleccionado.dataset.nombre}</strong>
+<div class="exercise-preview-tags">
+${recomendadoTag}
+<span>${ejercicioSeleccionado.dataset.entorno}</span>
+<span>${ejercicioSeleccionado.dataset.subgrupo}</span>
+<span>${ejercicioSeleccionado.dataset.nivel}</span>
+<span>${ejercicioSeleccionado.dataset.objetivo}</span>
+</div>
+<dl>
+<div><dt>Equipo</dt><dd>${ejercicioSeleccionado.dataset.equipo}</dd></div>
+<div><dt>Técnica</dt><dd>${ejercicioSeleccionado.dataset.indicacion}</dd></div>
+</dl>
+${videoLink}
+`;
+}
+
+async function cargarBibliotecaEjercicios(){
+if(window.FLOW_EXERCISE_LIBRARY){
+bibliotecaEjercicios = window.FLOW_EXERCISE_LIBRARY;
+actualizarEjercicios();
+return;
+}
+try{
+const respuesta = await fetch("../Data/exercise-library.json");
+if(!respuesta.ok){
+throw new Error("No se pudo cargar la biblioteca de ejercicios.");
+}
+bibliotecaEjercicios = await respuesta.json();
+}catch(error){
+bibliotecaEjercicios = bibliotecaFallback;
+}
+actualizarEjercicios();
+}
+
+async function cargarClientesRutina(){
+try{
+const clientes = await window.flowLoadClientes("../Data/clientes.json");
+clientes.forEach(cliente=>{
+const option = document.createElement("option");
+option.value = cliente.id;
+option.textContent = cliente.nombre;
+rutinaCliente.appendChild(option);
+const historialOption = document.createElement("option");
+historialOption.value = cliente.id;
+historialOption.textContent = cliente.nombre;
+historialCliente.appendChild(historialOption);
+});
+try{
+const current=await window.FLOW_BACKEND?.requireUser();
+if(current){
+const links=await window.FLOW_BACKEND.client.from("trainer_clients").select("client_id").eq("trainer_id",current.id).eq("status","active");
+const ids=(links.data||[]).map(item=>item.client_id);
+if(ids.length){
+const profiles=await window.FLOW_BACKEND.client.from("profiles").select("id,full_name").in("id",ids);
+(profiles.data||[]).forEach(profile=>{
+if([...rutinaCliente.options].some(option=>option.value===profile.id))return;
+const option=document.createElement("option"); option.value=profile.id; option.textContent=profile.full_name; rutinaCliente.appendChild(option);
+const historialOption=document.createElement("option"); historialOption.value=profile.id; historialOption.textContent=profile.full_name; historialCliente.appendChild(historialOption);
+});
+}
+}
+}catch(error){console.error("No se pudieron cargar clientes de Supabase",error);}
+renderHistorialRutinas();
+}catch(error){
+rutinaEstado.textContent = "No se pudieron cargar los clientes.";
+}
+}
+
+rutinaEntorno.addEventListener("change",actualizarFiltros);
+rutinaGrupo.addEventListener("change",manejarCambioGrupo);
+rutinaSubgrupo.addEventListener("change",manejarCambioSubgrupo);
+rutinaNivel.addEventListener("change",actualizarFiltros);
+rutinaObjetivo.addEventListener("change",actualizarFiltros);
+rutinaEquipo.addEventListener("change",actualizarEjercicios);
+rutinaBiblioteca.addEventListener("change",actualizarEjercicios);
+rutinaBusqueda.addEventListener("input",actualizarEjercicios);
+rutinaEjercicio.addEventListener("change",actualizarVistaPrevia);
+historialCliente.addEventListener("change",renderHistorialRutinas);
+rutinaPlantilla.addEventListener("change",actualizarVistaPlantilla);
+asignarPlantillaBtn.addEventListener("click",crearPlantillaEditable);
+renombrarPlantillaBtn.addEventListener("click",renombrarPlantillaPersonalizada);
+eliminarPlantillaBtn.addEventListener("click",eliminarPlantillaPersonalizada);
+guardarPlantillaBtn.addEventListener("click",guardarPlantillaEditable);
+guardarComoPlantillaBtn.addEventListener("click",guardarComoPlantillaPersonalizada);
+bloqueGrupo.addEventListener("change",actualizarEjerciciosBloqueExtra);
+agregarBloqueBtn.addEventListener("click",agregarBloqueEditable);
+plantillaBloques.addEventListener("change",(event)=>{
+const index = Number(event.target.dataset.index);
+if(event.target.classList.contains("template-exercise")){
+actualizarBloquePlantilla(index,"ejercicioId",event.target.value);
+renderPlantillaEditable();
+}
+if(event.target.classList.contains("template-series")){
+actualizarBloquePlantilla(index,"series",event.target.value);
+}
+if(event.target.classList.contains("template-reps")){
+actualizarBloquePlantilla(index,"repeticiones",event.target.value);
+}
+if(event.target.classList.contains("template-weight")){
+actualizarBloquePlantilla(index,"peso",event.target.value);
+}
+if(event.target.classList.contains("template-rest")){
+actualizarBloquePlantilla(index,"descanso",event.target.value);
+}
+});
+plantillaBloques.addEventListener("click",(event)=>{
+if(!event.target.classList.contains("template-remove")){
+return;
+}
+const index = Number(event.target.dataset.index);
+plantillaEditable.splice(index,1);
+renderPlantillaEditable();
+rutinaEstado.textContent = plantillaEditable.length ? "Bloque eliminado. Revisa la rutina antes de guardar." : "Todos los bloques fueron eliminados.";
+});
+historialRutinas.addEventListener("click",(event)=>{
+if(!event.target.classList.contains("assigned-remove")){
+return;
+}
+eliminarRutinaAsignada(event.target.dataset.id,event.target.dataset.index);
+});
+
+rutinaForm.addEventListener("submit",async (event)=>{
+event.preventDefault();
+const ejercicioSeleccionado = rutinaEjercicio.options[rutinaEjercicio.selectedIndex];
+const rutina = {
+id:`rutina-${Date.now()}-${Math.random().toString(36).slice(2,8)}`,
+cliente: rutinaCliente.options[rutinaCliente.selectedIndex].text,
+clienteId: rutinaCliente.value,
+dia: document.getElementById("rutinaDia").value,
+entorno: rutinaEntorno.value,
+grupoMuscular: document.getElementById("rutinaGrupo").value,
+subgrupo: rutinaSubgrupo.value,
+ejercicioId: rutinaEjercicio.value,
+ejercicio: ejercicioSeleccionado.dataset.nombre || ejercicioSeleccionado.textContent,
+equipo: ejercicioSeleccionado.dataset.equipo || "",
+nivel: ejercicioSeleccionado.dataset.nivel || "",
+entornoEjercicio: ejercicioSeleccionado.dataset.entorno || "",
+objetivo: ejercicioSeleccionado.dataset.objetivo || "",
+indicacion: ejercicioSeleccionado.dataset.indicacion || "",
+videoUrl: ejercicioSeleccionado.dataset.videoUrl || "",
+fuente: ejercicioSeleccionado.dataset.fuente || "",
+descanso: document.getElementById("rutinaDescanso").value,
+series: document.getElementById("rutinaSeries").value,
+repeticiones: document.getElementById("rutinaRepeticiones").value,
+peso: document.getElementById("rutinaPeso").value,
+observaciones: document.getElementById("rutinaObservaciones").value,
+fecha: new Date().toISOString()
+};
+const rutinas = JSON.parse(localStorage.getItem("flowRutinasAsignadas") || "[]");
+rutinas.push(rutina);
+guardarRutinasAsignadas(rutinas);
+try{
+const result = await window.FLOW_ROUTINE_SYNC?.saveAssignment({clientId:rutina.clienteId,name:"Rutina personalizada",blocks:[rutina]});
+rutinaEstado.textContent = result?.synced ? "Rutina asignada y sincronizada con el portal del cliente." : "Rutina asignada correctamente en este navegador.";
+}catch(error){
+console.error("No se pudo sincronizar la rutina",error);
+rutinaEstado.textContent = "Rutina asignada localmente, pero la sincronización falló.";
+}
+rutinaForm.reset();
+rutinaBiblioteca.value = "todos";
+actualizarFiltros();
+renderHistorialRutinas();
+});
+
+cargarClientesRutina();
+registrarPlantillasPersonalizadas();
+cargarBibliotecaEjercicios();
+</script>
+
+
+</body>
+
+</html>
