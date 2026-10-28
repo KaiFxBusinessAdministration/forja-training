@@ -2190,6 +2190,7 @@ button{
     width:100%;
     height:100%;
     object-fit:cover;
+    object-position:center center;
     z-index:0;
 }
 
@@ -2558,6 +2559,13 @@ button{
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
     transition: transform 220ms ease, border-color 220ms ease, background 220ms ease;
+}
+
+/* En pantallas estrechas prioriza al cliente guiado; evita que el recorte horizontal lo oculte. */
+@media (max-width: 640px) {
+    .role-select .landing-bg { object-position: 68% center; }
+    .auth-screen .landing-bg { object-position: 62% center; }
+    .page-hero img, .hero-card img, .visual-panel img { object-position: center center; }
 }
 
 .role-select .role-card:hover,
