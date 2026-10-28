@@ -26,6 +26,27 @@ return [...clientes.values()];
 
 document.addEventListener("DOMContentLoaded",()=>{
 
+const brandLinks=document.querySelectorAll(".brand, .brand a, [data-home-logout]");
+brandLinks.forEach(brand=>{
+brand.setAttribute("role","link");
+brand.setAttribute("tabindex","0");
+brand.setAttribute("title","Cerrar sesión y volver al inicio");
+const goHome=()=>{
+sessionStorage.removeItem("flowClienteActivoId");
+sessionStorage.removeItem("flowAuthRole");
+localStorage.removeItem("flowTrainerSession");
+localStorage.removeItem("flowClientSession");
+window.location.href="../index.html";
+};
+brand.addEventListener("click",event=>{
+if(event.target.closest("a")){event.preventDefault();}
+goHome();
+});
+brand.addEventListener("keydown",event=>{
+if(event.key==="Enter" || event.key===" "){event.preventDefault();goHome();}
+});
+});
+
 
 const links=document.querySelectorAll(".sidebar a");
 

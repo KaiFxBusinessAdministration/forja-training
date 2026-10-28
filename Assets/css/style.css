@@ -838,6 +838,16 @@ button{
     box-shadow:0 14px 32px rgba(183,243,74,.24);
 }
 
+.sidebar .brand{
+    cursor:pointer;
+}
+
+.sidebar .brand:focus-visible{
+    outline:2px solid var(--primary);
+    outline-offset:4px;
+    border-radius:8px;
+}
+
 .brand h2{
     font-size:19px;
     line-height:1.05;
