@@ -178,6 +178,14 @@ sessionStorage.setItem("flowClienteActivoId","99");
 
 const activeClientId=sessionStorage.getItem("flowClienteActivoId") || "99";
 
+if(window.FLOW_BACKEND?.ready){
+window.FLOW_BACKEND.client.auth.getUser().then(async({data})=>{
+if(!data.user)return;
+const {data:realProfile}=await window.FLOW_BACKEND.client.from("profiles").select("id,full_name,role,age,goal,weight_kg,height_cm").eq("id",data.user.id).single();
+if(realProfile){const cached=sessionStorage.getItem("flowAuthProfile");sessionStorage.setItem("flowClienteActivoId",realProfile.id);sessionStorage.setItem("flowAuthProfile",JSON.stringify(realProfile));if(cached!==JSON.stringify(realProfile))window.location.reload();}
+}).catch(()=>{});
+}
+
 window.flowLoadClientes("../Data/clientes.json")
 .then(clientes=>{
 
@@ -197,7 +205,7 @@ nombre:cliente.nombre,
 nombreCorto:cliente.nombre.split(" ")[0],
 edad:cliente.edad,
 peso:cliente.peso ? `${cliente.peso} kg` : "No registrado",
-altura:`${cliente.altura} m`,
+altura:cliente.altura,
 objetivo:cliente.objetivo,
 estado:cliente.estado,
 entrenador:cliente.entrenador,
