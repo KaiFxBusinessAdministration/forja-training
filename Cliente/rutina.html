@@ -43,7 +43,7 @@
 <div id="semanaDiasEditor" hidden class="dashboard-panel week-builder"><div class="panel-heading-row"><div><h3>Días de la semana</h3><p>Agrega un día por cada sesión del bloque. El calentamiento se define solo en el primer día.</p></div><button class="btn-secondary" id="agregarDiaSemana" type="button">+ Añadir otro día</button></div><div id="semanaDiasLista"></div></div>
 <div class="form-grid">
 <div><label for="atletaDia">Día</label><select id="atletaDia" required><option>Lunes</option><option>Martes</option><option>Miércoles</option><option>Jueves</option><option>Viernes</option><option>Sábado</option><option>Domingo</option></select></div>
-<div><label for="atletaEjercicio">Ejercicio</label><input id="atletaEjercicio" list="ejerciciosAtleta" placeholder="Busca un ejercicio de la biblioteca" required><datalist id="ejerciciosAtleta"></datalist></div>
+<div><label for="atletaEjercicio">Ejercicio</label><select id="atletaEjercicio" required><option value="">Selecciona un ejercicio de la biblioteca</option></select></div>
 <div><label for="atletaSeries">Series</label><input id="atletaSeries" type="number" min="1" max="20" value="3" required></div>
 <div><label for="atletaReps">Repeticiones</label><input id="atletaReps" type="number" min="1" max="100" value="10" required></div>
 <div><label for="atletaDescanso">Descanso (segundos)</label><input id="atletaDescanso" type="number" min="0" value="90" required></div>
@@ -109,7 +109,7 @@ const atletaRutinaKey = `flowRutinasIndependientes_${sessionStorage.getItem("flo
 const ejerciciosAtleta = document.getElementById("ejerciciosAtleta");
 const bibliotecaAtleta = Array.isArray(window.FLOW_EXERCISE_LIBRARY) ? window.FLOW_EXERCISE_LIBRARY : [];
 const nombresEjercicios = [...new Set(bibliotecaAtleta.map(ejercicio=>ejercicio.nombre).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));
-ejerciciosAtleta.innerHTML=nombresEjercicios.map(nombre=>`<option value="${nombre.replace(/&/g,"&amp;").replace(/"/g,"&quot;")}"></option>`).join("");
+ejerciciosAtleta.innerHTML='<option value="">Selecciona un ejercicio de la biblioteca</option>'+nombresEjercicios.map(nombre=>`<option value="${nombre.replace(/&/g,"&amp;").replace(/"/g,"&quot;")}">${nombre}</option>`).join("");
 const actualizarTipoRutina=()=>{semanaNombreWrap.hidden=atletaTipoRutina.value!=="semana";};
 atletaTipoRutina.addEventListener("change",actualizarTipoRutina);
 atletaTipoRutina.addEventListener("input",actualizarTipoRutina);
