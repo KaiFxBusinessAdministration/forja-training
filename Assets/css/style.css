@@ -2713,3 +2713,33 @@ button{
 .sidebar .brand {
     justify-content: center;
 }
+
+.week-day-group {
+    margin: 0 0 12px;
+    border: 1px solid var(--border-color, rgba(255,255,255,.12));
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.week-day-group summary {
+    cursor: pointer;
+    padding: 14px 16px;
+    font-weight: 700;
+    list-style-position: inside;
+}
+
+.week-day-group summary .form-help {
+    display: inline;
+    margin-left: 8px;
+}
+
+.week-day-exercises {
+    padding: 12px;
+    border-top: 1px solid var(--border-color, rgba(255,255,255,.12));
+}
+
+.week-day-exercises .week-day-row + .week-day-row {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-color, rgba(255,255,255,.08));
+}
