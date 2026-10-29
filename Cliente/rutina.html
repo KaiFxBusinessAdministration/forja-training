@@ -38,7 +38,7 @@
 <form id="atletaRutinaForm" class="client-form">
 <div class="form-grid">
 <div><label for="atletaTipoRutina">Crear</label><select id="atletaTipoRutina"><option value="dia">Día de training</option><option value="semana">Semana de training</option></select></div>
-<div id="semanaNombreWrap" hidden><label for="atletaSemanaNombre">Nombre de la semana</label><input id="atletaSemanaNombre" placeholder="Ej. Fuerza e hipertrofia"></div>
+<div id="semanaNombreWrap" hidden><label for="atletaSemanaNombre">Enfoque del bloque</label><select id="atletaSemanaNombre"><option value="Fuerza">Fuerza</option><option value="Hipertrofia">Hipertrofia</option><option value="Fuerza e hipertrofia">Fuerza e hipertrofia</option><option value="Recomposición corporal">Recomposición corporal</option><option value="Definición">Definición</option><option value="Preparación competitiva">Preparación competitiva</option><option value="Resistencia y acondicionamiento">Resistencia y acondicionamiento</option><option value="Técnica y base">Técnica y base</option><option value="Descarga y recuperación">Descarga y recuperación</option><option value="Personalizado">Personalizado</option></select><input id="atletaSemanaPersonalizada" hidden maxlength="120" placeholder="Escribe el nombre del bloque"></div>
 </div>
 <div class="form-grid">
 <div><label for="atletaDia">Día</label><select id="atletaDia" required><option>Lunes</option><option>Martes</option><option>Miércoles</option><option>Jueves</option><option>Viernes</option><option>Sábado</option><option>Domingo</option></select></div>
@@ -89,12 +89,16 @@ const atletaRutinaEstado = document.getElementById("atletaRutinaEstado");
 const atletaTipoRutina = document.getElementById("atletaTipoRutina");
 const semanaNombreWrap = document.getElementById("semanaNombreWrap");
 const atletaSemanaNombre = document.getElementById("atletaSemanaNombre");
+const atletaSemanaPersonalizada = document.getElementById("atletaSemanaPersonalizada");
 const atletaRutinaKey = `flowRutinasIndependientes_${sessionStorage.getItem("flowClienteActivoId") || "99"}`;
 const ejerciciosAtleta = document.getElementById("ejerciciosAtleta");
 const bibliotecaAtleta = Array.isArray(window.FLOW_EXERCISE_LIBRARY) ? window.FLOW_EXERCISE_LIBRARY : [];
 const nombresEjercicios = [...new Set(bibliotecaAtleta.map(ejercicio=>ejercicio.nombre).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));
 ejerciciosAtleta.innerHTML=nombresEjercicios.map(nombre=>`<option value="${nombre.replace(/&/g,"&amp;").replace(/"/g,"&quot;")}"></option>`).join("");
 atletaTipoRutina.addEventListener("change",()=>{semanaNombreWrap.hidden=atletaTipoRutina.value!=="semana";});
+atletaSemanaNombre.addEventListener("change",()=>{const personalizado=atletaSemanaNombre.value==="Personalizado";atletaSemanaPersonalizada.hidden=!personalizado;atletaSemanaPersonalizada.required=personalizado;if(!personalizado)atletaSemanaPersonalizada.value="";});
+atletaRutinaForm.addEventListener("submit",()=>{if(atletaSemanaNombre.value==="Personalizado")atletaSemanaNombre.value=atletaSemanaPersonalizada.value.trim();},{capture:true});
+atletaRutinaForm.addEventListener("reset",()=>{atletaSemanaPersonalizada.hidden=true;atletaSemanaPersonalizada.required=false;});
 atletaRutinaForm.addEventListener("submit",async event=>{event.preventDefault();const rutina={tipo:atletaTipoRutina.value,nombreSemana:atletaSemanaNombre.value.trim(),dia:atletaDia.value,ejercicio:atletaEjercicio.value.trim(),series:atletaSeries.value,repeticiones:atletaReps.value,descanso:atletaDescanso.value,calentamiento:atletaCalentamiento.value.trim(),fecha:new Date().toISOString()};const actuales=JSON.parse(localStorage.getItem(atletaRutinaKey) || "[]");const nombreClave=rutina.tipo==="semana"?rutina.nombreSemana.toLowerCase():"dia-independiente";const ejercicioClave=rutina.ejercicio.toLowerCase();const existente=actuales.findIndex(item=>item.tipo===rutina.tipo&&String(item.nombreSemana||"").toLowerCase()===nombreClave&&item.dia===rutina.dia&&String(item.ejercicio||"").toLowerCase()===ejercicioClave);if(existente>=0){actuales[existente]=rutina;}else{actuales.push(rutina);}localStorage.setItem(atletaRutinaKey,JSON.stringify(actuales));let mensaje=existente>=0?"Ejercicio actualizado dentro del día. Ya puedes registrar sus avances en Progreso.":rutina.tipo==="semana"?"Ejercicio agregado al día de training.":"Ejercicio guardado en tu día de training.";try{const resultado=await window.FLOW_ROUTINE_SYNC?.saveIndependentRoutine({name:rutina.nombreSemana||"Rutina independiente",day:rutina.dia,exercise:rutina.ejercicio,sets:rutina.series,reps:rutina.repeticiones,restSeconds:rutina.descanso,warmupSteps:rutina.calentamiento.split(/\n+/).map(paso=>paso.trim()).filter(Boolean)});if(resultado?.synced)mensaje+=" Sincronizado en Supabase.";}catch(error){console.error("No se pudo sincronizar la rutina en Supabase",error);mensaje+=" Guardado localmente; Supabase no está disponible.";}atletaRutinaForm.reset();atletaSeries.value=3;atletaReps.value=10;atletaDescanso.value=90;semanaNombreWrap.hidden=true;atletaRutinaEstado.textContent=mensaje;});
 
 const migracionRutinasKey = `${atletaRutinaKey}_migradas`;
