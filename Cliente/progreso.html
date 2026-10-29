@@ -45,48 +45,21 @@
 </div><button class="btn-primary" type="submit">Guardar avance</button><p class="form-help" id="clienteAvanceEstado" aria-live="polite"></p></form>
 </section>
 <section class="kpi-grid">
-<div class="kpi-card"><h3>Fuerza</h3><strong id="progresoFuerza">+12%</strong></div>
-<div class="kpi-card"><h3>Peso corporal</h3><strong id="progresoPeso">-2 kg</strong></div>
-<div class="kpi-card"><h3>Consistencia</h3><strong id="progresoConsistencia">92%</strong></div>
+<div class="kpi-card"><h3>Registros</h3><strong id="progresoFuerza">0</strong></div>
+<div class="kpi-card"><h3>Mejor carga</h3><strong id="progresoPeso">-</strong></div>
+<div class="kpi-card"><h3>Última sesión</h3><strong id="progresoConsistencia">-</strong></div>
 </section>
 <section class="dashboard-panel">
 <h2>Última revisión</h2>
-<div class="metric-list" id="progresoMarcas">
-<div class="metric-row"><span>Sentadilla</span><strong>110 kg</strong></div>
-<div class="metric-row"><span>Press banca</span><strong>82 kg</strong></div>
-<div class="metric-row"><span>Fatiga reportada</span><strong>Moderada</strong></div>
-</div>
+<div class="metric-list" id="progresoMarcas"><p class="empty-state">Todavía no hay avances registrados.</p></div>
 </section>
 <section class="dashboard-panel">
 <div class="panel-heading-row"><div><h2>Avances registrados</h2><p>Registros de carga y repeticiones enviados desde tu rutina.</p></div></div>
 <div class="metric-list" id="avancesRutina"><p class="empty-state">Todavía no hay avances registrados.</p></div>
 </section>
-<section class="dashboard-panel progress-photos-panel">
-<div class="panel-heading-row">
-<div>
-<h2>Fotos de progreso</h2>
-<p>Compara tu punto de inicio con tu evolución y comparte los cambios con tu entrenador.</p>
-</div>
-</div>
-<div class="progress-photo-upload-grid">
-<form class="progress-photo-form" data-photo-type="inicio">
-<h3>Foto de inicio</h3>
-<label for="fotoInicio">Subir foto</label>
-<input id="fotoInicio" type="file" accept="image/jpeg,image/png,image/webp" required>
-<button class="btn-secondary" type="submit">Guardar foto de inicio</button>
-</form>
-<form class="progress-photo-form" data-photo-type="avance">
-<h3>Foto de avance</h3>
-<label for="fotoAvance">Subir foto</label>
-<input id="fotoAvance" type="file" accept="image/jpeg,image/png,image/webp" required>
-<button class="btn-secondary" type="submit">Guardar foto de avance</button>
-</form>
-</div>
-<div class="progress-photo-gallery" id="progressPhotoGallery" aria-live="polite"></div>
-</section>
 <section class="dashboard-panel performance-panel" data-performance-panel hidden>
-<div class="panel-heading-row"><div><h2>Indicadores de rendimiento</h2><p>Contexto adicional para interpretar tu progreso.</p></div></div>
-<div class="performance-grid"><p><strong>Objetivo deportivo</strong><span data-client-field="objetivoDeportivo">-</span></p><p><strong>Observaciones</strong><span data-client-field="notasRendimiento">-</span></p></div>
+<div class="panel-heading-row"><div><h2>Indicadores de rendimiento</h2><p>Resumen calculado desde tus avances registrados.</p></div></div>
+<div class="performance-grid" id="indicadoresRendimiento"></div>
 </section></main>
 </div>
 <script src="../Assets/js/config.js"></script>
@@ -118,80 +91,34 @@ const avances=JSON.parse(localStorage.getItem("flowAvancesRutina") || "[]").filt
 avancesRutina.innerHTML=avances.length ? avances.map(item=>`<div class="metric-row"><span>${item.exerciseName}<small>${item.fecha}</small></span><strong>${item.peso} kg · ${item.repeticiones} reps</strong></div>`).join("") : `<p class="empty-state">Todavía no hay avances registrados.</p>`;
 try{
 const cloud=await window.FLOW_ROUTINE_SYNC?.listProgress(clienteId);
-if(cloud){avancesRutina.innerHTML=cloud.length ? cloud.map(item=>`<div class="metric-row"><span>${item.exercise_name}<small>${new Date(item.recorded_at).toLocaleDateString("es-EC")}</small></span><strong>${item.weight ?? "Sin peso"} kg · ${item.repetitions ?? "-"} reps</strong></div>`).join("") : `<p class="empty-state">Todavía no hay avances registrados.</p>`;}
+if(cloud){avancesRutina.innerHTML=cloud.length ? cloud.map(item=>`<div class="metric-row"><span>${item.exercise_name}<small>${new Date(item.recorded_at).toLocaleDateString("es-EC")}</small></span><strong>${item.weight ?? "Sin peso"} kg · ${item.sets_completed ?? "-"} series · ${item.repetitions ?? "-"} reps</strong></div>`).join("") : `<p class="empty-state">Todavía no hay avances registrados.</p>`;renderIndicadores(cloud.map(item=>({exerciseName:item.exercise_name,peso:item.weight,seriesLogradas:item.sets_completed,repeticiones:item.repetitions,fecha:new Date(item.recorded_at).toLocaleDateString("es-EC")})));}
 }catch(error){console.error("No se pudieron cargar avances de Supabase",error);}
 }
 clienteAvanceForm.addEventListener("submit",event=>{event.preventDefault();const clienteId=sessionStorage.getItem("flowClienteActivoId") || "99";const avances=JSON.parse(localStorage.getItem("flowAvancesRutina") || "[]");avances.push({clienteId,exerciseName:avanceEjercicio.value.trim(),peso:avancePeso.value,seriesLogradas:avanceSeries.value,repeticiones:avanceRepeticiones.value,fecha:new Date().toLocaleDateString("es-EC"),notas:avanceNotas.value.trim()});localStorage.setItem("flowAvancesRutina",JSON.stringify(avances));clienteAvanceForm.reset();cargarEntrenamientosGuardados();clienteAvanceEstado.textContent="Avance guardado correctamente.";renderAvances();});
  cargarEntrenamientosGuardados();
 renderAvances();
-const progressPhotoGallery = document.getElementById("progressPhotoGallery");
-
-function fotosProgresoKey(){
-return `flowFotosProgreso_${sessionStorage.getItem("flowClienteActivoId") || "99"}`;
-}
-
-function cargarFotosProgreso(){
-const fotos=JSON.parse(localStorage.getItem(fotosProgresoKey()) || "[]");
-progressPhotoGallery.innerHTML=fotos.length ? fotos.map((foto,index)=>`
-<article class="progress-photo-card">
-<img src="${foto.data}" alt="${foto.tipo === "inicio" ? "Foto de inicio" : "Foto de avance"}">
-<div><strong>${foto.tipo === "inicio" ? "Foto de inicio" : "Foto de avance"}</strong><small>${foto.fecha}</small></div>
-<button class="icon-button" type="button" data-remove-photo="${index}" aria-label="Eliminar foto">×</button>
-</article>`).join("") : `<p class="empty-state">Todavía no has agregado fotos de progreso.</p>`;
-progressPhotoGallery.querySelectorAll("[data-remove-photo]").forEach(button=>button.addEventListener("click",()=>{
-const fotosActuales=JSON.parse(localStorage.getItem(fotosProgresoKey()) || "[]");
-fotosActuales.splice(Number(button.dataset.removePhoto),1);
-localStorage.setItem(fotosProgresoKey(),JSON.stringify(fotosActuales));
-cargarFotosProgreso();
-}));
-}
-
-document.querySelectorAll(".progress-photo-form").forEach(form=>form.addEventListener("submit",event=>{
-event.preventDefault();
-const input=form.querySelector("input[type=file]");
-const file=input.files[0];
-if(!file){return;}
-if(file.size>5*1024*1024){
-alert("La foto debe pesar menos de 5 MB.");
+function renderIndicadores(avances){
+const panel=document.querySelector("[data-performance-panel]");
+if(!avances.length){
+panel.hidden=true;
+progresoFuerza.textContent="0";
+progresoPeso.textContent="-";
+progresoConsistencia.textContent="-";
+progresoMarcas.innerHTML=`<p class="empty-state">Todavía no hay avances registrados.</p>`;
 return;
 }
-const reader=new FileReader();
-reader.onload=()=>{
-const fotos=JSON.parse(localStorage.getItem(fotosProgresoKey()) || "[]");
-fotos.push({tipo:form.dataset.photoType,data:reader.result,fecha:new Date().toLocaleDateString("es-EC")});
-localStorage.setItem(fotosProgresoKey(),JSON.stringify(fotos));
-form.reset();
-cargarFotosProgreso();
-};
-reader.readAsDataURL(file);
-}));
-
-cargarFotosProgreso();
-
-fetch("../Data/openGym-demo.json")
-.then(response=>response.json())
-.then(data=>{
-const progreso = data.progreso;
-progresoFuerza.textContent = progreso.fuerza;
-progresoPeso.textContent = progreso.pesoCorporal;
-progresoConsistencia.textContent = progreso.consistencia;
-progresoMarcas.innerHTML = [
-...progreso.marcas.map(marca=>`
-<div class="metric-row">
-<span>${marca.ejercicio}</span>
-<strong>${marca.actual}</strong>
-</div>
-`),
-`<div class="metric-row"><span>Fatiga reportada</span><strong>${progreso.fatiga}</strong></div>`
-].join("");
-})
-.catch(()=>{
-const progreso = window.FLOW_OPEN_GYM_DEMO.progreso;
-progresoFuerza.textContent = progreso.fuerza;
-progresoPeso.textContent = progreso.pesoCorporal;
-progresoConsistencia.textContent = progreso.consistencia;
-progresoMarcas.innerHTML = [...progreso.marcas.map(marca=>`<div class="metric-row"><span>${marca.ejercicio}</span><strong>${marca.actual}</strong></div>`),`<div class="metric-row"><span>Fatiga reportada</span><strong>${progreso.fatiga}</strong></div>`].join("");
-});
+panel.hidden=false;
+const cargas=avances.map(item=>Number(item.peso)).filter(Number.isFinite);
+const mejorCarga=cargas.length ? `${Math.max(...cargas)} kg` : "-";
+const ultima=avances[avances.length-1].fecha || "-";
+progresoFuerza.textContent=String(avances.length);
+progresoPeso.textContent=mejorCarga;
+progresoConsistencia.textContent=ultima;
+progresoMarcas.innerHTML=avances.slice().reverse().map(item=>`<div class="metric-row"><span>${item.exerciseName}<small>${item.fecha}</small></span><strong>${item.peso || "-"} kg · ${item.seriesLogradas || "-"} series · ${item.repeticiones || "-"} reps</strong></div>`).join("");
+document.getElementById("indicadoresRendimiento").innerHTML=`<p><strong>Total de registros</strong><span>${avances.length}</span></p><p><strong>Ejercicios registrados</strong><span>${new Set(avances.map(item=>item.exerciseName)).size}</span></p><p><strong>Último registro</strong><span>${ultima}</span></p>`;
+}
+const clienteIdActual=sessionStorage.getItem("flowClienteActivoId") || "99";
+renderIndicadores(JSON.parse(localStorage.getItem("flowAvancesRutina") || "[]").filter(item=>String(item.clienteId)===String(clienteIdActual)));
 </script>
 </body>
 </html>
