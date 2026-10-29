@@ -181,7 +181,7 @@ const activeClientId=sessionStorage.getItem("flowClienteActivoId") || "99";
 if(window.FLOW_BACKEND?.ready){
 window.FLOW_BACKEND.client.auth.getUser().then(async({data})=>{
 if(!data.user)return;
-const {data:realProfile}=await window.FLOW_BACKEND.client.from("profiles").select("id,full_name,role,age,goal,weight_kg,height_cm").eq("id",data.user.id).single();
+const {data:realProfile}=await window.FLOW_BACKEND.client.from("profiles").select("id,full_name,role,age,goal,weight_kg,height_cm,emergency_contact_name,emergency_contact_phone").eq("id",data.user.id).single();
 if(realProfile){const cached=sessionStorage.getItem("flowAuthProfile");sessionStorage.setItem("flowClienteActivoId",realProfile.id);sessionStorage.setItem("flowAuthProfile",JSON.stringify(realProfile));if(cached!==JSON.stringify(realProfile))window.location.reload();}
 }).catch(()=>{});
 }
@@ -190,7 +190,7 @@ window.flowLoadClientes("../Data/clientes.json")
 .then(clientes=>{
 
 const authProfile=JSON.parse(sessionStorage.getItem("flowAuthProfile") || "null");
-const cliente=authProfile ? {id:authProfile.id,nombre:authProfile.full_name || "Atleta",edad:authProfile.age || "No registrada",peso:authProfile.weight_kg,altura:authProfile.height_cm ? `${(Number(authProfile.height_cm)/100).toFixed(2)} m` : "No registrada",objetivo:authProfile.goal || "Por definir",estado:"Activo",entrenador:"Sin entrenador",tipoSeguimiento:"General"} : clientes.find(item=>String(item.id)===activeClientId) || (params.get("demo")==="1" ? clientes.find(item=>item.nombre.toLowerCase().includes("demo")) : null) || clientes[0];
+const cliente=authProfile ? {id:authProfile.id,nombre:authProfile.full_name || "Atleta",edad:authProfile.age || "No registrada",peso:authProfile.weight_kg,altura:authProfile.height_cm ? `${(Number(authProfile.height_cm)/100).toFixed(2)} m` : "No registrada",objetivo:authProfile.goal || "Por definir",estado:"Activo",entrenador:"Sin entrenador",tipoSeguimiento:"General"} : (params.get("demo")==="1" ? clientes.find(item=>item.nombre.toLowerCase().includes("demo")) : {id:activeClientId,nombre:"Atleta",edad:"No registrada",peso:null,altura:"No registrada",objetivo:"Por definir",estado:"Activo",entrenador:"Sin entrenador",tipoSeguimiento:"General"});
 
 if(!cliente){
 return;

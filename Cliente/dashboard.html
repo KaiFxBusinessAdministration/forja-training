@@ -38,17 +38,13 @@
 <img src="../Assets/img/client-dashboard.jpg" alt="Entrenador y cliente revisando progreso en gimnasio">
 </section>
 <section class="kpi-grid">
-<div class="kpi-card"><h3>Sesiones semana</h3><strong>4</strong></div>
-<div class="kpi-card"><h3>Adherencia</h3><strong>92%</strong></div>
-<div class="kpi-card"><h3>Racha activa</h3><strong>18d</strong></div>
+<div class="kpi-card"><h3>Sesiones registradas</h3><strong id="clientSessions">0</strong></div>
+<div class="kpi-card"><h3>Avances registrados</h3><strong id="clientProgressCount">0</strong></div>
+<div class="kpi-card"><h3>Último registro</h3><strong id="clientLastProgress">-</strong></div>
 </section>
 <section class="dashboard-panel">
 <h2>Próximas acciones</h2>
-<div class="activity">
-<p>Completar rutina de tren superior</p>
-<p>Registrar agua diaria y comidas principales</p>
-<p>Enviar feedback de fatiga al entrenador</p>
-</div>
+<div class="activity" id="clientNextActions"><p class="empty-state">Todavía no hay acciones registradas.</p></div>
 </section>
 <section class="dashboard-panel performance-panel" data-performance-panel hidden>
 <div class="panel-heading-row"><div><h2>Seguimiento de rendimiento</h2><p>Información deportiva avanzada disponible para este perfil.</p></div><span class="status-badge" data-client-field="tipoSeguimiento">Atleta de rendimiento</span></div>
@@ -64,7 +60,11 @@
 <script src="../Assets/js/backend-config.js"></script>
 <script src="../Assets/js/vendor/supabase.min.js"></script>
 <script src="../Assets/js/backend.js"></script>
+<script src="../Assets/js/routine-sync.js"></script>
 <script src="../Assets/js/app.js"></script>
+<script>
+(async()=>{const id=sessionStorage.getItem("flowClienteActivoId");const sync=window.FLOW_ROUTINE_SYNC;if(!id||!sync)return;try{const avances=await sync.listProgress(id);if(avances?.length){document.getElementById("clientProgressCount").textContent=avances.length;document.getElementById("clientLastProgress").textContent=new Date(avances[0].recorded_at).toLocaleDateString("es-EC");document.getElementById("clientSessions").textContent=new Set(avances.map(item=>new Date(item.recorded_at).toLocaleDateString("es-EC"))).size;document.getElementById("clientNextActions").innerHTML='<p>Continúa registrando tus avances en Progreso.</p>';} }catch(error){console.error("No se pudieron cargar los indicadores reales",error);}})();
+</script>
 </body>
 </html>
 

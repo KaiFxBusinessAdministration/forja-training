@@ -10,6 +10,10 @@ alter table public.profiles
   add column if not exists weight_kg numeric(6,2) check (weight_kg is null or weight_kg > 0),
   add column if not exists height_cm numeric(5,2) check (height_cm is null or height_cm > 0);
 
+alter table public.profiles
+  add column if not exists emergency_contact_name text,
+  add column if not exists emergency_contact_phone text;
+
 alter table public.progress_logs
   add column if not exists sets_completed integer check (sets_completed is null or sets_completed >= 0);
 

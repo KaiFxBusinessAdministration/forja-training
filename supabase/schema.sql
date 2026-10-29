@@ -11,6 +11,8 @@ create table public.profiles (
   goal text,
   weight_kg numeric(6,2) check (weight_kg is null or weight_kg > 0),
   height_cm numeric(5,2) check (height_cm is null or height_cm > 0),
+  emergency_contact_name text,
+  emergency_contact_phone text,
   avatar_url text,
   created_at timestamptz not null default now()
 );

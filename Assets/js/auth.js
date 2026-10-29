@@ -4,7 +4,7 @@
   async function profileFor(user){
     const api=backend();
     if(!api?.ready){ throw new Error("Backend no configurado."); }
-    const {data,error}=await api.client.from("profiles").select("id,full_name,role,age,goal,weight_kg,height_cm").eq("id",user.id).single();
+    const {data,error}=await api.client.from("profiles").select("id,full_name,role,age,goal,weight_kg,height_cm,emergency_contact_name,emergency_contact_phone").eq("id",user.id).single();
     if(error) throw error;
     return data;
   }
