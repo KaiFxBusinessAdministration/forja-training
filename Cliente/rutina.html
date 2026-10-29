@@ -37,7 +37,7 @@
 <div class="panel-heading-row"><div><h2>Constructor de rutina</h2><p>Crea tus entrenamientos diarios y define el calentamiento antes de comenzar.</p></div></div>
 <form id="atletaRutinaForm" class="client-form">
 <div class="form-grid">
-<div><label for="atletaTipoRutina">Crear</label><select id="atletaTipoRutina"><option value="dia">Día de training</option><option value="semana">Semana de training</option></select></div>
+<div><label for="atletaTipoRutina">Crear</label><select id="atletaTipoRutina" onchange="document.getElementById('semanaNombreWrap').hidden=this.value!=='semana'"><option value="dia">Día de training</option><option value="semana">Semana de training</option></select></div>
 <div id="semanaNombreWrap" hidden><label for="atletaSemanaNombre">Enfoque del bloque</label><select id="atletaSemanaNombre"><option value="Fuerza">Fuerza</option><option value="Hipertrofia">Hipertrofia</option><option value="Fuerza e hipertrofia">Fuerza e hipertrofia</option><option value="Recomposición corporal">Recomposición corporal</option><option value="Definición">Definición</option><option value="Preparación competitiva">Preparación competitiva</option><option value="Resistencia y acondicionamiento">Resistencia y acondicionamiento</option><option value="Técnica y base">Técnica y base</option><option value="Descarga y recuperación">Descarga y recuperación</option><option value="Personalizado">Personalizado</option></select><input id="atletaSemanaPersonalizada" hidden maxlength="120" placeholder="Escribe el nombre del bloque"></div>
 </div>
 <div class="form-grid">
@@ -95,12 +95,21 @@ const atletaTipoRutina = document.getElementById("atletaTipoRutina");
 const semanaNombreWrap = document.getElementById("semanaNombreWrap");
 const atletaSemanaNombre = document.getElementById("atletaSemanaNombre");
 const atletaSemanaPersonalizada = document.getElementById("atletaSemanaPersonalizada");
+const atletaDia = document.getElementById("atletaDia");
+const atletaEjercicio = document.getElementById("atletaEjercicio");
+const atletaSeries = document.getElementById("atletaSeries");
+const atletaReps = document.getElementById("atletaReps");
+const atletaDescanso = document.getElementById("atletaDescanso");
+const atletaCalentamiento = document.getElementById("atletaCalentamiento");
 const atletaRutinaKey = `flowRutinasIndependientes_${sessionStorage.getItem("flowClienteActivoId") || "99"}`;
 const ejerciciosAtleta = document.getElementById("ejerciciosAtleta");
 const bibliotecaAtleta = Array.isArray(window.FLOW_EXERCISE_LIBRARY) ? window.FLOW_EXERCISE_LIBRARY : [];
 const nombresEjercicios = [...new Set(bibliotecaAtleta.map(ejercicio=>ejercicio.nombre).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));
 ejerciciosAtleta.innerHTML=nombresEjercicios.map(nombre=>`<option value="${nombre.replace(/&/g,"&amp;").replace(/"/g,"&quot;")}"></option>`).join("");
-atletaTipoRutina.addEventListener("change",()=>{semanaNombreWrap.hidden=atletaTipoRutina.value!=="semana";});
+const actualizarTipoRutina=()=>{semanaNombreWrap.hidden=atletaTipoRutina.value!=="semana";};
+atletaTipoRutina.addEventListener("change",actualizarTipoRutina);
+atletaTipoRutina.addEventListener("input",actualizarTipoRutina);
+actualizarTipoRutina();
 atletaSemanaNombre.addEventListener("change",()=>{const personalizado=atletaSemanaNombre.value==="Personalizado";atletaSemanaPersonalizada.hidden=!personalizado;atletaSemanaPersonalizada.required=personalizado;if(!personalizado)atletaSemanaPersonalizada.value="";});
 atletaRutinaForm.addEventListener("submit",()=>{if(atletaSemanaNombre.value==="Personalizado")atletaSemanaNombre.value=atletaSemanaPersonalizada.value.trim();},{capture:true});
 atletaRutinaForm.addEventListener("reset",()=>{atletaSemanaPersonalizada.hidden=true;atletaSemanaPersonalizada.required=false;});
