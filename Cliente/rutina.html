@@ -107,9 +107,11 @@ const semanaDiasLista = document.getElementById("semanaDiasLista");
 const agregarDiaSemana = document.getElementById("agregarDiaSemana");
 const atletaRutinaKey = `flowRutinasIndependientes_${sessionStorage.getItem("flowClienteActivoId") || "99"}`;
 const ejerciciosAtleta = document.getElementById("ejerciciosAtleta");
-const bibliotecaAtleta = Array.isArray(window.FLOW_EXERCISE_LIBRARY) ? window.FLOW_EXERCISE_LIBRARY : [];
-const nombresEjercicios = [...new Set(bibliotecaAtleta.map(ejercicio=>ejercicio.nombre).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));
-ejerciciosAtleta.innerHTML='<option value="">Selecciona un ejercicio de la biblioteca</option>'+nombresEjercicios.map(nombre=>`<option value="${nombre.replace(/&/g,"&amp;").replace(/"/g,"&quot;")}">${nombre}</option>`).join("");
+let bibliotecaAtleta = Array.isArray(window.FLOW_EXERCISE_LIBRARY) ? window.FLOW_EXERCISE_LIBRARY : [];
+let nombresEjercicios = [];
+function cargarEjerciciosEnSelect(){nombresEjercicios=[...new Set(bibliotecaAtleta.map(ejercicio=>ejercicio.nombre).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));ejerciciosAtleta.innerHTML='<option value="">Selecciona un ejercicio de la biblioteca</option>'+nombresEjercicios.map(nombre=>`<option value="${nombre.replace(/&/g,"&amp;").replace(/"/g,"&quot;")}">${nombre}</option>`).join("");}
+cargarEjerciciosEnSelect();
+if(!nombresEjercicios.length){fetch("../Data/exercise-library.js").then(response=>response.text()).then(source=>{const inicio=source.indexOf("[");const fin=source.lastIndexOf("];" );if(inicio>=0&&fin>inicio){bibliotecaAtleta=JSON.parse(source.slice(inicio,fin+1));cargarEjerciciosEnSelect();}}).catch(error=>console.warn("No se pudo cargar la biblioteca de ejercicios",error));}
 const actualizarTipoRutina=()=>{semanaNombreWrap.hidden=atletaTipoRutina.value!=="semana";};
 atletaTipoRutina.addEventListener("change",actualizarTipoRutina);
 atletaTipoRutina.addEventListener("input",actualizarTipoRutina);
