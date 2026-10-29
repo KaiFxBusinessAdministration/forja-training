@@ -22,7 +22,8 @@ create table public.trainer_clients (
 
 create table public.routines (
   id uuid primary key default gen_random_uuid(),
-  trainer_id uuid not null references public.profiles(id) on delete cascade,
+  owner_id uuid not null references public.profiles(id) on delete cascade,
+  trainer_id uuid references public.profiles(id) on delete cascade,
   client_id uuid not null references public.profiles(id) on delete cascade,
   name text not null,
   day_name text not null,
@@ -87,13 +88,13 @@ create policy profiles_update_self on public.profiles for update using (id = aut
 create policy trainer_clients_visible_to_members on public.trainer_clients for select using (trainer_id = auth.uid() or client_id = auth.uid() or public.is_admin());
 create policy trainer_clients_admin_manage on public.trainer_clients for all using (public.is_admin()) with check (public.is_admin());
 
-create policy routines_member_read on public.routines for select using (trainer_id = auth.uid() or client_id = auth.uid() or public.is_admin());
-create policy routines_trainer_insert on public.routines for insert with check (trainer_id = auth.uid() and public.is_trainer_of(client_id));
-create policy routines_trainer_update on public.routines for update using (trainer_id = auth.uid()) with check (trainer_id = auth.uid());
-create policy routines_trainer_delete on public.routines for delete using (trainer_id = auth.uid());
+create policy routines_member_read on public.routines for select using (owner_id = auth.uid() or trainer_id = auth.uid() or client_id = auth.uid() or public.is_admin());
+create policy routines_owner_insert on public.routines for insert with check (owner_id = auth.uid() and ((trainer_id = auth.uid() and public.is_trainer_of(client_id)) or (trainer_id is null and client_id = auth.uid())));
+create policy routines_owner_update on public.routines for update using (owner_id = auth.uid() or trainer_id = auth.uid()) with check (owner_id = auth.uid() or trainer_id = auth.uid());
+create policy routines_owner_delete on public.routines for delete using (owner_id = auth.uid() or trainer_id = auth.uid());
 
 create policy routine_exercises_member_read on public.routine_exercises for select using (exists (select 1 from public.routines r where r.id = routine_id and (r.trainer_id = auth.uid() or r.client_id = auth.uid() or public.is_admin())));
-create policy routine_exercises_trainer_manage on public.routine_exercises for all using (exists (select 1 from public.routines r where r.id = routine_id and r.trainer_id = auth.uid())) with check (exists (select 1 from public.routines r where r.id = routine_id and r.trainer_id = auth.uid()));
+create policy routine_exercises_owner_manage on public.routine_exercises for all using (exists (select 1 from public.routines r where r.id = routine_id and (r.owner_id = auth.uid() or r.trainer_id = auth.uid()))) with check (exists (select 1 from public.routines r where r.id = routine_id and (r.owner_id = auth.uid() or r.trainer_id = auth.uid())));
 
 create policy progress_client_read_insert on public.progress_logs for select using (client_id = auth.uid() or public.is_trainer_of(client_id) or public.is_admin());
 create policy progress_client_create on public.progress_logs for insert with check (client_id = auth.uid());

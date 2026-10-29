@@ -3,6 +3,15 @@
   async function user(){const api=getApi();if(!api?.ready)return null;try{return await api.requireUser();}catch{return null;}}
   const number=value=>{if(value===null||value===undefined||value===""||value==="Sin peso")return null;const n=Number(String(value).replace(",","."));return Number.isFinite(n)?n:null;};
   window.FLOW_ROUTINE_SYNC={
+    async saveIndependentRoutine({name,day,exercise,sets,reps,restSeconds,warmupSteps}){
+      const api=getApi(),owner=await user();
+      if(!api?.ready||!owner)return {synced:false};
+      const {data:routine,error}=await api.client.from("routines").insert({owner_id:owner.id,client_id:owner.id,trainer_id:null,name:name||"Rutina independiente",day_name:day||"Día sin definir",warmup_steps:Array.isArray(warmupSteps)?warmupSteps:[],notes:null}).select("id").single();
+      if(error)throw error;
+      const {error:exerciseError}=await api.client.from("routine_exercises").insert({routine_id:routine.id,exercise_id:`independent-${Date.now()}`,exercise_name:exercise||"Ejercicio",sets:Math.max(1,parseInt(sets,10)||3),reps:String(reps||"12"),rest_seconds:number(restSeconds),position:0});
+      if(exerciseError)throw exerciseError;
+      return {synced:true,routineId:routine.id};
+    },
     async saveAssignment({clientId,name,blocks}){
       const api=getApi(),trainer=await user();if(!api?.ready||!trainer||!clientId)return {synced:false};
       const grouped=blocks.reduce((out,b)=>{(out[b.dia||"Día sin definir"]||=[]).push(b);return out;},{}),saved=[];
