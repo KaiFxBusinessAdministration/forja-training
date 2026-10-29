@@ -54,7 +54,7 @@ loginForm.addEventListener("submit",async(event)=>{
 event.preventDefault();
 loginEstado.textContent="Comprobando acceso...";
 try{
-const profile=await window.FLOW_AUTH.signIn(document.getElementById("loginEmail").value.trim(),document.getElementById("loginPassword").value);
+const profile=await window.FLOW_AUTH.signIn(document.getElementById("loginEmail").value.trim(),document.getElementById("loginPassword").value,"trainer");
 window.location.href=window.FLOW_AUTH.destination(profile.role);
 }catch(error){
 loginEstado.textContent=error.message.includes("Invalid login credentials") ? "Correo o contraseña incorrectos." : error.message;

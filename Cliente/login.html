@@ -54,7 +54,7 @@ loginForm.addEventListener("submit",async(event)=>{
 event.preventDefault();
 loginEstado.textContent="Comprobando acceso...";
 try{
-const profile=await window.FLOW_AUTH.signIn(document.getElementById("loginEmail").value.trim(),document.getElementById("loginPassword").value);
+const profile=await window.FLOW_AUTH.signIn(document.getElementById("loginEmail").value.trim(),document.getElementById("loginPassword").value,"client");
 sessionStorage.setItem("flowClienteActivoId",profile.id);
 window.location.href=window.FLOW_AUTH.destination(profile.role);
 }catch(error){

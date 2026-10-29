@@ -5,6 +5,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/png" href="../Assets/img/forja-favicon.png?v=forja-favicon-2">
+<script src="../Assets/js/vendor/supabase.min.js"></script>
+<script src="../Assets/js/backend-config.js"></script>
+<script src="../Assets/js/backend.js"></script>
 
 <title>Flow Fitness | Dashboard Entrenador</title>
 
@@ -78,7 +81,7 @@ Dashboard
 </h1>
 
 <p>
-Bienvenido Andrés Vega
+<span id="trainerWelcome">Bienvenido</span>
 </p>
 
 </div>
@@ -91,7 +94,7 @@ Bienvenido Andrés Vega
 <div>
 
 <strong>
-Andrés
+<span id="trainerName">Entrenador</span>
 </strong>
 
 <span>
@@ -104,6 +107,18 @@ Entrenador
 
 
 </header>
+
+<section class="dashboard-panel trainer-profile-editor">
+<h2>Mis datos</h2>
+<form id="trainerProfileForm" class="client-form" style="max-width:720px;text-align:left">
+<div><label for="trainerFullName">Nombre completo</label><input id="trainerFullName" required></div>
+<div><label for="trainerAge">Edad</label><input id="trainerAge" type="number" min="18" max="100"></div>
+<div><label for="trainerEmergencyName">Contacto de emergencia</label><input id="trainerEmergencyName"></div>
+<div><label for="trainerPhone">Teléfono de emergencia</label><input id="trainerPhone" type="tel"></div>
+<button class="btn-primary" type="submit">Guardar mis datos</button>
+<p class="form-status" id="trainerProfileStatus" aria-live="polite"></p>
+</form>
+</section>
 
 
 
@@ -267,6 +282,30 @@ Nueva rutina creada para Ana
 
 
 <script src="../Assets/js/app.js"></script>
+<script>
+(async()=>{
+  const status=document.getElementById("trainerProfileStatus");
+  try{
+    const user=await window.FLOW_BACKEND.requireUser();
+    const {data:profile,error}=await window.FLOW_BACKEND.client.from("profiles").select("id,full_name,role,age,emergency_contact_name,emergency_contact_phone").eq("id",user.id).single();
+    if(error) throw error;
+    if(profile.role!=="trainer") throw new Error("Perfil no autorizado");
+    const name=profile.full_name || user.user_metadata?.full_name || user.email?.split("@")[0] || "Entrenador";
+    document.getElementById("trainerWelcome").textContent=`Bienvenido ${name}`;
+    document.getElementById("trainerName").textContent=name;
+    document.getElementById("trainerFullName").value=profile.full_name||name;
+    document.getElementById("trainerAge").value=profile.age||"";
+    document.getElementById("trainerEmergencyName").value=profile.emergency_contact_name||"";
+    document.getElementById("trainerPhone").value=profile.emergency_contact_phone||"";
+    document.getElementById("trainerProfileForm").addEventListener("submit",async event=>{
+      event.preventDefault(); status.textContent="Guardando...";
+      const {data:updated,error:updateError}=await window.FLOW_BACKEND.client.from("profiles").update({full_name:document.getElementById("trainerFullName").value.trim(),age:Number(document.getElementById("trainerAge").value)||null,emergency_contact_name:document.getElementById("trainerEmergencyName").value.trim()||null,emergency_contact_phone:document.getElementById("trainerPhone").value.trim()||null}).eq("id",user.id).select("full_name").single();
+      if(updateError) throw updateError;
+      document.getElementById("trainerWelcome").textContent=`Bienvenido ${updated.full_name}`; document.getElementById("trainerName").textContent=updated.full_name; sessionStorage.setItem("flowAuthProfile",JSON.stringify({...profile,...updated})); status.textContent="Datos guardados y sincronizados.";
+    });
+  }catch(error){ status.textContent="No se pudieron cargar tus datos. Inicia sesión nuevamente."; console.error(error); }
+})();
+</script>
 <script>
 window.flowLoadClientes("../Data/clientes.json").then(clientes=>{
 const activos = clientes.filter(cliente=>cliente.estado === "Activo").length;

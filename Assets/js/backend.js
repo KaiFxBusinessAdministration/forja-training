@@ -15,4 +15,15 @@
       if(this.ready) await this.client.auth.signOut();
     }
   };
+  document.addEventListener("DOMContentLoaded",()=>{
+    const path=window.location.pathname;
+    const protectedArea=path.includes("/Cliente/") || path.includes("/Entrenador/");
+    const isLogin=path.endsWith("/login.html");
+    if(!protectedArea || isLogin || !ready)return;
+    const expected=path.includes("/Entrenador/") ? "trainer" : "client";
+    window.FLOW_BACKEND.requireUser().then(async current=>{
+      const {data:profile}=await window.FLOW_BACKEND.client.from("profiles").select("role").eq("id",current.id).single();
+      if(!profile || profile.role!==expected) window.location.replace("login.html");
+    }).catch(()=>window.location.replace("login.html"));
+  });
 })();

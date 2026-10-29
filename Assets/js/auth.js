@@ -10,12 +10,18 @@
   }
 
   window.FLOW_AUTH={
-    async signIn(email,password){
+    async signIn(email,password,expectedRole){
       const api=backend();
       if(!api?.ready) throw new Error("Supabase no está disponible. Revisa la configuración del backend.");
       const {data,error}=await api.client.auth.signInWithPassword({email,password});
       if(error) throw error;
       const profile=await profileFor(data.user);
+      if(expectedRole && profile.role !== expectedRole){
+        await api.client.auth.signOut();
+        sessionStorage.removeItem("flowAuthRole");
+        sessionStorage.removeItem("flowAuthProfile");
+        throw new Error(expectedRole === "trainer" ? "Este correo pertenece a un atleta. Usa el acceso de cliente." : "Este correo pertenece a un entrenador. Usa el acceso de entrenador.");
+      }
       sessionStorage.setItem("flowAuthRole",profile.role);
       sessionStorage.setItem("flowAuthProfile",JSON.stringify(profile));
       return profile;
