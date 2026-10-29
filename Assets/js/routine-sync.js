@@ -12,6 +12,18 @@
       if(exerciseError)throw exerciseError;
       return {synced:true,routineId:routine.id};
     },
+    async migrateLocalRoutines({items,markerKey}){
+      const api=getApi(),owner=await user();
+      if(!api?.ready||!owner||!Array.isArray(items)||!items.length)return {synced:false,reason:"session"};
+      const pendientes=items.filter((_,index)=>!JSON.parse(localStorage.getItem(markerKey)||"[]").includes(index));
+      const migrados=JSON.parse(localStorage.getItem(markerKey)||"[]");
+      for(const [index,rutina] of items.entries()){
+        if(!pendientes.includes(rutina)||migrados.includes(index))continue;
+        await this.saveIndependentRoutine({name:rutina.nombreSemana||"Rutina independiente",day:rutina.dia,exercise:rutina.ejercicio,sets:rutina.series,reps:rutina.repeticiones,restSeconds:rutina.descanso,warmupSteps:String(rutina.calentamiento||"").split(/\n+/).map(paso=>paso.trim()).filter(Boolean)});
+        migrados.push(index);localStorage.setItem(markerKey,JSON.stringify(migrados));
+      }
+      return {synced:true,count:migrados.length};
+    },
     async saveAssignment({clientId,name,blocks}){
       const api=getApi(),trainer=await user();if(!api?.ready||!trainer||!clientId)return {synced:false};
       const grouped=blocks.reduce((out,b)=>{(out[b.dia||"Día sin definir"]||=[]).push(b);return out;},{}),saved=[];
