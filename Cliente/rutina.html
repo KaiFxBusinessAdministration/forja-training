@@ -86,6 +86,7 @@
 <script src="../Assets/js/backend.js"></script>
 <script src="../Assets/js/routine-sync.js"></script>
 <script src="../Assets/js/app.js"></script>
+<script src="../Data/exercise-names.js"></script>
 <script src="../Data/exercise-library.js"></script>
 <script src="../Data/openGym-demo.js"></script>
 <script>
@@ -107,7 +108,7 @@ const semanaDiasLista = document.getElementById("semanaDiasLista");
 const agregarDiaSemana = document.getElementById("agregarDiaSemana");
 const atletaRutinaKey = `flowRutinasIndependientes_${sessionStorage.getItem("flowClienteActivoId") || "99"}`;
 const ejerciciosAtleta = document.getElementById("ejerciciosAtleta");
-let bibliotecaAtleta = Array.isArray(window.FLOW_EXERCISE_LIBRARY) ? window.FLOW_EXERCISE_LIBRARY : [];
+let bibliotecaAtleta = Array.isArray(window.FLOW_EXERCISE_LIBRARY) ? window.FLOW_EXERCISE_LIBRARY : (Array.isArray(window.FLOW_EXERCISE_NAMES) ? window.FLOW_EXERCISE_NAMES.map((nombre,index)=>({id:`name-${index}`,nombre})) : []);
 let nombresEjercicios = [];
 function cargarEjerciciosEnSelect(){nombresEjercicios=[...new Set(bibliotecaAtleta.map(ejercicio=>ejercicio.nombre).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));ejerciciosAtleta.innerHTML='<option value="">Selecciona un ejercicio de la biblioteca</option>'+nombresEjercicios.map(nombre=>`<option value="${nombre.replace(/&/g,"&amp;").replace(/"/g,"&quot;")}">${nombre}</option>`).join("");}
 cargarEjerciciosEnSelect();
