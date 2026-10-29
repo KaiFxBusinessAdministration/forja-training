@@ -53,6 +53,7 @@ create table public.progress_logs (
   routine_exercise_id uuid references public.routine_exercises(id) on delete set null,
   exercise_name text not null,
   weight numeric(7,2),
+  sets_completed integer check (sets_completed is null or sets_completed >= 0),
   repetitions integer check (repetitions is null or repetitions >= 0),
   notes text,
   recorded_at timestamptz not null default now()

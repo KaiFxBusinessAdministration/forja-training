@@ -4,6 +4,9 @@
 alter table public.routines
   add column if not exists owner_id uuid references public.profiles(id) on delete cascade;
 
+alter table public.progress_logs
+  add column if not exists sets_completed integer check (sets_completed is null or sets_completed >= 0);
+
 alter table public.routines
   alter column trainer_id drop not null;
 
