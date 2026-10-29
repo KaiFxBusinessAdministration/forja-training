@@ -42,7 +42,7 @@
 </div>
 <div class="form-grid">
 <div><label for="atletaDia">Día</label><select id="atletaDia" required><option>Lunes</option><option>Martes</option><option>Miércoles</option><option>Jueves</option><option>Viernes</option><option>Sábado</option><option>Domingo</option></select></div>
-<div><label for="atletaEjercicio">Ejercicio</label><input id="atletaEjercicio" list="ejerciciosAtleta" placeholder="Ej. Press banca" required><datalist id="ejerciciosAtleta"><option value="Press banca"><option value="Jalón al pecho con agarre neutro"><option value="Sentadilla"><option value="Peso muerto rumano"><option value="Press militar"><option value="Remo sentado en polea"><option value="Plancha"></datalist></div>
+<div><label for="atletaEjercicio">Ejercicio</label><input id="atletaEjercicio" list="ejerciciosAtleta" placeholder="Busca un ejercicio de la biblioteca" required><datalist id="ejerciciosAtleta"></datalist></div>
 <div><label for="atletaSeries">Series</label><input id="atletaSeries" type="number" min="1" max="20" value="3" required></div>
 <div><label for="atletaReps">Repeticiones</label><input id="atletaReps" type="number" min="1" max="100" value="10" required></div>
 <div><label for="atletaDescanso">Descanso (segundos)</label><input id="atletaDescanso" type="number" min="0" value="90" required></div>
@@ -80,6 +80,7 @@
 <script src="../Assets/js/backend.js"></script>
 <script src="../Assets/js/routine-sync.js"></script>
 <script src="../Assets/js/app.js"></script>
+<script src="../Data/exercise-library.js"></script>
 <script src="../Data/openGym-demo.js"></script>
 <script>
 const rutinaHoy = document.getElementById("rutinaHoy");
@@ -89,6 +90,10 @@ const atletaTipoRutina = document.getElementById("atletaTipoRutina");
 const semanaNombreWrap = document.getElementById("semanaNombreWrap");
 const atletaSemanaNombre = document.getElementById("atletaSemanaNombre");
 const atletaRutinaKey = `flowRutinasIndependientes_${sessionStorage.getItem("flowClienteActivoId") || "99"}`;
+const ejerciciosAtleta = document.getElementById("ejerciciosAtleta");
+const bibliotecaAtleta = Array.isArray(window.FLOW_EXERCISE_LIBRARY) ? window.FLOW_EXERCISE_LIBRARY : [];
+const nombresEjercicios = [...new Set(bibliotecaAtleta.map(ejercicio=>ejercicio.nombre).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));
+ejerciciosAtleta.innerHTML=nombresEjercicios.map(nombre=>`<option value="${nombre.replace(/&/g,"&amp;").replace(/"/g,"&quot;")}"></option>`).join("");
 atletaTipoRutina.addEventListener("change",()=>{semanaNombreWrap.hidden=atletaTipoRutina.value!=="semana";});
 atletaRutinaForm.addEventListener("submit",event=>{event.preventDefault();const rutina={tipo:atletaTipoRutina.value,nombreSemana:atletaSemanaNombre.value.trim(),dia:atletaDia.value,ejercicio:atletaEjercicio.value.trim(),series:atletaSeries.value,repeticiones:atletaReps.value,descanso:atletaDescanso.value,calentamiento:atletaCalentamiento.value.trim(),fecha:new Date().toISOString()};const actuales=JSON.parse(localStorage.getItem(atletaRutinaKey) || "[]");const nombreClave=rutina.tipo==="semana"?rutina.nombreSemana.toLowerCase():"dia-independiente";const ejercicioClave=rutina.ejercicio.toLowerCase();const existente=actuales.findIndex(item=>item.tipo===rutina.tipo&&String(item.nombreSemana||"").toLowerCase()===nombreClave&&item.dia===rutina.dia&&String(item.ejercicio||"").toLowerCase()===ejercicioClave);if(existente>=0){actuales[existente]=rutina;}else{actuales.push(rutina);}localStorage.setItem(atletaRutinaKey,JSON.stringify(actuales));atletaRutinaForm.reset();atletaSeries.value=3;atletaReps.value=10;atletaDescanso.value=90;semanaNombreWrap.hidden=true;atletaRutinaEstado.textContent=existente>=0?"Ejercicio actualizado dentro del día. Ya puedes registrar sus avances en Progreso.":rutina.tipo==="semana"?"Ejercicio agregado al día de training.":"Ejercicio guardado en tu día de training.";});
 
