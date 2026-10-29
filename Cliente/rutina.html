@@ -33,6 +33,22 @@
 </div>
 <img src="../Assets/img/client-routine.jpg" alt="Entrenador masculino asistiendo a un cliente masculino con una rutina en gimnasio">
 </section>
+<section class="dashboard-panel independent-routine-builder">
+<div class="panel-heading-row"><div><h2>Constructor de rutina</h2><p>Crea tus entrenamientos diarios y define el calentamiento antes de comenzar.</p></div></div>
+<form id="atletaRutinaForm" class="client-form">
+<div class="form-grid">
+<div><label for="atletaDia">Día</label><select id="atletaDia" required><option>Lunes</option><option>Martes</option><option>Miércoles</option><option>Jueves</option><option>Viernes</option><option>Sábado</option><option>Domingo</option></select></div>
+<div><label for="atletaEjercicio">Ejercicio</label><input id="atletaEjercicio" list="ejerciciosAtleta" placeholder="Ej. Press banca" required><datalist id="ejerciciosAtleta"><option value="Press banca"><option value="Jalón al pecho con agarre neutro"><option value="Sentadilla"><option value="Peso muerto rumano"><option value="Press militar"><option value="Remo sentado en polea"><option value="Plancha"></datalist></div>
+<div><label for="atletaSeries">Series</label><input id="atletaSeries" type="number" min="1" max="20" value="3" required></div>
+<div><label for="atletaReps">Repeticiones</label><input id="atletaReps" type="number" min="1" max="100" value="10" required></div>
+<div><label for="atletaDescanso">Descanso (segundos)</label><input id="atletaDescanso" type="number" min="0" value="90" required></div>
+<div><label for="atletaCalentamiento">Calentamiento del día</label><textarea id="atletaCalentamiento" rows="3" placeholder="Ej. 5 min de bicicleta; movilidad de hombros; 2 series progresivas"></textarea></div>
+</div>
+<button class="btn-primary" type="submit">Guardar entrenamiento</button>
+<p class="form-help" id="atletaRutinaEstado" aria-live="polite"></p>
+</form>
+<div class="activity" id="rutinasAtletaGuardadas"><p class="empty-state">Todavía no has creado entrenamientos propios.</p></div>
+</section>
 <section class="split-grid">
 <div class="dashboard-panel">
 <h2>Hoy</h2>
@@ -68,6 +84,17 @@
 <script>
 const rutinaHoy = document.getElementById("rutinaHoy");
 const rutinaSemana = document.getElementById("rutinaSemana");
+const atletaRutinaForm = document.getElementById("atletaRutinaForm");
+const rutinasAtletaGuardadas = document.getElementById("rutinasAtletaGuardadas");
+const atletaRutinaEstado = document.getElementById("atletaRutinaEstado");
+const atletaRutinaKey = `flowRutinasIndependientes_${sessionStorage.getItem("flowClienteActivoId") || "99"}`;
+function renderRutinasIndependientes(){
+const rutinas = JSON.parse(localStorage.getItem(atletaRutinaKey) || "[]");
+rutinasAtletaGuardadas.innerHTML = rutinas.length ? rutinas.map((rutina,index)=>`<p><strong>${rutina.dia}: ${rutina.ejercicio}</strong> · ${rutina.series} x ${rutina.repeticiones} · ${rutina.descanso}s${rutina.calentamiento ? ` · Calentamiento: ${rutina.calentamiento}` : ""} <button class="icon-button" type="button" data-remove-independent="${index}" aria-label="Eliminar entrenamiento">×</button></p>`).join("") : `<p class="empty-state">Todavía no has creado entrenamientos propios.</p>`;
+rutinasAtletaGuardadas.querySelectorAll("[data-remove-independent]").forEach(button=>button.addEventListener("click",()=>{const actuales=JSON.parse(localStorage.getItem(atletaRutinaKey) || "[]");actuales.splice(Number(button.dataset.removeIndependent),1);localStorage.setItem(atletaRutinaKey,JSON.stringify(actuales));renderRutinasIndependientes();}));
+}
+atletaRutinaForm.addEventListener("submit",event=>{event.preventDefault();const rutina={dia:atletaDia.value,ejercicio:atletaEjercicio.value.trim(),series:atletaSeries.value,repeticiones:atletaReps.value,descanso:atletaDescanso.value,calentamiento:atletaCalentamiento.value.trim()};const actuales=JSON.parse(localStorage.getItem(atletaRutinaKey) || "[]");actuales.push(rutina);localStorage.setItem(atletaRutinaKey,JSON.stringify(actuales));atletaRutinaForm.reset();atletaSeries.value=3;atletaReps.value=10;atletaDescanso.value=90;atletaRutinaEstado.textContent="Entrenamiento guardado en tu rutina.";renderRutinasIndependientes();});
+renderRutinasIndependientes();
 
 function ejercicioMarkup(ejercicio){
 const videoLink = ejercicio.videoUrl ? `<a class="exercise-video-link" href="${ejercicio.videoUrl}" target="_blank" rel="noopener">Ver demostración</a>` : "";
@@ -113,7 +140,7 @@ const avances=JSON.parse(localStorage.getItem("flowAvancesRutina") || "[]");
 const clienteId=sessionStorage.getItem("flowClienteActivoId") || "99";
 avances.push({clienteId,exerciseId,exerciseName,peso:peso.trim() || "Sin peso",repeticiones:repeticiones.trim() || "-",fecha:new Date().toLocaleDateString("es-EC")});
 localStorage.setItem("flowAvancesRutina",JSON.stringify(avances));
-try{await window.FLOW_ROUTINE_SYNC?.recordProgress({clientId,routineExerciseId:exerciseId,exerciseName,weight:peso.trim(),repetitions:repeticiones.trim()});}
+try{await window.FLOW_ROUTINE_SYNC?.recordProgress({clientId:clienteId,routineExerciseId:exerciseId,exerciseName,weight:peso.trim(),repetitions:repeticiones.trim()});}
 catch(error){console.error("No se pudo sincronizar el avance",error);}
 const boton=document.querySelector(`[data-avance-id="${CSS.escape(exerciseId)}"]`);
 if(boton){boton.textContent="Avance guardado";}

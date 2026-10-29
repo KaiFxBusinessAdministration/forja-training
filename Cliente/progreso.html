@@ -33,6 +33,15 @@
 </div>
 <img src="../Assets/img/client-progress.jpg" alt="Entrenador guiando a un cliente durante trabajo de fuerza">
 </section>
+<section class="dashboard-panel">
+<div class="panel-heading-row"><div><h2>Registrar avance</h2><p>Guarda el peso y las repeticiones de tu sesión para revisar tu evolución.</p></div></div>
+<form id="clienteAvanceForm" class="client-form"><div class="form-grid">
+<div><label for="avanceEjercicio">Ejercicio</label><input id="avanceEjercicio" required placeholder="Ej. Press banca"></div>
+<div><label for="avancePeso">Peso (kg)</label><input id="avancePeso" type="number" min="0" step="0.5" required></div>
+<div><label for="avanceRepeticiones">Repeticiones</label><input id="avanceRepeticiones" type="number" min="1" required></div>
+<div><label for="avanceNotas">Observaciones</label><input id="avanceNotas" placeholder="Técnica, fatiga o sensaciones"></div>
+</div><button class="btn-primary" type="submit">Guardar avance</button><p class="form-help" id="clienteAvanceEstado" aria-live="polite"></p></form>
+</section>
 <section class="kpi-grid">
 <div class="kpi-card"><h3>Fuerza</h3><strong id="progresoFuerza">+12%</strong></div>
 <div class="kpi-card"><h3>Peso corporal</h3><strong id="progresoPeso">-2 kg</strong></div>
@@ -91,6 +100,8 @@ const progresoPeso = document.getElementById("progresoPeso");
 const progresoConsistencia = document.getElementById("progresoConsistencia");
 const progresoMarcas = document.getElementById("progresoMarcas");
 const avancesRutina = document.getElementById("avancesRutina");
+const clienteAvanceForm = document.getElementById("clienteAvanceForm");
+const clienteAvanceEstado = document.getElementById("clienteAvanceEstado");
 async function renderAvances(){
 const clienteId=sessionStorage.getItem("flowClienteActivoId") || "99";
 const avances=JSON.parse(localStorage.getItem("flowAvancesRutina") || "[]").filter(item=>String(item.clienteId)===String(clienteId)).slice(-12).reverse();
@@ -100,6 +111,7 @@ const cloud=await window.FLOW_ROUTINE_SYNC?.listProgress(clienteId);
 if(cloud){avancesRutina.innerHTML=cloud.length ? cloud.map(item=>`<div class="metric-row"><span>${item.exercise_name}<small>${new Date(item.recorded_at).toLocaleDateString("es-EC")}</small></span><strong>${item.weight ?? "Sin peso"} kg · ${item.repetitions ?? "-"} reps</strong></div>`).join("") : `<p class="empty-state">Todavía no hay avances registrados.</p>`;}
 }catch(error){console.error("No se pudieron cargar avances de Supabase",error);}
 }
+clienteAvanceForm.addEventListener("submit",event=>{event.preventDefault();const clienteId=sessionStorage.getItem("flowClienteActivoId") || "99";const avances=JSON.parse(localStorage.getItem("flowAvancesRutina") || "[]");avances.push({clienteId,exerciseName:avanceEjercicio.value.trim(),peso:avancePeso.value,repeticiones:avanceRepeticiones.value,fecha:new Date().toLocaleDateString("es-EC"),notas:avanceNotas.value.trim()});localStorage.setItem("flowAvancesRutina",JSON.stringify(avances));clienteAvanceForm.reset();clienteAvanceEstado.textContent="Avance guardado correctamente.";renderAvances();});
 renderAvances();
 const progressPhotoGallery = document.getElementById("progressPhotoGallery");
 
