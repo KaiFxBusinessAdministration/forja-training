@@ -1290,6 +1290,10 @@ button{
 }
 
 .topbar .profile img{
+    width:88px;
+    height:88px;
+    object-fit:contain;
+    object-position:center;
     border:1px solid rgba(215,249,138,.45);
     padding:2px;
 }
