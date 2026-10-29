@@ -181,7 +181,8 @@ const activeClientId=sessionStorage.getItem("flowClienteActivoId") || "99";
 window.flowLoadClientes("../Data/clientes.json")
 .then(clientes=>{
 
-const cliente=clientes.find(item=>String(item.id)===activeClientId) || clientes.find(item=>item.nombre.toLowerCase().includes("demo")) || clientes[0];
+const authProfile=JSON.parse(sessionStorage.getItem("flowAuthProfile") || "null");
+const cliente=authProfile ? {id:authProfile.id,nombre:authProfile.full_name || "Atleta",edad:"No registrado",peso:authProfile.weight_kg,altura:authProfile.height_cm ? `${(Number(authProfile.height_cm)/100).toFixed(2)} m` : "No registrada",objetivo:"Por definir",estado:"Activo",entrenador:"Sin entrenador",tipoSeguimiento:"General"} : clientes.find(item=>String(item.id)===activeClientId) || (params.get("demo")==="1" ? clientes.find(item=>item.nombre.toLowerCase().includes("demo")) : null) || clientes[0];
 
 if(!cliente){
 return;
@@ -195,7 +196,7 @@ const values={
 nombre:cliente.nombre,
 nombreCorto:cliente.nombre.split(" ")[0],
 edad:cliente.edad,
-peso:`${cliente.peso} kg`,
+peso:cliente.peso ? `${cliente.peso} kg` : "No registrado",
 altura:`${cliente.altura} m`,
 objetivo:cliente.objetivo,
 estado:cliente.estado,

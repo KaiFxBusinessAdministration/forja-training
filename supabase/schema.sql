@@ -7,6 +7,8 @@ create table public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   full_name text not null,
   role public.app_role not null default 'client',
+  weight_kg numeric(6,2) check (weight_kg is null or weight_kg > 0),
+  height_cm numeric(5,2) check (height_cm is null or height_cm > 0),
   avatar_url text,
   created_at timestamptz not null default now()
 );

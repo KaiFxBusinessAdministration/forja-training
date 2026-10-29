@@ -39,6 +39,14 @@
 <div class="kpi-card"><h3>Altura</h3><strong data-client-field="altura">1.82 m</strong></div>
 </section>
 <section class="dashboard-panel">
+<h2>Mis datos físicos</h2>
+<p>Completa tus datos para que tus métricas sean personales y reales.</p>
+<form id="clientMetricsForm" class="client-form"><div class="form-grid">
+<div><label for="clientWeight">Peso (kg)</label><input id="clientWeight" type="number" min="1" step="0.1" placeholder="Ej. 82.5"></div>
+<div><label for="clientHeight">Estatura (cm)</label><input id="clientHeight" type="number" min="50" step="0.1" placeholder="Ej. 178"></div>
+</div><button class="btn-primary" type="submit">Guardar mis datos</button><p class="form-help" id="clientMetricsStatus" aria-live="polite"></p></form>
+</section>
+<section class="dashboard-panel">
 <h2>Información del plan</h2>
 <div class="activity">
 <p>Estado: <span data-client-field="estado">Activo</span></p>
@@ -54,6 +62,18 @@
 </main>
 </div>
 <script src="../Assets/js/config.js"></script>
+<script src="../Assets/js/backend-config.js"></script>
+<script src="../Assets/js/vendor/supabase.min.js"></script>
+<script src="../Assets/js/backend.js"></script>
 <script src="../Assets/js/app.js"></script>
+<script>
+const clientMetricsForm=document.getElementById("clientMetricsForm");
+const clientMetricsStatus=document.getElementById("clientMetricsStatus");
+const clientWeight=document.getElementById("clientWeight");
+const clientHeight=document.getElementById("clientHeight");
+const profile=JSON.parse(sessionStorage.getItem("flowAuthProfile") || "null");
+if(profile){clientWeight.value=profile.weight_kg || "";clientHeight.value=profile.height_cm || "";}
+clientMetricsForm.addEventListener("submit",async event=>{event.preventDefault();const api=window.FLOW_BACKEND;const current=profile;if(!api?.ready||!current){clientMetricsStatus.textContent="Inicia sesión con una cuenta real para guardar tus datos.";return;}clientMetricsStatus.textContent="Guardando...";const {data,error}=await api.client.from("profiles").update({weight_kg:Number(clientWeight.value)||null,height_cm:Number(clientHeight.value)||null}).eq("id",current.id).select("id,full_name,role,weight_kg,height_cm").single();if(error){clientMetricsStatus.textContent="No se pudieron guardar tus datos.";console.error(error);return;}sessionStorage.setItem("flowAuthProfile",JSON.stringify(data));clientMetricsStatus.textContent="Datos guardados correctamente.";document.querySelectorAll('[data-client-field="peso"]').forEach(el=>el.textContent=data.weight_kg?`${data.weight_kg} kg`:"No registrado");document.querySelectorAll('[data-client-field="altura"]').forEach(el=>el.textContent=data.height_cm?`${(Number(data.height_cm)/100).toFixed(2)} m`:"No registrada");});
+</script>
 </body>
 </html>
