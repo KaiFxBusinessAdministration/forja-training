@@ -42,6 +42,7 @@
 <h2>Mis datos físicos</h2>
 <p>Completa tus datos para que tus métricas sean personales y reales.</p>
 <form id="clientMetricsForm" class="client-form"><div class="form-grid">
+<div><label for="profileFullName">Nombres y apellidos</label><input id="profileFullName" type="text" maxlength="160" required placeholder="Tu nombre completo"></div>
 <div><label for="clientAge">Edad</label><input id="clientAge" type="number" min="10" max="100" placeholder="Ej. 30"></div>
 <div><label for="clientGoal">Enfoque / objetivo</label><input id="clientGoal" type="text" maxlength="120" placeholder="Ej. Fuerza e hipertrofia"></div>
 <div><label for="clientWeight">Peso (kg)</label><input id="clientWeight" type="number" min="1" step="0.1" placeholder="Ej. 82.5"></div>
@@ -72,6 +73,7 @@
 <script src="../Assets/js/app.js"></script>
 <script>
 const clientMetricsForm=document.getElementById("clientMetricsForm");
+const profileFullName=document.getElementById("profileFullName");
 const clientMetricsStatus=document.getElementById("clientMetricsStatus");
 const clientWeight=document.getElementById("clientWeight");
 const clientHeight=document.getElementById("clientHeight");
@@ -80,8 +82,8 @@ const clientGoal=document.getElementById("clientGoal");
 const emergencyName=document.getElementById("emergencyName");
 const emergencyPhone=document.getElementById("emergencyPhone");
 const profile=JSON.parse(sessionStorage.getItem("flowAuthProfile") || "null");
-if(profile){clientAge.value=profile.age || "";clientGoal.value=profile.goal || "";clientWeight.value=profile.weight_kg || "";clientHeight.value=profile.height_cm || "";emergencyName.value=profile.emergency_contact_name || "";emergencyPhone.value=profile.emergency_contact_phone || "";}
-clientMetricsForm.addEventListener("submit",async event=>{event.preventDefault();const api=window.FLOW_BACKEND;const current=profile;if(!api?.ready||!current){clientMetricsStatus.textContent="Inicia sesión con una cuenta real para guardar tus datos.";return;}clientMetricsStatus.textContent="Guardando...";const {data,error}=await api.client.from("profiles").update({age:Number(clientAge.value)||null,goal:clientGoal.value.trim()||null,weight_kg:Number(clientWeight.value)||null,height_cm:Number(clientHeight.value)||null,emergency_contact_name:emergencyName.value.trim()||null,emergency_contact_phone:emergencyPhone.value.trim()||null}).eq("id",current.id).select("id,full_name,role,age,goal,weight_kg,height_cm,emergency_contact_name,emergency_contact_phone").single();if(error){clientMetricsStatus.textContent="No se pudieron guardar tus datos.";console.error(error);return;}sessionStorage.setItem("flowAuthProfile",JSON.stringify(data));clientMetricsStatus.textContent="Datos guardados correctamente.";document.querySelectorAll('[data-client-field="edad"]').forEach(el=>el.textContent=data.age||"No registrada");document.querySelectorAll('[data-client-field="objetivo"]').forEach(el=>el.textContent=data.goal||"Por definir");document.querySelectorAll('[data-client-field="peso"]').forEach(el=>el.textContent=data.weight_kg?`${data.weight_kg} kg`:"No registrado");document.querySelectorAll('[data-client-field="altura"]').forEach(el=>el.textContent=data.height_cm?`${(Number(data.height_cm)/100).toFixed(2)} m`:"No registrada");});
+if(profile){profileFullName.value=profile.full_name || "";clientAge.value=profile.age || "";clientGoal.value=profile.goal || "";clientWeight.value=profile.weight_kg || "";clientHeight.value=profile.height_cm || "";emergencyName.value=profile.emergency_contact_name || "";emergencyPhone.value=profile.emergency_contact_phone || "";}
+clientMetricsForm.addEventListener("submit",async event=>{event.preventDefault();const api=window.FLOW_BACKEND;const current=profile;if(!api?.ready||!current){clientMetricsStatus.textContent="Inicia sesión con una cuenta real para guardar tus datos.";return;}clientMetricsStatus.textContent="Guardando...";const {data,error}=await api.client.from("profiles").update({full_name:profileFullName.value.trim(),age:Number(clientAge.value)||null,goal:clientGoal.value.trim()||null,weight_kg:Number(clientWeight.value)||null,height_cm:Number(clientHeight.value)||null,emergency_contact_name:emergencyName.value.trim()||null,emergency_contact_phone:emergencyPhone.value.trim()||null}).eq("id",current.id).select("id,full_name,role,age,goal,weight_kg,height_cm,emergency_contact_name,emergency_contact_phone").single();if(error){clientMetricsStatus.textContent="No se pudieron guardar tus datos.";console.error(error);return;}sessionStorage.setItem("flowAuthProfile",JSON.stringify(data));clientMetricsStatus.textContent="Datos guardados correctamente.";document.querySelectorAll('[data-client-field="edad"]').forEach(el=>el.textContent=data.age||"No registrada");document.querySelectorAll('[data-client-field="objetivo"]').forEach(el=>el.textContent=data.goal||"Por definir");document.querySelectorAll('[data-client-field="peso"]').forEach(el=>el.textContent=data.weight_kg?`${data.weight_kg} kg`:"No registrado");document.querySelectorAll('[data-client-field="altura"]').forEach(el=>el.textContent=data.height_cm?`${(Number(data.height_cm)/100).toFixed(2)} m`:"No registrada");});
 </script>
 </body>
 </html>
