@@ -107,7 +107,7 @@ const semanaDiasEditor = document.getElementById("semanaDiasEditor");
 const semanaDiasLista = document.getElementById("semanaDiasLista");
 const agregarDiaSemana = document.getElementById("agregarDiaSemana");
 const atletaRutinaKey = `flowRutinasIndependientes_${sessionStorage.getItem("flowClienteActivoId") || "99"}`;
-const ejerciciosAtleta = document.getElementById("ejerciciosAtleta");
+const ejerciciosAtleta = document.getElementById("atletaEjercicio");
 let bibliotecaAtleta = Array.isArray(window.FLOW_EXERCISE_LIBRARY) ? window.FLOW_EXERCISE_LIBRARY : (Array.isArray(window.FLOW_EXERCISE_NAMES) ? window.FLOW_EXERCISE_NAMES.map((nombre,index)=>({id:`name-${index}`,nombre})) : []);
 let nombresEjercicios = [];
 function cargarEjerciciosEnSelect(){nombresEjercicios=[...new Set(bibliotecaAtleta.map(ejercicio=>ejercicio.nombre).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));ejerciciosAtleta.innerHTML='<option value="">Selecciona un ejercicio de la biblioteca</option>'+nombresEjercicios.map(nombre=>`<option value="${nombre.replace(/&/g,"&amp;").replace(/"/g,"&quot;")}">${nombre}</option>`).join("");}
@@ -118,7 +118,7 @@ atletaTipoRutina.addEventListener("change",actualizarTipoRutina);
 atletaTipoRutina.addEventListener("input",actualizarTipoRutina);
 actualizarTipoRutina();
 const diasSemanaOpciones=["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"];
-function filaDiaSemana(esPrimera=false){const fila=document.createElement("div");fila.className="form-grid week-day-row";fila.innerHTML=`<div><label>Día</label><select data-week-day>${diasSemanaOpciones.map(dia=>`<option>${dia}</option>`).join("")}</select></div><div><label>Ejercicio</label><select data-week-exercise required><option value="">Selecciona un ejercicio</option>${nombresEjercicios.map(nombre=>`<option value="${nombre.replace(/&/g,"&amp;").replace(/"/g,"&quot;")}">${nombre}</option>`).join("")}</select></div><div><label>Series</label><input data-week-sets type="number" min="1" max="20" value="3" required></div><div><label>Repeticiones</label><input data-week-reps type="number" min="1" max="100" value="10" required></div><div><label>Descanso (segundos)</label><input data-week-rest type="number" min="0" value="90" required></div>${esPrimera?'<div><label>Calentamiento del día</label><textarea data-week-warmup rows="3" placeholder="Un paso por línea"></textarea></div>':''}`;semanaDiasLista.appendChild(fila);}
+function filaDiaSemana(esPrimera=false){const fila=document.createElement("div");fila.className="form-grid week-day-row";const diasOptions=diasSemanaOpciones.map(dia=>`<option>${dia}</option>`).join("");const ejerciciosOptions=nombresEjercicios.map(nombre=>{const seguro=nombre.replace(/&/g,"&amp;").replace(/"/g,"&quot;");return `<option value="${seguro}">${nombre}</option>`;}).join("");const calentamiento=esPrimera?'<div><label>Calentamiento del día</label><textarea data-week-warmup rows="3" placeholder="Un paso por línea"></textarea></div>':"";fila.innerHTML='<div><label>Día</label><select data-week-day>'+diasOptions+'</select></div><div><label>Ejercicio</label><select data-week-exercise required><option value="">Selecciona un ejercicio</option>'+ejerciciosOptions+'</select></div><div><label>Series</label><input data-week-sets type="number" min="1" max="20" value="3" required></div><div><label>Repeticiones</label><input data-week-reps type="number" min="1" max="100" value="10" required></div><div><label>Descanso (segundos)</label><input data-week-rest type="number" min="0" value="90" required></div>'+calentamiento;semanaDiasLista.appendChild(fila);}
 function prepararEditorSemana(){if(atletaTipoRutina.value!=="semana"){semanaDiasEditor.hidden=true;return;}semanaDiasEditor.hidden=false;if(!semanaDiasLista.children.length)filaDiaSemana(true);}
 atletaTipoRutina.addEventListener("change",prepararEditorSemana);atletaTipoRutina.addEventListener("input",prepararEditorSemana);agregarDiaSemana.addEventListener("click",()=>filaDiaSemana(false));
 atletaRutinaForm.addEventListener("submit",async event=>{if(atletaTipoRutina.value!=="semana")return;event.preventDefault();event.stopImmediatePropagation();const nombre=atletaSemanaNombre.value==="Personalizado"?atletaSemanaPersonalizada.value.trim():atletaSemanaNombre.value;const filas=[...semanaDiasLista.querySelectorAll(".week-day-row")];if(!nombre||!filas.length){atletaRutinaEstado.textContent="Selecciona el enfoque y agrega al menos un día.";return;}const actuales=JSON.parse(localStorage.getItem(atletaRutinaKey)||"[]");const ahora=new Date().toISOString();let sincronizados=0;for(const fila of filas){const rutina={tipo:"semana",nombreSemana:nombre,dia:fila.querySelector("[data-week-day]").value,ejercicio:fila.querySelector("[data-week-exercise]").value.trim(),series:fila.querySelector("[data-week-sets]").value,repeticiones:fila.querySelector("[data-week-reps]").value,descanso:fila.querySelector("[data-week-rest]").value,calentamiento:fila.querySelector("[data-week-warmup]")?.value.trim()||"",fecha:ahora};if(!rutina.ejercicio)continue;const index=actuales.findIndex(item=>item.tipo==="semana"&&String(item.nombreSemana).toLowerCase()===nombre.toLowerCase()&&item.dia===rutina.dia&&String(item.ejercicio).toLowerCase()===rutina.ejercicio.toLowerCase());if(index>=0)actuales[index]=rutina;else actuales.push(rutina);try{const resultado=await window.FLOW_ROUTINE_SYNC?.saveIndependentRoutine({name:nombre,day:rutina.dia,exercise:rutina.ejercicio,sets:rutina.series,reps:rutina.repeticiones,restSeconds:rutina.descanso,warmupSteps:rutina.calentamiento.split(/\n+/).map(p=>p.trim()).filter(Boolean)});if(resultado?.synced)sincronizados++;}catch(error){console.error("No se pudo sincronizar el día semanal",error);}}localStorage.setItem(atletaRutinaKey,JSON.stringify(actuales));atletaRutinaEstado.textContent=`Semana guardada con ${filas.length} día${filas.length===1?"":"s"}${sincronizados?" y sincronizada en Supabase":" localmente"}.`;semanaDiasLista.innerHTML="";semanaDiasEditor.hidden=true;atletaRutinaForm.reset();},{capture:true});
@@ -200,13 +200,17 @@ id:exercise.id,nombreSemana:rutina.name||"Rutina independiente",dia:rutina.day_n
 })));
 }
 
+function warmupMarkup(pasos){return (pasos||[]).map(paso=>"<li>"+paso+"</li>").join("");}
+function routineExerciseMarkup(items){return (items||[]).map(item=>"<p><strong>"+(item.ejercicio||"Ejercicio")+"</strong> · "+(item.series||"-")+" series x "+(item.repeticiones||"-")+" repeticiones · descanso: "+(item.descanso||"Sin definir")+"</p>").join("");}
+function warmupBlockMarkup(pasos,titulo="Calentamiento del día"){return pasos?.length?'<div class="client-warmup"><strong>'+titulo+'</strong><ol>'+warmupMarkup(pasos)+'</ol></div>':"";}
+
 function renderRutinasGuardadas(rutinas){
 const destino=document.getElementById("rutinasGuardadas");
 if(!destino)return;
 if(!rutinas?.length){destino.innerHTML='<p class="empty-state">Todavía no hay entrenamientos guardados.</p>';return;}
 const grupos=new Map();
 rutinas.forEach(rutina=>{const clave=`${rutina.nombreSemana||"Rutina independiente"}::${rutina.dia||"Día sin definir"}`;if(!grupos.has(clave))grupos.set(clave,[]);grupos.get(clave).push(rutina);});
-destino.innerHTML=[...grupos.values()].map(items=>{const primero=items[0];const calentamiento=items.find(item=>item.calentamiento?.length)?.calentamiento||[];return `<article class="routine-day"><header><h3>${primero.nombreSemana||"Rutina independiente"}</h3><span>${primero.dia||"Día sin definir"}</span></header>${calentamiento.length?`<div class="client-warmup"><strong>Calentamiento</strong><ol>${calentamiento.map(paso=>`<li>${paso}</li>`).join("")}</ol></div>`:"<p class="form-help">Sin calentamiento registrado para este día.</p>"}<div class="activity-list">${items.map(item=>`<p><strong>${item.ejercicio}</strong> · ${item.series||"-"} series x ${item.repeticiones||"-"} repeticiones · descanso: ${item.descanso||"Sin definir"}</p>`).join("")}</div></article>`;}).join("");
+destino.innerHTML=[...grupos.values()].map(items=>{const primero=items[0];const calentamiento=items.find(item=>item.calentamiento?.length)?.calentamiento||[];return `<article class="routine-day"><header><h3>${primero.nombreSemana||"Rutina independiente"}</h3><span>${primero.dia||"Día sin definir"}</span></header>${warmupBlockMarkup(calentamiento,"Calentamiento")||"<p class=\"form-help\">Sin calentamiento registrado para este día.</p>"}<div class="activity-list">${routineExerciseMarkup(items)}</div></article>`;}).join("");
 }
 
 fetch("../Data/openGym-demo.json")
@@ -229,7 +233,7 @@ return `
 <h3>${dia.dia}</h3>
 <span>${dia.enfoque}</span>
 </header>
-${calentamiento?.length ? `<div class="client-warmup"><strong>Calentamiento del día</strong><ol>${calentamiento.map(paso=>`<li>${paso}</li>`).join("")}</ol></div>` : ""}
+${warmupBlockMarkup(calentamiento)}
 ${dia.ejercicios.map(ejercicioMarkup).join("")}
 </article>
 `;}).join("");
@@ -239,7 +243,7 @@ const asignadasMarkup = asignadas.length ? `
 <h3>Asignado por entrenador</h3>
 <span>${asignadas.length} ejercicio${asignadas.length === 1 ? "" : "s"}</span>
 </header>
-${asignadas.filter((rutina,index)=>rutina.calentamiento?.length && !asignadas.slice(0,index).some(item=>item.dia===rutina.dia)).map(rutina=>`<div class="client-warmup"><strong>${rutina.dia}: calentamiento del día</strong><ol>${rutina.calentamiento.map(paso=>`<li>${paso}</li>`).join("")}</ol></div>`).join("")}
+${asignadas.filter((rutina,index)=>rutina.calentamiento?.length && !asignadas.slice(0,index).some(item=>item.dia===rutina.dia)).map(rutina=>warmupBlockMarkup(rutina.calentamiento,rutina.dia+": calentamiento del día")).join("")}
 ${asignadas.map(rutinaAsignadaMarkup).join("")}
 </article>
 ` : "";
@@ -256,3 +260,4 @@ rutinaHoy.innerHTML = hoy.ejercicios.map(ejercicio=>`<p>${ejercicio.nombre}: ${e
 </script>
 </body>
 </html>
+
