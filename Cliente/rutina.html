@@ -64,6 +64,11 @@
 </div>
 </div>
 <div class="dashboard-panel">
+<h2>Mis bloques guardados</h2>
+<p class="form-help">Selecciona mentalmente el día que estés entrenando y vuelve aquí la próxima semana para consultar sus ejercicios y calentamiento.</p>
+<div class="activity" id="rutinasGuardadas"><p class="empty-state">Todavía no hay entrenamientos guardados.</p></div>
+</div>
+<div class="dashboard-panel">
 <h2>Indicaciones</h2>
 <div class="activity">
 <p>Calienta 10 minutos antes de cargar.</p>
@@ -170,8 +175,17 @@ try{return await window.FLOW_ROUTINE_SYNC.listForClient(clientId);}catch(error){
 
 function convertirRutinasCloud(rutinas){
 return (rutinas||[]).flatMap(rutina=>(rutina.routine_exercises||[]).map(exercise=>({
-id:exercise.id,dia:rutina.day_name,ejercicio:exercise.exercise_name,grupoMuscular:exercise.muscle_group||"General",series:exercise.sets,repeticiones:exercise.reps,peso:exercise.weight??"Sin peso",descanso:exercise.rest_seconds?`${exercise.rest_seconds} segundos`:"Sin definir",observaciones:exercise.notes||rutina.notes||"Asignación directa del entrenador.",calentamiento:rutina.warmup_steps||[]
+id:exercise.id,nombreSemana:rutina.name||"Rutina independiente",dia:rutina.day_name,ejercicio:exercise.exercise_name,grupoMuscular:exercise.muscle_group||"General",series:exercise.sets,repeticiones:exercise.reps,peso:exercise.weight??"Sin peso",descanso:exercise.rest_seconds?`${exercise.rest_seconds} segundos`:"Sin definir",observaciones:exercise.notes||rutina.notes||"Asignación directa del entrenador.",calentamiento:rutina.warmup_steps||[]
 })));
+}
+
+function renderRutinasGuardadas(rutinas){
+const destino=document.getElementById("rutinasGuardadas");
+if(!destino)return;
+if(!rutinas?.length){destino.innerHTML='<p class="empty-state">Todavía no hay entrenamientos guardados.</p>';return;}
+const grupos=new Map();
+rutinas.forEach(rutina=>{const clave=`${rutina.nombreSemana||"Rutina independiente"}::${rutina.dia||"Día sin definir"}`;if(!grupos.has(clave))grupos.set(clave,[]);grupos.get(clave).push(rutina);});
+destino.innerHTML=[...grupos.values()].map(items=>{const primero=items[0];const calentamiento=items.find(item=>item.calentamiento?.length)?.calentamiento||[];return `<article class="routine-day"><header><h3>${primero.nombreSemana||"Rutina independiente"}</h3><span>${primero.dia||"Día sin definir"}</span></header>${calentamiento.length?`<div class="client-warmup"><strong>Calentamiento</strong><ol>${calentamiento.map(paso=>`<li>${paso}</li>`).join("")}</ol></div>`:"<p class="form-help">Sin calentamiento registrado para este día.</p>"}<div class="activity-list">${items.map(item=>`<p><strong>${item.ejercicio}</strong> · ${item.series||"-"} series x ${item.repeticiones||"-"} repeticiones · descanso: ${item.descanso||"Sin definir"}</p>`).join("")}</div></article>`;}).join("");
 }
 
 fetch("../Data/openGym-demo.json")
@@ -181,6 +195,7 @@ const plan = data.rutinaActual;
 const hoy = plan.semana[0];
 const cloud = await rutinasCloudCliente();
 const asignadas = cloud ? convertirRutinasCloud(cloud) : rutinasAsignadasCliente();
+renderRutinasGuardadas(asignadas);
 rutinaHoy.innerHTML = hoy.ejercicios.map(ejercicio=>
 `<p>${ejercicio.nombre}: ${ejercicio.series} x ${ejercicio.repeticiones} · ${ejercicio.peso}</p>`
 ).join("");
@@ -214,6 +229,7 @@ const data = window.FLOW_OPEN_GYM_DEMO;
 const plan = data.rutinaActual;
 const hoy = plan.semana[0];
 const asignadas = rutinasAsignadasCliente();
+renderRutinasGuardadas(asignadas);
 rutinaHoy.innerHTML = hoy.ejercicios.map(ejercicio=>`<p>${ejercicio.nombre}: ${ejercicio.series} x ${ejercicio.repeticiones} · ${ejercicio.peso}</p>`).join("");
 });
 </script>
