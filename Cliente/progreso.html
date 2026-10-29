@@ -36,8 +36,10 @@
 <section class="dashboard-panel">
 <div class="panel-heading-row"><div><h2>Registrar avance</h2><p>Guarda el peso y las repeticiones de tu sesión para revisar tu evolución.</p></div></div>
 <form id="clienteAvanceForm" class="client-form"><div class="form-grid">
+<div><label for="avanceRutina">Entrenamiento guardado</label><select id="avanceRutina" required><option value="">Selecciona un entrenamiento</option></select></div>
 <div><label for="avanceEjercicio">Ejercicio</label><input id="avanceEjercicio" required placeholder="Ej. Press banca"></div>
 <div><label for="avancePeso">Peso (kg)</label><input id="avancePeso" type="number" min="0" step="0.5" required></div>
+<div><label for="avanceSeries">Series logradas</label><input id="avanceSeries" type="number" min="1" required></div>
 <div><label for="avanceRepeticiones">Repeticiones</label><input id="avanceRepeticiones" type="number" min="1" required></div>
 <div><label for="avanceNotas">Observaciones</label><input id="avanceNotas" placeholder="Técnica, fatiga o sensaciones"></div>
 </div><button class="btn-primary" type="submit">Guardar avance</button><p class="form-help" id="clienteAvanceEstado" aria-live="polite"></p></form>
@@ -102,6 +104,14 @@ const progresoMarcas = document.getElementById("progresoMarcas");
 const avancesRutina = document.getElementById("avancesRutina");
 const clienteAvanceForm = document.getElementById("clienteAvanceForm");
 const clienteAvanceEstado = document.getElementById("clienteAvanceEstado");
+const avanceRutina = document.getElementById("avanceRutina");
+const avanceSeries = document.getElementById("avanceSeries");
+const rutinaIndependienteKey = `flowRutinasIndependientes_${sessionStorage.getItem("flowClienteActivoId") || "99"}`;
+function cargarEntrenamientosGuardados(){
+const rutinas=JSON.parse(localStorage.getItem(rutinaIndependienteKey) || "[]");
+avanceRutina.innerHTML=`<option value="">Selecciona un entrenamiento</option>`+rutinas.map((rutina,index)=>`<option value="${index}">${rutina.tipo==="semana" ? (rutina.nombreSemana || "Semana de training") : "Día de training"} · ${rutina.dia} · ${rutina.ejercicio}</option>`).join("");
+}
+avanceRutina.addEventListener("change",()=>{const rutinas=JSON.parse(localStorage.getItem(rutinaIndependienteKey) || "[]");const rutina=rutinas[Number(avanceRutina.value)];if(rutina){avanceEjercicio.value=rutina.ejercicio;avanceSeries.value=rutina.series;avanceRepeticiones.value=rutina.repeticiones;}});
 async function renderAvances(){
 const clienteId=sessionStorage.getItem("flowClienteActivoId") || "99";
 const avances=JSON.parse(localStorage.getItem("flowAvancesRutina") || "[]").filter(item=>String(item.clienteId)===String(clienteId)).slice(-12).reverse();
@@ -111,7 +121,8 @@ const cloud=await window.FLOW_ROUTINE_SYNC?.listProgress(clienteId);
 if(cloud){avancesRutina.innerHTML=cloud.length ? cloud.map(item=>`<div class="metric-row"><span>${item.exercise_name}<small>${new Date(item.recorded_at).toLocaleDateString("es-EC")}</small></span><strong>${item.weight ?? "Sin peso"} kg · ${item.repetitions ?? "-"} reps</strong></div>`).join("") : `<p class="empty-state">Todavía no hay avances registrados.</p>`;}
 }catch(error){console.error("No se pudieron cargar avances de Supabase",error);}
 }
-clienteAvanceForm.addEventListener("submit",event=>{event.preventDefault();const clienteId=sessionStorage.getItem("flowClienteActivoId") || "99";const avances=JSON.parse(localStorage.getItem("flowAvancesRutina") || "[]");avances.push({clienteId,exerciseName:avanceEjercicio.value.trim(),peso:avancePeso.value,repeticiones:avanceRepeticiones.value,fecha:new Date().toLocaleDateString("es-EC"),notas:avanceNotas.value.trim()});localStorage.setItem("flowAvancesRutina",JSON.stringify(avances));clienteAvanceForm.reset();clienteAvanceEstado.textContent="Avance guardado correctamente.";renderAvances();});
+clienteAvanceForm.addEventListener("submit",event=>{event.preventDefault();const clienteId=sessionStorage.getItem("flowClienteActivoId") || "99";const avances=JSON.parse(localStorage.getItem("flowAvancesRutina") || "[]");avances.push({clienteId,exerciseName:avanceEjercicio.value.trim(),peso:avancePeso.value,seriesLogradas:avanceSeries.value,repeticiones:avanceRepeticiones.value,fecha:new Date().toLocaleDateString("es-EC"),notas:avanceNotas.value.trim()});localStorage.setItem("flowAvancesRutina",JSON.stringify(avances));clienteAvanceForm.reset();cargarEntrenamientosGuardados();clienteAvanceEstado.textContent="Avance guardado correctamente.";renderAvances();});
+ cargarEntrenamientosGuardados();
 renderAvances();
 const progressPhotoGallery = document.getElementById("progressPhotoGallery");
 

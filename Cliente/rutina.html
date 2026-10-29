@@ -37,6 +37,10 @@
 <div class="panel-heading-row"><div><h2>Constructor de rutina</h2><p>Crea tus entrenamientos diarios y define el calentamiento antes de comenzar.</p></div></div>
 <form id="atletaRutinaForm" class="client-form">
 <div class="form-grid">
+<div><label for="atletaTipoRutina">Crear</label><select id="atletaTipoRutina"><option value="dia">Día de training</option><option value="semana">Semana de training</option></select></div>
+<div id="semanaNombreWrap" hidden><label for="atletaSemanaNombre">Nombre de la semana</label><input id="atletaSemanaNombre" placeholder="Ej. Fuerza e hipertrofia"></div>
+</div>
+<div class="form-grid">
 <div><label for="atletaDia">Día</label><select id="atletaDia" required><option>Lunes</option><option>Martes</option><option>Miércoles</option><option>Jueves</option><option>Viernes</option><option>Sábado</option><option>Domingo</option></select></div>
 <div><label for="atletaEjercicio">Ejercicio</label><input id="atletaEjercicio" list="ejerciciosAtleta" placeholder="Ej. Press banca" required><datalist id="ejerciciosAtleta"><option value="Press banca"><option value="Jalón al pecho con agarre neutro"><option value="Sentadilla"><option value="Peso muerto rumano"><option value="Press militar"><option value="Remo sentado en polea"><option value="Plancha"></datalist></div>
 <div><label for="atletaSeries">Series</label><input id="atletaSeries" type="number" min="1" max="20" value="3" required></div>
@@ -47,7 +51,7 @@
 <button class="btn-primary" type="submit">Guardar entrenamiento</button>
 <p class="form-help" id="atletaRutinaEstado" aria-live="polite"></p>
 </form>
-<div class="activity" id="rutinasAtletaGuardadas"><p class="empty-state">Todavía no has creado entrenamientos propios.</p></div>
+<p class="form-help">Tus entrenamientos guardados aparecerán en Progreso para registrar cargas, series logradas y repeticiones.</p>
 </section>
 <section class="split-grid">
 <div class="dashboard-panel">
@@ -68,10 +72,6 @@
 </div>
 </div>
 </section>
-<section class="dashboard-panel">
-<h2>Rutinas asignadas</h2>
-<div class="routine-week" id="rutinaSemana"></div>
-</section>
 </main>
 </div>
 <script src="../Assets/js/config.js"></script>
@@ -83,18 +83,14 @@
 <script src="../Data/openGym-demo.js"></script>
 <script>
 const rutinaHoy = document.getElementById("rutinaHoy");
-const rutinaSemana = document.getElementById("rutinaSemana");
 const atletaRutinaForm = document.getElementById("atletaRutinaForm");
-const rutinasAtletaGuardadas = document.getElementById("rutinasAtletaGuardadas");
 const atletaRutinaEstado = document.getElementById("atletaRutinaEstado");
+const atletaTipoRutina = document.getElementById("atletaTipoRutina");
+const semanaNombreWrap = document.getElementById("semanaNombreWrap");
+const atletaSemanaNombre = document.getElementById("atletaSemanaNombre");
 const atletaRutinaKey = `flowRutinasIndependientes_${sessionStorage.getItem("flowClienteActivoId") || "99"}`;
-function renderRutinasIndependientes(){
-const rutinas = JSON.parse(localStorage.getItem(atletaRutinaKey) || "[]");
-rutinasAtletaGuardadas.innerHTML = rutinas.length ? rutinas.map((rutina,index)=>`<p><strong>${rutina.dia}: ${rutina.ejercicio}</strong> · ${rutina.series} x ${rutina.repeticiones} · ${rutina.descanso}s${rutina.calentamiento ? ` · Calentamiento: ${rutina.calentamiento}` : ""} <button class="icon-button" type="button" data-remove-independent="${index}" aria-label="Eliminar entrenamiento">×</button></p>`).join("") : `<p class="empty-state">Todavía no has creado entrenamientos propios.</p>`;
-rutinasAtletaGuardadas.querySelectorAll("[data-remove-independent]").forEach(button=>button.addEventListener("click",()=>{const actuales=JSON.parse(localStorage.getItem(atletaRutinaKey) || "[]");actuales.splice(Number(button.dataset.removeIndependent),1);localStorage.setItem(atletaRutinaKey,JSON.stringify(actuales));renderRutinasIndependientes();}));
-}
-atletaRutinaForm.addEventListener("submit",event=>{event.preventDefault();const rutina={dia:atletaDia.value,ejercicio:atletaEjercicio.value.trim(),series:atletaSeries.value,repeticiones:atletaReps.value,descanso:atletaDescanso.value,calentamiento:atletaCalentamiento.value.trim()};const actuales=JSON.parse(localStorage.getItem(atletaRutinaKey) || "[]");actuales.push(rutina);localStorage.setItem(atletaRutinaKey,JSON.stringify(actuales));atletaRutinaForm.reset();atletaSeries.value=3;atletaReps.value=10;atletaDescanso.value=90;atletaRutinaEstado.textContent="Entrenamiento guardado en tu rutina.";renderRutinasIndependientes();});
-renderRutinasIndependientes();
+atletaTipoRutina.addEventListener("change",()=>{semanaNombreWrap.hidden=atletaTipoRutina.value!=="semana";});
+atletaRutinaForm.addEventListener("submit",event=>{event.preventDefault();const rutina={tipo:atletaTipoRutina.value,nombreSemana:atletaSemanaNombre.value.trim(),dia:atletaDia.value,ejercicio:atletaEjercicio.value.trim(),series:atletaSeries.value,repeticiones:atletaReps.value,descanso:atletaDescanso.value,calentamiento:atletaCalentamiento.value.trim(),fecha:new Date().toISOString()};const actuales=JSON.parse(localStorage.getItem(atletaRutinaKey) || "[]");actuales.push(rutina);localStorage.setItem(atletaRutinaKey,JSON.stringify(actuales));atletaRutinaForm.reset();atletaSeries.value=3;atletaReps.value=10;atletaDescanso.value=90;semanaNombreWrap.hidden=true;atletaRutinaEstado.textContent=rutina.tipo==="semana"?"Semana de training guardada. Ya puedes registrar sus avances en Progreso.":"Día de training guardado. Ya puedes registrar sus avances en Progreso.";});
 
 function ejercicioMarkup(ejercicio){
 const videoLink = ejercicio.videoUrl ? `<a class="exercise-video-link" href="${ejercicio.videoUrl}" target="_blank" rel="noopener">Ver demostración</a>` : "";
@@ -197,8 +193,7 @@ ${asignadas.filter((rutina,index)=>rutina.calentamiento?.length && !asignadas.sl
 ${asignadas.map(rutinaAsignadaMarkup).join("")}
 </article>
 ` : "";
-rutinaSemana.innerHTML = asignadasMarkup + planBase;
-rutinaSemana.addEventListener("click",event=>{const boton=event.target.closest(".exercise-progress-trigger"); if(boton){registrarAvance(boton.dataset.avanceId,boton.dataset.exerciseName);}});
+// El registro de cargas y repeticiones se realiza exclusivamente en Progreso.
 })
 .catch(()=>{
 const data = window.FLOW_OPEN_GYM_DEMO;
@@ -206,7 +201,6 @@ const plan = data.rutinaActual;
 const hoy = plan.semana[0];
 const asignadas = rutinasAsignadasCliente();
 rutinaHoy.innerHTML = hoy.ejercicios.map(ejercicio=>`<p>${ejercicio.nombre}: ${ejercicio.series} x ${ejercicio.repeticiones} · ${ejercicio.peso}</p>`).join("");
-rutinaSemana.innerHTML = plan.semana.map(dia=>`<article class="routine-day"><header><h3>${dia.dia}</h3><span>${dia.enfoque}</span></header>${dia.ejercicios.map(ejercicioMarkup).join("")}</article>`).join("");
 });
 </script>
 </body>
