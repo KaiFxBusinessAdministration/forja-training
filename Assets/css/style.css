@@ -2705,5 +2705,11 @@ button{
 .sidebar .brand h2 {
     width: 236px !important;
     height: 78px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
     background-size: contain !important;
+}
+
+.sidebar .brand {
+    justify-content: center;
 }
