@@ -182,7 +182,7 @@ window.flowLoadClientes("../Data/clientes.json")
 .then(clientes=>{
 
 const authProfile=JSON.parse(sessionStorage.getItem("flowAuthProfile") || "null");
-const cliente=authProfile ? {id:authProfile.id,nombre:authProfile.full_name || "Atleta",edad:"No registrado",peso:authProfile.weight_kg,altura:authProfile.height_cm ? `${(Number(authProfile.height_cm)/100).toFixed(2)} m` : "No registrada",objetivo:"Por definir",estado:"Activo",entrenador:"Sin entrenador",tipoSeguimiento:"General"} : clientes.find(item=>String(item.id)===activeClientId) || (params.get("demo")==="1" ? clientes.find(item=>item.nombre.toLowerCase().includes("demo")) : null) || clientes[0];
+const cliente=authProfile ? {id:authProfile.id,nombre:authProfile.full_name || "Atleta",edad:authProfile.age || "No registrada",peso:authProfile.weight_kg,altura:authProfile.height_cm ? `${(Number(authProfile.height_cm)/100).toFixed(2)} m` : "No registrada",objetivo:authProfile.goal || "Por definir",estado:"Activo",entrenador:"Sin entrenador",tipoSeguimiento:"General"} : clientes.find(item=>String(item.id)===activeClientId) || (params.get("demo")==="1" ? clientes.find(item=>item.nombre.toLowerCase().includes("demo")) : null) || clientes[0];
 
 if(!cliente){
 return;

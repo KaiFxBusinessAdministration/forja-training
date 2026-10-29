@@ -5,6 +5,8 @@ alter table public.routines
   add column if not exists owner_id uuid references public.profiles(id) on delete cascade;
 
 alter table public.profiles
+  add column if not exists age integer check (age is null or age between 10 and 100),
+  add column if not exists goal text,
   add column if not exists weight_kg numeric(6,2) check (weight_kg is null or weight_kg > 0),
   add column if not exists height_cm numeric(5,2) check (height_cm is null or height_cm > 0);
 
