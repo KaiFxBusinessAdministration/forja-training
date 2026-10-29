@@ -37,7 +37,8 @@
 <div class="panel-heading-row"><div><h2>Registrar avance</h2><p>Guarda el peso y las repeticiones de tu sesión para revisar tu evolución.</p></div></div>
 <form id="clienteAvanceForm" class="client-form"><div class="form-grid">
 <div><label for="avanceBloque">Semana o día</label><select id="avanceBloque" required><option value="">Selecciona una semana o día</option></select></div>
-<div><label for="avanceRutina">Ejercicio</label><select id="avanceRutina" required disabled><option value="">Primero selecciona una semana o día</option></select></div>
+<div><label for="avanceDia">Día de la semana</label><select id="avanceDia" required disabled><option value="">Primero selecciona una semana o día</option></select></div>
+<div><label for="avanceRutina">Ejercicio</label><select id="avanceRutina" required disabled><option value="">Primero selecciona un día</option></select></div>
 <input id="avanceEjercicio" type="hidden">
 <div><label for="avancePeso">Peso (kg)</label><input id="avancePeso" type="number" min="0" step="0.5" required></div>
 <div><label for="avanceSeries">Series logradas</label><input id="avanceSeries" type="number" min="1" required></div>
@@ -80,6 +81,7 @@ const clienteAvanceForm = document.getElementById("clienteAvanceForm");
 const clienteAvanceEstado = document.getElementById("clienteAvanceEstado");
 const avanceRutina = document.getElementById("avanceRutina");
 const avanceBloque = document.getElementById("avanceBloque");
+const avanceDia = document.getElementById("avanceDia");
 const avanceSeries = document.getElementById("avanceSeries");
 const rutinaIndependienteKey = `flowRutinasIndependientes_${sessionStorage.getItem("flowClienteActivoId") || "99"}`;
 let rutinasGuardadas=[];
@@ -88,9 +90,11 @@ rutinasGuardadas=JSON.parse(localStorage.getItem(rutinaIndependienteKey) || "[]"
 const bloques=[...new Map(rutinasGuardadas.map((rutina,index)=>{const clave=rutina.tipo==="semana"?`semana|${String(rutina.nombreSemana||"Semana de training").toLowerCase()}`:`dia|${rutina.dia}`;return [clave,{clave,titulo:rutina.tipo==="semana"?(rutina.nombreSemana||"Semana de training"):`Día de training · ${rutina.dia}`,indices:[]}]})).values()];
 rutinasGuardadas.forEach((rutina,index)=>{const clave=rutina.tipo==="semana"?`semana|${String(rutina.nombreSemana||"Semana de training").toLowerCase()}`:`dia|${rutina.dia}`;bloques.find(bloque=>bloque.clave===clave)?.indices.push(index);});
 avanceBloque.innerHTML=`<option value="">Selecciona una semana o día</option>`+bloques.map(bloque=>`<option value="${bloque.clave}">${bloque.titulo}</option>`).join("");
-avanceRutina.innerHTML=`<option value="">Primero selecciona una semana o día</option>`;avanceRutina.disabled=true;
+avanceDia.innerHTML=`<option value="">Primero selecciona una semana o día</option>`;avanceDia.disabled=true;
+avanceRutina.innerHTML=`<option value="">Primero selecciona un día</option>`;avanceRutina.disabled=true;
 }
-avanceBloque.addEventListener("change",()=>{const seleccion=avanceBloque.value;const indices=rutinasGuardadas.map((rutina,index)=>{const clave=rutina.tipo==="semana"?`semana|${String(rutina.nombreSemana||"Semana de training").toLowerCase()}`:`dia|${rutina.dia}`;return clave===seleccion?index:null}).filter(index=>index!==null);avanceRutina.innerHTML=`<option value="">Selecciona un ejercicio</option>`+indices.map(index=>`<option value="${index}">${rutinasGuardadas[index].ejercicio}</option>`).join("");avanceRutina.disabled=!indices.length;});
+avanceBloque.addEventListener("change",()=>{const seleccion=avanceBloque.value;const indices=rutinasGuardadas.map((rutina,index)=>{const clave=rutina.tipo==="semana"?`semana|${String(rutina.nombreSemana||"Semana de training").toLowerCase()}`:`dia|${rutina.dia}`;return clave===seleccion?index:null}).filter(index=>index!==null);const dias=[...new Map(indices.map(index=>[rutinasGuardadas[index].dia,index])).entries()];avanceDia.innerHTML=`<option value="">Selecciona un día de la semana</option>`+dias.map(([dia])=>`<option value="${dia}">${dia}</option>`).join("");avanceDia.disabled=!dias.length;avanceRutina.innerHTML=`<option value="">Primero selecciona un día</option>`;avanceRutina.disabled=true;});
+avanceDia.addEventListener("change",()=>{const seleccion=avanceBloque.value;const diaSeleccionado=avanceDia.value;const indices=rutinasGuardadas.map((rutina,index)=>{const clave=rutina.tipo==="semana"?`semana|${String(rutina.nombreSemana||"Semana de training").toLowerCase()}`:`dia|${rutina.dia}`;return clave===seleccion&&rutina.dia===diaSeleccionado?index:null}).filter(index=>index!==null);avanceRutina.innerHTML=`<option value="">Selecciona un ejercicio</option>`+indices.map(index=>`<option value="${index}">${rutinasGuardadas[index].ejercicio}</option>`).join("");avanceRutina.disabled=!indices.length;});
 avanceRutina.addEventListener("change",()=>{const rutina=rutinasGuardadas[Number(avanceRutina.value)];if(rutina){avanceEjercicio.value=rutina.ejercicio;avanceSeries.value=rutina.series;avanceRepeticiones.value=rutina.repeticiones;}});
 async function renderAvances(){
 const clienteId=sessionStorage.getItem("flowClienteActivoId") || "99";
