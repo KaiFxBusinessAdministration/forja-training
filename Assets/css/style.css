@@ -2695,6 +2695,46 @@ button{
     .page-hero img, .hero-card img, .visual-panel img { object-position: center center; }
 }
 
+/* Alturas cortas: mantiene todos los controles visibles sin scroll. */
+@media (max-height: 800px) {
+    .auth-screen {
+        padding: 8px;
+    }
+    .auth-screen .landing-container {
+        padding: 12px clamp(16px, 3vw, 32px) 14px;
+        gap: 9px;
+    }
+    .auth-screen .logo-box {
+        gap: 5px;
+    }
+    .auth-logo,
+    .auth-logo img {
+        max-width: min(210px, 42vw);
+    }
+    .auth-screen .client-form {
+        gap: 9px;
+    }
+    .auth-screen .client-form label {
+        margin-bottom: 3px;
+    }
+    .auth-screen .client-form input,
+    .auth-screen .client-form button {
+        padding-top: 9px;
+        padding-bottom: 9px;
+    }
+    .auth-screen .turnstile-slot {
+        min-height: 58px;
+        margin: 0;
+    }
+    .auth-screen .oauth-actions {
+        margin: 0 auto 4px;
+    }
+    .auth-screen > .btn-secondary {
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+}
+
 .role-select .role-card:hover,
 .role-select .role-card:focus-visible {
     transform: translateY(-4px);
