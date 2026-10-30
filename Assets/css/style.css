@@ -2563,7 +2563,7 @@ button{
     min-height: 100svh;
     box-sizing: border-box;
     padding: clamp(12px, 3vw, 28px);
-    overflow-y: auto;
+    overflow: hidden;
 }
 .auth-screen .landing-container {
     box-sizing: border-box;
@@ -2670,15 +2670,20 @@ button{
     .auth-screen .landing-container {
         width: 100%;
         padding: 16px 14px 18px;
-        gap: 14px;
+        gap: 12px;
     }
     .auth-logo,
     .auth-logo img {
-        max-width: min(270px, 78vw);
+        max-width: min(220px, 62vw);
     }
     .auth-screen .client-form {
         padding: 0;
         gap: 14px;
+    }
+    .auth-screen .client-form input,
+    .auth-screen .client-form button {
+        padding-top: 11px;
+        padding-bottom: 11px;
     }
     .auth-screen .client-form label { margin-bottom: 4px; }
     .auth-screen .client-form input { padding: 11px 13px; }
