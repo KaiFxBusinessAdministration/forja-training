@@ -29,6 +29,8 @@
 </div>
 <button class="btn-primary" type="submit">Entrar al portal</button>
 <button class="btn-secondary" type="button" id="recuperarPassword">Recuperar contraseña</button>
+<button class="btn-secondary" type="button" id="googleAccess">Continuar con Google</button>
+<button class="btn-secondary" type="button" id="githubAccess">Continuar con GitHub</button>
 <a class="btn-secondary" href="../registro.html?role=client">Crear cuenta de atleta</a>
 <p class="form-status" id="loginEstado" aria-live="polite"></p>
 </form>
@@ -45,6 +47,10 @@ const loginForm=document.getElementById("loginCliente");
 const loginEstado=document.getElementById("loginEstado");
 const resetForm=document.getElementById("resetPasswordForm");
 const resetEstado=document.getElementById("resetEstado");
+async function oauthReturn(){if(new URLSearchParams(location.search).get("oauth")!=="1")return;try{const profile=await window.FLOW_AUTH.finishOAuth("client");sessionStorage.setItem("flowClienteActivoId",profile.id);location.href=window.FLOW_AUTH.destination(profile.role);}catch(error){loginEstado.textContent="La cuenta no tiene un perfil de atleta autorizado en FORJA.";console.error(error);}}
+document.getElementById("googleAccess").addEventListener("click",()=>window.FLOW_AUTH.signInWithProvider("google","client").catch(error=>loginEstado.textContent=error.message));
+document.getElementById("githubAccess").addEventListener("click",()=>window.FLOW_AUTH.signInWithProvider("github","client").catch(error=>loginEstado.textContent=error.message));
+oauthReturn();
 if(window.location.hash.includes("access_token") || new URLSearchParams(window.location.search).get("reset")==="1"){
 loginForm.hidden=true;
 document.getElementById("recuperarPassword").hidden=true;
