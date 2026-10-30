@@ -2546,7 +2546,7 @@ button{
 .oauth-icon{width:22px;height:22px;display:block;}
 .google-icon{font-weight:800;font-size:22px;line-height:1;background:conic-gradient(from -45deg,#4285f4 0 25%,#34a853 25% 48%,#fbbc05 48% 72%,#ea4335 72% 100%);-webkit-background-clip:text;background-clip:text;color:transparent;}
 .oauth-icon{width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-weight:800;line-height:1;}
-.google-icon{font-family:Arial,sans-serif;color:#4285f4;font-size:19px;}
+.google-icon{font-family:Arial,sans-serif;font-size:19px;background:conic-gradient(from -45deg,#4285f4 0 25%,#34a853 25% 48%,#fbbc05 48% 72%,#ea4335 72% 100%);-webkit-background-clip:text;background-clip:text;color:transparent;}
 .github-icon{color:#f4f7f4;}
 
 /* Panel más ligero para que la fotografía siga siendo protagonista. */
