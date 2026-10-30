@@ -2539,8 +2539,12 @@ button{
 .auth-logo { width: min(100%, 270px); margin: 0 auto 16px; display: flex; justify-content: center; }
 .auth-logo img { display: block; width: 100%; height: auto; max-width: 270px; object-fit: contain; }
 .oauth-actions{display:flex;justify-content:center;align-items:center;gap:12px;margin:2px auto 0;width:100%;}
-.oauth-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:118px;height:40px;padding:0 14px;border:1px solid rgba(255,255,255,.2);border-radius:8px;background:rgba(17,20,19,.72);color:#f4f7f4;font:inherit;font-size:14px;cursor:pointer;transition:background .2s ease,border-color .2s ease,transform .2s ease;}
-.oauth-btn:hover,.oauth-btn:focus-visible{background:rgba(255,255,255,.1);border-color:rgba(184,245,75,.65);transform:translateY(-1px);}
+.oauth-btn{display:grid;place-items:center;width:44px;height:44px;min-width:44px;padding:0;border:1px solid rgba(255,255,255,.24);border-radius:50%;background:rgba(17,20,19,.72);color:#f4f7f4;font:inherit;cursor:pointer;transition:background .2s ease,border-color .2s ease,transform .2s ease,box-shadow .2s ease;}
+.oauth-btn:hover,.oauth-btn:focus-visible{background:rgba(255,255,255,.12);border-color:rgba(184,245,75,.65);transform:translateY(-2px);box-shadow:0 8px 18px rgba(0,0,0,.25);}
+.oauth-btn>span:last-child{display:none;}
+.oauth-actions{display:flex;justify-content:center;align-items:center;gap:14px;margin:4px auto 12px;width:100%;}
+.oauth-icon{width:22px;height:22px;display:block;}
+.google-icon{font-weight:800;font-size:22px;line-height:1;background:conic-gradient(from -45deg,#4285f4 0 25%,#34a853 25% 48%,#fbbc05 48% 72%,#ea4335 72% 100%);-webkit-background-clip:text;background-clip:text;color:transparent;}
 .oauth-icon{width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-weight:800;line-height:1;}
 .google-icon{font-family:Arial,sans-serif;color:#4285f4;font-size:19px;}
 .github-icon{color:#f4f7f4;}
