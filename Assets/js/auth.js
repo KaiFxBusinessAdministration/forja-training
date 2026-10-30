@@ -33,6 +33,18 @@
       const {error}=await api.client.auth.resetPasswordForEmail(email,{redirectTo:redirect});
       if(error) throw error;
     },
+    async register({email,password,fullName,role,invite}){
+      const api=backend();
+      if(!api?.ready) throw new Error("Supabase no está disponible.");
+      const requestedRole=role === "trainer" && invite === "FORJA-TRAINER" ? "trainer" : "client";
+      const {data,error}=await api.client.auth.signUp({email,password,options:{data:{full_name:fullName,requested_role:requestedRole}}});
+      if(error) throw error;
+      if(data.user && data.session){
+        const {error:profileError}=await api.client.from("profiles").insert({id:data.user.id,full_name:fullName,role:requestedRole});
+        if(profileError) throw profileError;
+      }
+      return {needsConfirmation:!data.session,role:requestedRole};
+    },
     async updatePassword(password){
       const api=backend();
       if(!api?.ready) throw new Error("Supabase no está disponible.");
