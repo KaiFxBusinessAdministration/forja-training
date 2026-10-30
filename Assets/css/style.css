@@ -2557,6 +2557,38 @@ button{
 .register-icon-link svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
 .oauth-actions .register-icon-link{margin:0;}
 
+/* Accesos adaptables: el formulario conserva sus proporciones en cualquier viewport. */
+.auth-screen {
+    min-height: 100vh;
+    min-height: 100svh;
+    box-sizing: border-box;
+    padding: clamp(12px, 3vw, 28px);
+    overflow-y: auto;
+}
+.auth-screen .landing-container {
+    box-sizing: border-box;
+    width: min(100%, 560px);
+    max-width: 560px;
+    padding: clamp(20px, 4vw, 42px) clamp(16px, 5vw, 48px);
+    gap: clamp(18px, 3vw, 32px);
+}
+.auth-screen .logo-box,
+.auth-screen .client-form {
+    width: 100%;
+    min-width: 0;
+}
+.auth-screen .client-form {
+    max-width: 460px !important;
+    box-sizing: border-box;
+}
+.auth-screen .client-form input,
+.auth-screen .client-form button,
+.auth-screen .client-form select,
+.auth-screen .client-form textarea {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
 /* Panel más ligero para que la fotografía siga siendo protagonista. */
 .auth-screen .landing-container {
     background: rgba(8, 12, 11, .30) !important;
@@ -2624,6 +2656,22 @@ button{
 
 /* En pantallas estrechas prioriza al cliente guiado; evita que el recorte horizontal lo oculte. */
 @media (max-width: 640px) {
+    .auth-screen {
+        align-items: flex-start;
+        padding: 12px;
+    }
+    .auth-screen .landing-container {
+        width: 100%;
+        padding: 22px 16px 24px;
+        gap: 20px;
+    }
+    .auth-logo,
+    .auth-logo img {
+        max-width: min(270px, 78vw);
+    }
+    .auth-screen .client-form {
+        padding: 0;
+    }
     .sidebar .brand h2 { width: 204px; height: 68px; }
     .role-select .landing-bg { object-position: 68% center; }
     .auth-screen .landing-bg { object-position: 62% center; }
