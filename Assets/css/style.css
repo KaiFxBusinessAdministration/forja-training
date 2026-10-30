@@ -2569,6 +2569,10 @@ button{
     box-sizing: border-box;
     width: min(100%, 560px);
     max-width: 560px;
+    max-height: calc(100svh - 24px);
+    margin: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
     padding: clamp(20px, 4vw, 42px) clamp(16px, 5vw, 48px);
     gap: clamp(18px, 3vw, 32px);
 }
@@ -2587,6 +2591,11 @@ button{
 .auth-screen .client-form textarea {
     max-width: 100%;
     box-sizing: border-box;
+}
+.auth-screen .turnstile-slot,
+.auth-screen .cf-turnstile,
+.auth-screen iframe {
+    max-width: 100%;
 }
 
 /* Panel más ligero para que la fotografía siga siendo protagonista. */
@@ -2662,6 +2671,7 @@ button{
     }
     .auth-screen .landing-container {
         width: 100%;
+        max-height: calc(100svh - 24px);
         padding: 22px 16px 24px;
         gap: 20px;
     }
