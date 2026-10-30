@@ -85,15 +85,29 @@ const avanceDia = document.getElementById("avanceDia");
 const avanceSeries = document.getElementById("avanceSeries");
 const rutinaIndependienteKey = `flowRutinasIndependientes_${sessionStorage.getItem("flowClienteActivoId") || "99"}`;
 let rutinasGuardadas=[];
-function cargarEntrenamientosGuardados(){
-rutinasGuardadas=JSON.parse(localStorage.getItem(rutinaIndependienteKey) || "[]");
+const ordenDiasProgreso=new Map(["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"].map((dia,index)=>[dia.toLowerCase(),index]));
+function convertirRutinasProgresoCloud(rutinas){
+return (rutinas||[]).flatMap(rutina=>(rutina.routine_exercises||[]).map(ejercicio=>({tipo:"semana",nombreSemana:rutina.name||"Semana de training",dia:rutina.day_name||"Día sin definir",ejercicio:ejercicio.exercise_name||"",series:ejercicio.sets||3,repeticiones:ejercicio.reps||10,descanso:ejercicio.rest_seconds||90,calentamiento:rutina.warmup_steps||[]})));
+}
+async function cargarEntrenamientosGuardados(){
+const locales=JSON.parse(localStorage.getItem(rutinaIndependienteKey) || "[]");
+let cloud=null;
+try{const clienteId=sessionStorage.getItem("flowClienteActivoId");if(clienteId&&window.FLOW_ROUTINE_SYNC)cloud=await window.FLOW_ROUTINE_SYNC.listForClient(clienteId);}catch(error){console.warn("No se pudieron cargar las rutinas de Supabase",error);}
+rutinasGuardadas=cloud?.length?convertirRutinasProgresoCloud(cloud):locales;
+rutinasGuardadas.sort((a,b)=>{
+const bloque=String(a.nombreSemana||"").localeCompare(String(b.nombreSemana||""),"es");
+if(bloque!==0)return bloque;
+return (ordenDiasProgreso.get(String(a.dia||"").toLowerCase())??99)-(ordenDiasProgreso.get(String(b.dia||"").toLowerCase())??99);
+});
 const bloques=[...new Map(rutinasGuardadas.map((rutina,index)=>{const clave=rutina.tipo==="semana"?`semana|${String(rutina.nombreSemana||"Semana de training").toLowerCase()}`:`dia|${rutina.dia}`;return [clave,{clave,titulo:rutina.tipo==="semana"?(rutina.nombreSemana||"Semana de training"):`Día de training · ${rutina.dia}`,indices:[]}]})).values()];
 rutinasGuardadas.forEach((rutina,index)=>{const clave=rutina.tipo==="semana"?`semana|${String(rutina.nombreSemana||"Semana de training").toLowerCase()}`:`dia|${rutina.dia}`;bloques.find(bloque=>bloque.clave===clave)?.indices.push(index);});
+const ordenarBloques=(a,b)=>a.titulo.localeCompare(b.titulo,"es");
+bloques.sort(ordenarBloques);
 avanceBloque.innerHTML=`<option value="">Selecciona una semana o día</option>`+bloques.map(bloque=>`<option value="${bloque.clave}">${bloque.titulo}</option>`).join("");
 avanceDia.innerHTML=`<option value="">Primero selecciona una semana o día</option>`;avanceDia.disabled=true;
 avanceRutina.innerHTML=`<option value="">Primero selecciona un día</option>`;avanceRutina.disabled=true;
 }
-avanceBloque.addEventListener("change",()=>{const seleccion=avanceBloque.value;const indices=rutinasGuardadas.map((rutina,index)=>{const clave=rutina.tipo==="semana"?`semana|${String(rutina.nombreSemana||"Semana de training").toLowerCase()}`:`dia|${rutina.dia}`;return clave===seleccion?index:null}).filter(index=>index!==null);const dias=[...new Map(indices.map(index=>[rutinasGuardadas[index].dia,index])).entries()];avanceDia.innerHTML=`<option value="">Selecciona un día de la semana</option>`+dias.map(([dia])=>`<option value="${dia}">${dia}</option>`).join("");avanceDia.disabled=!dias.length;avanceRutina.innerHTML=`<option value="">Primero selecciona un día</option>`;avanceRutina.disabled=true;});
+avanceBloque.addEventListener("change",()=>{const seleccion=avanceBloque.value;const indices=rutinasGuardadas.map((rutina,index)=>{const clave=rutina.tipo==="semana"?`semana|${String(rutina.nombreSemana||"Semana de training").toLowerCase()}`:`dia|${rutina.dia}`;return clave===seleccion?index:null}).filter(index=>index!==null);const dias=[...new Map(indices.map(index=>[rutinasGuardadas[index].dia,index])).entries()].sort((a,b)=>(ordenDiasProgreso.get(String(a[0]).toLowerCase())??99)-(ordenDiasProgreso.get(String(b[0]).toLowerCase())??99));avanceDia.innerHTML=`<option value="">Selecciona un día de la semana</option>`+dias.map(([dia])=>`<option value="${dia}">${dia}</option>`).join("");avanceDia.disabled=!dias.length;avanceRutina.innerHTML=`<option value="">Primero selecciona un día</option>`;avanceRutina.disabled=true;});
 avanceDia.addEventListener("change",()=>{const seleccion=avanceBloque.value;const diaSeleccionado=avanceDia.value;const indices=rutinasGuardadas.map((rutina,index)=>{const clave=rutina.tipo==="semana"?`semana|${String(rutina.nombreSemana||"Semana de training").toLowerCase()}`:`dia|${rutina.dia}`;return clave===seleccion&&rutina.dia===diaSeleccionado?index:null}).filter(index=>index!==null);avanceRutina.innerHTML=`<option value="">Selecciona un ejercicio</option>`+indices.map(index=>`<option value="${index}">${rutinasGuardadas[index].ejercicio}</option>`).join("");avanceRutina.disabled=!indices.length;});
 avanceRutina.addEventListener("change",()=>{const rutina=rutinasGuardadas[Number(avanceRutina.value)];if(rutina){avanceEjercicio.value=rutina.ejercicio;avanceSeries.value=rutina.series;avanceRepeticiones.value=rutina.repeticiones;}});
 async function renderAvances(){
