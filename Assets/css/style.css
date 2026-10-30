@@ -2548,6 +2548,9 @@ button{
 .oauth-icon{width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-weight:800;line-height:1;}
 .google-icon{font-family:Arial,sans-serif;font-size:19px;background:conic-gradient(from -45deg,#4285f4 0 25%,#34a853 25% 48%,#fbbc05 48% 72%,#ea4335 72% 100%);-webkit-background-clip:text;background-clip:text;color:transparent;}
 .github-icon{color:#f4f7f4;}
+.register-icon-link{display:grid;place-items:center;width:44px;height:44px;margin:8px auto 0;color:#dfe8df;border:1px solid rgba(255,255,255,.24);border-radius:50%;background:rgba(17,20,19,.72);transition:background .2s ease,border-color .2s ease,transform .2s ease,box-shadow .2s ease;}
+.register-icon-link:hover,.register-icon-link:focus-visible{color:#b7f34a;border-color:rgba(184,245,75,.65);background:rgba(255,255,255,.12);transform:translateY(-2px);box-shadow:0 8px 18px rgba(0,0,0,.25);}
+.register-icon-link svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
 
 /* Panel más ligero para que la fotografía siga siendo protagonista. */
 .auth-screen .landing-container {
