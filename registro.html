@@ -5,6 +5,7 @@
 <title>Registro | FORJA TRAINING</title>
 <link rel="stylesheet" href="Assets/css/style.css?v=forja-logo-1">
 <script src="Assets/js/vendor/supabase.min.js"></script><script src="Assets/js/backend-config.js"></script><script src="Assets/js/backend.js"></script><script src="Assets/js/auth.js?v=register-1"></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body class="landing auth-screen" style="--landing-image:url('Assets/img/client-login-reserved.png')">
 <img class="landing-bg" src="Assets/img/client-login-reserved.png" alt="Atleta y entrenador">
@@ -14,11 +15,13 @@
 <label for="email">Correo electrónico</label><input id="email" type="email" required>
 <label for="password">Contraseña</label><input id="password" type="password" minlength="8" required>
 <label for="confirm">Repetir contraseña</label><input id="confirm" type="password" minlength="8" required>
+<div id="turnstileRegister" class="turnstile-slot"></div>
 <button class="btn-primary" type="submit">Crear cuenta</button><p class="form-status" id="registerStatus" aria-live="polite"></p>
 </form><a class="btn-secondary" id="backLogin" href="Cliente/login.html">Volver al acceso</a></div>
 <script>
 const params=new URLSearchParams(location.search), role=params.get("role")==="trainer"?"trainer":"client", invite=params.get("invite")||"";
+let captchaToken=""; window.FLOW_AUTH.renderCaptcha("turnstileRegister",token=>captchaToken=token);
 if(role==="trainer" && invite!=="FORJA-TRAINER"){document.getElementById("registerTitle").textContent="Registro de entrenador por invitación";document.getElementById("registerStatus").textContent="Este enlace de entrenador no es válido.";document.getElementById("registerForm").querySelector("button").disabled=true;}
 if(role==="trainer")document.getElementById("backLogin").href="Entrenador/login.html";
-document.getElementById("registerForm").addEventListener("submit",async event=>{event.preventDefault();const status=document.getElementById("registerStatus");if(document.getElementById("password").value!==document.getElementById("confirm").value){status.textContent="Las contraseñas no coinciden.";return;}status.textContent="Creando cuenta...";try{const result=await window.FLOW_AUTH.register({email:document.getElementById("email").value.trim(),password:document.getElementById("password").value,fullName:document.getElementById("fullName").value.trim(),role,invite});status.textContent=result.needsConfirmation?"Cuenta creada. Revisa tu correo para confirmar el acceso.":"Cuenta creada. Ya puedes iniciar sesión.";event.target.reset();}catch(error){status.textContent=error.message;}});
+document.getElementById("registerForm").addEventListener("submit",async event=>{event.preventDefault();const status=document.getElementById("registerStatus");if(!captchaToken){status.textContent="Confirma la verificación de seguridad.";return;}if(document.getElementById("password").value!==document.getElementById("confirm").value){status.textContent="Las contraseñas no coinciden.";return;}status.textContent="Creando cuenta...";try{const result=await window.FLOW_AUTH.register({email:document.getElementById("email").value.trim(),password:document.getElementById("password").value,fullName:document.getElementById("fullName").value.trim(),role,invite,captchaToken});status.textContent=result.needsConfirmation?"Cuenta creada. Revisa tu correo para confirmar el acceso.":"Cuenta creada. Ya puedes iniciar sesión.";event.target.reset();}catch(error){status.textContent=error.message;}});
 </script></body></html>

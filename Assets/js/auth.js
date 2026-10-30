@@ -10,10 +10,10 @@
   }
 
   window.FLOW_AUTH={
-    async signIn(email,password,expectedRole){
+    async signIn(email,password,expectedRole,captchaToken){
       const api=backend();
       if(!api?.ready) throw new Error("Supabase no está disponible. Revisa la configuración del backend.");
-      const {data,error}=await api.client.auth.signInWithPassword({email,password});
+      const {data,error}=await api.client.auth.signInWithPassword({email,password,options:captchaToken?{captchaToken}:undefined});
       if(error) throw error;
       let profile;
       try{profile=await profileFor(data.user);}catch(error){
@@ -32,18 +32,18 @@
       sessionStorage.setItem("flowAuthProfile",JSON.stringify(profile));
       return profile;
     },
-    async resetPassword(email){
+    async resetPassword(email,captchaToken){
       const api=backend();
       if(!api?.ready) throw new Error("Supabase no está disponible.");
       const redirect=`${window.location.origin}${window.location.pathname}?reset=1`;
-      const {error}=await api.client.auth.resetPasswordForEmail(email,{redirectTo:redirect});
+      const {error}=await api.client.auth.resetPasswordForEmail(email,{redirectTo:redirect,captchaToken});
       if(error) throw error;
     },
-    async register({email,password,fullName,role,invite}){
+    async register({email,password,fullName,role,invite,captchaToken}){
       const api=backend();
       if(!api?.ready) throw new Error("Supabase no está disponible.");
       const requestedRole=role === "trainer" && invite === "FORJA-TRAINER" ? "trainer" : "client";
-      const {data,error}=await api.client.auth.signUp({email,password,options:{data:{full_name:fullName,requested_role:requestedRole}}});
+      const {data,error}=await api.client.auth.signUp({email,password,options:{data:{full_name:fullName,requested_role:requestedRole},captchaToken}});
       if(error) throw error;
       if(data.user && data.session){
         const {error:profileError}=await api.client.from("profiles").insert({id:data.user.id,full_name:fullName,role:requestedRole});
@@ -77,6 +77,10 @@
       if(!api?.ready) throw new Error("Supabase no está disponible.");
       const {error}=await api.client.auth.updateUser({password});
       if(error) throw error;
+    },
+    renderCaptcha(containerId,onToken){
+      const mount=()=>{if(!window.turnstile)return false;window.turnstile.render(`#${containerId}`,{sitekey:"0x4AAAAAAFsw_QWIVPoPvmj_",callback:onToken,'expired-callback':()=>onToken(""),'error-callback':()=>onToken("")});return true;};
+      if(mount())return;const timer=setInterval(()=>{if(mount())clearInterval(timer);},200);
     },
     destination(role){
       return role === "client" ? "dashboard.html" : "../Entrenador/dashboard.html";
