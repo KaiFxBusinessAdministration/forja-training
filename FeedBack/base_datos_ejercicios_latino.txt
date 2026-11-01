@@ -1,0 +1,365 @@
+=====================================================================
+BASE DE DATOS MAESTRA DE HIPERTROFIA Y FITNESS - ESPAÑOL LATINO
+Optimizado para Supabase, Buscadores Web y Aplicaciones Móviles
+=====================================================================
+
+ID: 1
+EJERCICIO: Press de banca plano tradicional
+CATEGORÍA: EMPUJE (PUSH)
+EQUIPAMIENTO: Barra Libre y Banco Plano
+MÚSCULO PRINCIPAL: Pectoral Mayor (Medio e Inferior)
+MÚSCULOS SECUNDARIOS: Deltoides Anterior, Tríceps Braquial, Coracobraquial
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): press plano, banca plana, pecho barra, press banca plano, pecho plano
+TIP TÉCNICO: Mantén los pies planos en el suelo, retrae las escápulas y baja la barra de forma controlada hasta tocar el pecho medio.
+----------------------------------------------------------------------
+ID: 2
+EJERCICIO: Press de banca inclinado con barra
+CATEGORÍA: EMPUJE (PUSH)
+EQUIPAMIENTO: Barra Libre y Banco Inclinado
+MÚSCULO PRINCIPAL: Pectoral Mayor (Pecho Superior / Haz Clavicular)
+MÚSCULOS SECUNDARIOS: Deltoides Anterior, Tríceps Braquial
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): press inclinado barra, banca inclinada barra, pecho superior barra, pecho arriba barra
+TIP TÉCNICO: Ajusta el banco a 30-45 grados. Baja la barra hacia la parte alta del pecho controlando los hombros.
+----------------------------------------------------------------------
+ID: 3
+EJERCICIO: Press militar de pie (Overhead Press)
+CATEGORÍA: EMPUJE (PUSH)
+EQUIPAMIENTO: Barra Olímpica
+MÚSCULO PRINCIPAL: Deltoides Anterior (Hombro Frontal)
+MÚSCULOS SECUNDARIOS: Deltoides Lateral, Tríceps Braquial, Core (Estabilizador)
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): press militar, ohp, hombro de pie, press militar barra, hombro arriba
+TIP TÉCNICO: Aprieta glúteos y abdomen fuertemente para proteger la espalda baja. Empuja la barra en línea vertical pasando rozando la cara.
+----------------------------------------------------------------------
+ID: 4
+EJERCICIO: Press de banca con agarre cerrado
+CATEGORÍA: EMPUJE (PUSH)
+EQUIPAMIENTO: Barra Libre y Banco Plano
+MÚSCULO PRINCIPAL: Tríceps Braquial (Completo)
+MÚSCULOS SECUNDARIOS: Pectoral Mayor, Deltoides Anterior
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): press cerrado, banca cerrado, tricep barra banco, agarre cerrado tricep
+TIP TÉCNICO: Coloca las manos a la anchura de los hombros. Baja manteniendo los codos lo más pegados al cuerpo posible.
+----------------------------------------------------------------------
+ID: 5
+EJERCICIO: Press de pecho sentado en máquina Hammer
+CATEGORÍA: EMPUJE (PUSH)
+EQUIPAMIENTO: Máquina Articulada / Hammer
+MÚSCULO PRINCIPAL: Pectoral Mayor (Enfoque Densidad)
+MÚSCULOS SECUNDARIOS: Deltoides Anterior, Tríceps Braquial
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): press hammer, pecho maquina, press de pecho sentado, hammer de pecho
+TIP TÉCNICO: Empuja manteniendo la espalda firmemente apoyada en el respaldo y enfócate en juntar los bíceps contra el pecho.
+----------------------------------------------------------------------
+ID: 6
+EJERCICIO: Cruces de poleas altas (Enfoque Pecho Bajo)
+CATEGORÍA: EMPUJE (PUSH)
+EQUIPAMIENTO: Poleas Dobles y Manijas
+MÚSCULO PRINCIPAL: Pectoral Mayor (Fibras Inferiores / Costales)
+MÚSCULOS SECUNDARIOS: Deltoides Anterior, Bíceps (Porción corta)
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): cruces polea alta, crossover altas, cables de arriba, pecho bajo polea
+TIP TÉCNICO: Cruza las manos hacia abajo y adelante simulando un abrazo, manteniendo una ligera flexión en los codos.
+----------------------------------------------------------------------
+ID: 7
+EJERCICIO: Cruces de poleas bajas (Enfoque Pecho Superior)
+CATEGORÍA: EMPUJE (PUSH)
+EQUIPAMIENTO: Poleas Dobles y Manijas
+MÚSCULO PRINCIPAL: Pectoral Mayor (Fibras Superiores / Claviculares)
+MÚSCULOS SECUNDARIOS: Deltoides Anterior, Bíceps Braquial
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): cruces polea baja, crossover bajas, cables de abajo, pecho superior polea
+TIP TÉCNICO: Lleva las manijas de abajo hacia arriba y al centro, concentrando el esfuerzo en la porción alta del pecho.
+----------------------------------------------------------------------
+ID: 8
+EJERCICIO: Pec Deck (Contractor de Pecho)
+CATEGORÍA: EMPUJE (PUSH)
+EQUIPAMIENTO: Máquina Selectorizada
+MÚSCULO PRINCIPAL: Pectoral Mayor (Máximo Aislamiento)
+MÚSCULOS SECUNDARIOS: Deltoides Anterior
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): pec deck, contractor maquina, aperturas maquina, mariposa maquina
+TIP TÉCNICO: Mantén los hombros hacia abajo y hacia atrás. Concéntrate en apretar los codos hacia el centro en la contracción.
+----------------------------------------------------------------------
+ID: 9
+EJERCICIO: Extensión de tríceps en polea alta con cuerda
+CATEGORÍA: EMPUJE (PUSH)
+EQUIPAMIENTO: Polea Alta y Cuerda
+MÚSCULO PRINCIPAL: Tríceps Braquial (Cabeza Lateral y Medial)
+MÚSCULOS SECUNDARIOS: Ancóneo
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): tricep polea, tricep cuerda, extensiones polea, jalon tricep
+TIP TÉCNICO: Bloquea los codos firmes a los lados de tus costillas y extiende los brazos hacia abajo abriendo la cuerda al final.
+----------------------------------------------------------------------
+ID: 10
+EJERCICIO: Press inclinado con mancuernas
+CATEGORÍA: EMPUJE (PUSH)
+EQUIPAMIENTO: Mancuernas y Banco Inclinado
+MÚSCULO PRINCIPAL: Pectoral Mayor (Pecho Superior)
+MÚSCULOS SECUNDARIOS: Deltoides Anterior, Tríceps Braquial
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): press inclinado mancuernas, pecho superior mancuernas, banca inclinada mancuernas, pecho arriba
+TIP TÉCNICO: Inicia el ejercicio pateando las mancuernas con las rodillas. En la bajada, los codos van a 45 grados rozando las costillas.
+----------------------------------------------------------------------
+ID: 11
+EJERCICIO: Press plano con mancuernas
+CATEGORÍA: EMPUJE (PUSH)
+EQUIPAMIENTO: Mancuernas y Banco Plano
+MÚSCULO PRINCIPAL: Pectoral Mayor (Completo)
+MÚSCULOS SECUNDARIOS: Deltoides Anterior, Tríceps Braquial
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): press plano mancuernas, pecho mancuernas plano, banca plana mancuernas
+TIP TÉCNICO: Baja las mancuernas abriendo ligeramente los codos de forma segura y empuja hacia el centro sin chocar las mancuernas.
+----------------------------------------------------------------------
+ID: 12
+EJERCICIO: Press de hombros con mancuernas sentado
+CATEGORÍA: EMPUJE (PUSH)
+EQUIPAMIENTO: Mancuernas y Banco 90 Grados
+MÚSCULO PRINCIPAL: Deltoides Anterior (Hombro Frontal)
+MÚSCULOS SECUNDARIOS: Deltoides Lateral, Tríceps Braquial
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): press militar mancuernas, hombro mancuernas, press hombro sentado
+TIP TÉCNICO: Mantén los codos ligeramente hacia el frente en el plano escapular (no totalmente abiertos) para cuidar los hombros.
+----------------------------------------------------------------------
+ID: 13
+EJERCICIO: Elevaciones laterales con mancuernas
+CATEGORÍA: EMPUJE (PUSH)
+EQUIPAMIENTO: Mancuernas
+MÚSCULO PRINCIPAL: Deltoides Lateral (Hombro Medio)
+MÚSCULOS SECUNDARIOS: Deltoides Anterior, Trapecio Superior
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): vuelos laterales, laterales mancuernas, vuelos hombro, aberturas hombro
+TIP TÉCNICO: Eleva las mancuernas ligeramente hacia adelante y hacia los lados, guiando el movimiento con los codos.
+----------------------------------------------------------------------
+ID: 14
+EJERCICIO: Copa de tríceps con mancuerna (A dos manos)
+CATEGORÍA: EMPUJE (PUSH)
+EQUIPAMIENTO: Mancuerna
+MÚSCULO PRINCIPAL: Tríceps Braquial (Énfasis Cabeza Larga)
+MÚSCULOS SECUNDARIOS: Ancóneo
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): copa tricep, extension tras nuca, tricep mancuerna sentado
+TIP TÉCNICO: Sujeta la mancuerna por detrás de la cabeza, mantén los codos apuntando hacia adelante y extiende verticalmente.
+----------------------------------------------------------------------
+ID: 15
+EJERCICIO: Remo con barra (Prono 45 grados)
+CATEGORÍA: TIRÓN (PULL)
+EQUIPAMIENTO: Barra Olímpica
+MÚSCULO PRINCIPAL: Dorsal Ancho, Trapecio Medio y Redondo Mayor
+MÚSCULOS SECUNDARIOS: Deltoides Posterior, Bíceps Braquial, Erectores Espinales
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): remo barra, remo prono, remo espalda barra, remo inclinado
+TIP TÉCNICO: Inclina el torso a 45 grados manteniendo la espalda recta. Jala la barra hacia el ombligo guiando con los codos.
+----------------------------------------------------------------------
+ID: 16
+EJERCICIO: Remo Pendlay
+CATEGORÍA: TIRÓN (PULL)
+EQUIPAMIENTO: Barra Olímpica y Discos
+MÚSCULO PRINCIPAL: Espalda Alta (Trapecio, Romboides, Deltoides Posterior)
+MÚSCULOS SECUNDARIOS: Dorsal Ancho, Core, Bíceps Braquial
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): remo pendlay, remo desde el suelo, pendlay row, remo barra muerto
+TIP TÉCNICO: El torso debe estar paralelo al suelo. Jala la barra explosivamente desde el piso hacia el pecho inferior.
+----------------------------------------------------------------------
+ID: 17
+EJERCICIO: Curl de bíceps con barra Z
+CATEGORÍA: TIRÓN (PULL)
+EQUIPAMIENTO: Barra Z y Discos
+MÚSCULO PRINCIPAL: Bíceps Braquial
+MÚSCULOS SECUNDARIOS: Braquial Anterior, Braquiorradial (Antebrazo)
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): curl barra z, biceps barra z, curl z, biceps z
+TIP TÉCNICO: Sujeta la barra en la zona curva para proteger las muñecas. Sube de forma fluida sin balancear el torso.
+----------------------------------------------------------------------
+ID: 18
+EJERCICIO: Jalón al pecho con barra en V (Agarre Neutro Cerrado)
+CATEGORÍA: TIRÓN (PULL)
+EQUIPAMIENTO: Polea Alta y Barra V
+MÚSCULO PRINCIPAL: Dorsal Ancho (Fibras bajas / ilíacas) y Redondo Mayor
+MÚSCULOS SECUNDARIOS: Braquial anterior, Antebrazo, Deltoides posterior
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): jalon neutro, jalon cerrado, jalon barra v, espalda polea alta cerrada, jalon al pecho v
+TIP TÉCNICO: Mantén el torso estable con una ligera inclinación y clava los codos hacia abajo apuntando a tus costillas.
+----------------------------------------------------------------------
+ID: 19
+EJERCICIO: Jalón al pecho agarre prono abierto tradicional
+CATEGORÍA: TIRÓN (PULL)
+EQUIPAMIENTO: Polea Alta y Barra Larga
+MÚSCULO PRINCIPAL: Dorsal Ancho (Fibras Superiores / Amplitud)
+MÚSCULOS SECUNDARIOS: Redondo Mayor, Bíceps Braquial, Trapecio Inferior
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): jalon abierto, jalon al pecho, espalda polea alta, polea prono
+TIP TÉCNICO: Sujeta la barra más ancho que tus hombros. Jala llevando la barra al pecho superior y sacando el pecho.
+----------------------------------------------------------------------
+ID: 20
+EJERCICIO: Pullover en polea alta
+CATEGORÍA: TIRÓN (PULL)
+EQUIPAMIENTO: Polea Alta (Barra recta o pequeña)
+MÚSCULO PRINCIPAL: Dorsal Ancho (Completo) y Redondo Mayor
+MÚSCULOS SECUNDARIOS: Tríceps (Cabeza larga), Pectoral mayor (Porción esternal)
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): pullover polea, pullover espalda, polea alta recta, pullover barra chica, pullover
+TIP TÉCNICO: Bloquea una ligera flexión en los codos y arrastra la barra en un arco limpio hasta tocar tus muslos, apretando la espalda.
+----------------------------------------------------------------------
+ID: 21
+EJERCICIO: Curl Bayesian en polea baja (Face-Away Cable Curl)
+CATEGORÍA: TIRÓN (PULL)
+EQUIPAMIENTO: Polea Baja y Manija D
+MÚSCULO PRINCIPAL: Bíceps Braquial (Énfasis absoluto en la Cabeza Larga por tensión estirada)
+MÚSCULOS SECUNDARIOS: Braquial anterior, Braquiorradial (Antebrazo), Core (Anti-rotación)
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): curl bayesian, bayesian curl, biceps polea atras, curl de espaldas a la polea, behind the back cable curl
+TIP TÉCNICO: Párate de espaldas a la polea, da un paso al frente para dejar el brazo estirado por detrás del torso y realiza el curl manteniendo el codo fijo en el espacio.
+----------------------------------------------------------------------
+ID: 22
+EJERCICIO: Face Pull en polea alta
+CATEGORÍA: TIRÓN (PULL)
+EQUIPAMIENTO: Polea Alta y Cuerda
+MÚSCULO PRINCIPAL: Deltoides Posterior (Hombro de atrás) y Trapecio Medio/Inferior
+MÚSCULOS SECUNDARIOS: Romboides, Infraespinoso, Redondo Menor
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): face pull, facepull, hombro posterior polea, jalon a la cara, cuerda a la cara
+TIP TÉCNICO: Jala la cuerda directamente hacia tu frente o sienes, separando las manos al final del recorrido para forzar la rotación externa del hombro.
+----------------------------------------------------------------------
+ID: 23
+EJERCICIO: Remo Gironda (Polea baja con barra V)
+CATEGORÍA: TIRÓN (PULL)
+EQUIPAMIENTO: Polea Baja y Barra V
+MÚSCULO PRINCIPAL: Dorsal Ancho y Romboides
+MÚSCULOS SECUNDARIOS: Trapecio Medio, Deltoides Posterior, Bíceps Braquial
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): remo gironda, remo sentado polea, remo bajo polea, remo cerrado polea
+TIP TÉCNICO: Mantén la espalda recta, extiende completamente los brazos para estirar y jala hacia el abdomen bajo apretando las escápulas.
+----------------------------------------------------------------------
+ID: 24
+EJERCICIO: Remo a una mano con mancuerna
+CATEGORÍA: TIRÓN (PULL)
+EQUIPAMIENTO: Mancuerna y Banco Plano
+MÚSCULO PRINCIPAL: Dorsal Ancho y Redondo Mayor
+MÚSCULOS SECUNDARIOS: Romboides, Deltoides Posterior, Bíceps Braquial
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): remo una mano, remo mancuerna, serrucho, remo un brazo
+TIP TÉCNICO: Apoya una rodilla y mano en el banco. Jala la mancuerna llevando el codo hacia la cadera, no hacia el pecho.
+----------------------------------------------------------------------
+ID: 25
+EJERCICIO: Curl Martillo con mancuernas
+CATEGORÍA: TIRÓN (PULL)
+EQUIPAMIENTO: Mancuernas
+MÚSCULO PRINCIPAL: Braquiorradial (Antebrazo) y Braquial Anterior
+MÚSCULOS SECUNDARIOS: Bíceps Braquial
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): curl martillo, martillos, biceps martillo, agarre neutro biceps
+TIP TÉCNICO: Mantén las palmas de las manos mirándose entre sí durante todo el movimiento. Sube de forma estricta.
+----------------------------------------------------------------------
+ID: 26
+EJERCICIO: Curl de bíceps alterno con mancuernas
+CATEGORÍA: TIRÓN (PULL)
+EQUIPAMIENTO: Mancuernas
+MÚSCULO PRINCIPAL: Bíceps Braquial (Con énfasis en la supinación)
+MÚSCULOS SECUNDARIOS: Braquial Anterior, Antebrazo
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): curl alterno, biceps mancuernas, curl tradicional biceps, curl mancuernas
+TIP TÉCNICO: Arranca en agarre neutro y gira la muñeca hacia afuera (supinación) a medida que vas subiendo el peso.
+----------------------------------------------------------------------
+ID: 27
+EJERCICIO: Sentadilla trasera libre (Barra Alta)
+CATEGORÍA: PIERNAS (LEGS)
+EQUIPAMIENTO: Barra Olímpica y Rack
+MÚSCULO PRINCIPAL: Cuádriceps y Glúteo Mayor
+MÚSCULOS SECUNDARIOS: Isquiotibiales, Core, Erectores Espinales
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): sentadilla, sentadilla libre, squat, sentadilla barra, piernas barra
+TIP TÉCNICO: Apoya la barra en los trapecios. Baja rompiendo el paralelo de las rodillas manteniendo el pecho arriba.
+----------------------------------------------------------------------
+ID: 28
+EJERCICIO: Peso muerto rumano con barra
+CATEGORÍA: PIERNAS (LEGS)
+EQUIPAMIENTO: Barra Olímpica
+MÚSCULO PRINCIPAL: Isquiotibiales (Bíceps Femoral, Semitendinoso) y Glúteo Mayor
+MÚSCULOS SECUNDARIOS: Erectores Espinales, Core, Antebrazos (Agarre)
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): peso muerto rumano, rdl, rumano barra, femoral barra
+TIP TÉCNICO: Empuja la cadera hacia atrás como si quisieras tocar la pared con los glúteos, flexionando mínimamente las rodillas.
+----------------------------------------------------------------------
+ID: 29
+EJERCICIO: Hip Thrust con barra libre
+CATEGORÍA: PIERNAS (LEGS)
+EQUIPAMIENTO: Barra Olímpica, Discos y Banco
+MÚSCULO PRINCIPAL: Glúteo Mayor (Máxima contracción acortada)
+MÚSCULOS SECUNDARIOS: Isquiotibiales, Cuádriceps, Core
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): hip thrust, hiptrust, empuje de cadera, gluteo con barra, hip thrust barra
+TIP TÉCNICO: Apoya las escápulas en el banco. Empuja con los talones hacia arriba hasta lograr una extensión completa de cadera.
+----------------------------------------------------------------------
+ID: 30
+EJERCICIO: Prensa de piernas a 45 grados
+CATEGORÍA: PIERNAS (LEGS)
+EQUIPAMIENTO: Máquina de Prensa 45°
+MÚSCULO PRINCIPAL: Cuádriceps (Énfasis general según posición de pies)
+MÚSCULOS SECUNDARIOS: Glúteo Mayor, Isquiotibiales, Aductores
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): prensa, prensa 45, prensa de piernas, maquina prensa
+TIP TÉCNICO: Baja controlado sin dejar que la cadera se despegue del respaldo para evitar lesiones lumbares.
+----------------------------------------------------------------------
+ID: 31
+EJERCICIO: Extensión de cuádriceps en máquina
+CATEGORÍA: PIERNAS (LEGS)
+EQUIPAMIENTO: Máquina Selectorizada
+MÚSCULO PRINCIPAL: Cuádriceps (Aislamiento Total del Recto Femoral)
+MÚSCULOS SECUNDARIOS: Ninguno
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): extensiones, extension de piernas, maquina cuadricep, extension cuadricep
+TIP TÉCNICO: Sujeta firmemente las manijas laterales para bloquear la cadera abajo. Extiende por completo y aprieta 1 segundo arriba.
+----------------------------------------------------------------------
+ID: 32
+EJERCICIO: Curl de piernas acostado (Femoral)
+CATEGORÍA: PIERNAS (LEGS)
+EQUIPAMIENTO: Máquina Selectorizada
+MÚSCULO PRINCIPAL: Isquiotibiales (Flexión de rodilla)
+MÚSCULOS SECUNDARIOS: Gastrocnemio (Gemelos)
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): curl femoral, femoral acostado, curl piernas acostado, femoral maquina
+TIP TÉCNICO: Mantén la pelvis pegada al banco durante todo el recorrido para evitar que la espalda baja compense la fuerza.
+----------------------------------------------------------------------
+ID: 33
+EJERCICIO: Sentadilla búlgara con mancuernas
+CATEGORÍA: PIERNAS (LEGS)
+EQUIPAMIENTO: Mancuernas y Banco Plano
+MÚSCULO PRINCIPAL: Cuádriceps y Glúteo Mayor
+MÚSCULOS SECUNDARIOS: Glúteo medio (Estabilizador), Isquiotibiales
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): sentadilla bulgara, bulgaras con mancuernas, desplante bulgari, pierna en banco
+TIP TÉCNICO: Apoya el empeine del pie trasero en el banco. Baja verticalmente manteniendo la rodilla delantera alineada.
+----------------------------------------------------------------------
+ID: 34
+EJERCICIO: Press Pallof en polea (Anti-Rotación)
+CATEGORÍA: CORE
+EQUIPAMIENTO: Polea Media y Manija D
+MÚSCULO PRINCIPAL: Oblicuos y Transverso Abdominal
+MÚSCULOS SECUNDARIOS: Glúteo medio, Deltoides anterior (Isométrico)
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): press pallof, pallof press, core polea, abdomen anti rotacion
+TIP TÉCNICO: Párate de lado a la polea, extiende los brazos al frente sosteniendo el cable y resiste la fuerza de la polea.
+----------------------------------------------------------------------
+ID: 35
+EJERCICIO: Crunch abdominal en polea alta (Rezo)
+CATEGORÍA: CORE
+EQUIPAMIENTO: Polea Alta y Cuerda
+MÚSCULO PRINCIPAL: Recto Abdominal
+MÚSCULOS SECUNDARIOS: Oblicuos
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): crunch polea, abdominales polea, rezo abdomen, crunch rezo
+TIP TÉCNICO: De rodillas, sujeta la cuerda junto a tu cabeza. Flexiona la columna arqueando la espalda, no dobles la cadera.
+----------------------------------------------------------------------
+ID: 36
+EJERCICIO: Flexiones de pecho tradicionales
+CATEGORÍA: EMPUJE (PUSH)
+EQUIPAMIENTO: Peso Corporal
+MÚSCULO PRINCIPAL: Pectoral Mayor (Medio e Inferior)
+MÚSCULOS SECUNDARIOS: Tríceps Braquial, Deltoides Anterior, Core
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): flexiones, push ups, lagartijas, pecho en casa, flexiones de brazo
+TIP TÉCNICO: Mantén el cuerpo en una línea recta perfecta. Los codos deben apuntar diagonalmente hacia atrás, no hacia los lados.
+----------------------------------------------------------------------
+ID: 37
+EJERCICIO: Flexiones en pica (Pike Push-ups)
+CATEGORÍA: EMPUJE (PUSH)
+EQUIPAMIENTO: Peso Corporal
+MÚSCULO PRINCIPAL: Deltoides Anterior y Lateral (Hombros)
+MÚSCULOS SECUNDARIOS: Trapecio Superior, Tríceps Braquial
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): flexiones en pica, pike push ups, hombro calistenia, hombro en casa
+TIP TÉCNICO: Eleva la cadera formando una V invertida. Baja la cabeza controladamente formando un triángulo imaginario con tus manos.
+----------------------------------------------------------------------
+ID: 38
+EJERCICIO: Dominadas australianas bajo mesa (Remo Invertido)
+CATEGORÍA: TIRÓN (PULL)
+EQUIPAMIENTO: Mesa o Barra Baja
+MÚSCULO PRINCIPAL: Trapecio Medio, Romboides y Dorsal Ancho
+MÚSCULOS SECUNDARIOS: Deltoides Posterior, Bíceps Braquial
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): remo invertido, dominadas australianas, espalda en casa, remo bajo mesa
+TIP TÉCNICO: Acuéstate bajo una mesa resistente, sujétate del borde y jala tu pecho hacia arriba manteniendo el cuerpo rígido.
+----------------------------------------------------------------------
+ID: 39
+EJERCICIO: Sentadilla búlgara en sofá
+CATEGORÍA: PIERNAS (LEGS)
+EQUIPAMIENTO: Sofá, Silla o Cama
+MÚSCULO PRINCIPAL: Cuádriceps y Glúteo Mayor
+MÚSCULOS SECUNDARIOS: Glúteo Medio, Isquiotibiales
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): bulgaras en casa, desplantes en sofa, pierna en casa silla
+TIP TÉCNICO: Apoya el pie trasero en el borde del sofá. Baja cuidando que la rodilla delantera no sufra molestias.
+----------------------------------------------------------------------
+ID: 40
+EJERCICIO: Fondos de tríceps en silla
+CATEGORÍA: EMPUJE (PUSH)
+EQUIPAMIENTO: Silla o Banco Casero
+MÚSCULO PRINCIPAL: Tríceps Braquial
+MÚSCULOS SECUNDARIOS: Deltoides Anterior, Pectoral Mayor
+ETIQUETAS BÚSQUEDA (SINÓNIMOS): fondos silla, fondos en banco, tricep en casa silla, dips silla
+TIP TÉCNICO: Apoya las manos en el borde de la silla. Baja la cadera pegada a la silla flexionando los codos a 90 grados.
+----------------------------------------------------------------------
