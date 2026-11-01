@@ -113,6 +113,17 @@ let bibliotecaAtleta = Array.isArray(window.FLOW_EXERCISE_LIBRARY) ? window.FLOW
 let nombresEjercicios = [];
 function cargarEjerciciosEnSelect(){nombresEjercicios=[...new Set(bibliotecaAtleta.map(ejercicio=>ejercicio.nombre).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));ejerciciosAtleta.innerHTML='<option value="">Selecciona un ejercicio de la biblioteca</option>'+nombresEjercicios.map(nombre=>`<option value="${nombre.replace(/&/g,"&amp;").replace(/"/g,"&quot;")}">${nombre}</option>`).join("");}
 cargarEjerciciosEnSelect();
+fetch("../FeedBack/base_datos_ejercicios_latino.txt").then(response=>response.ok?response.text():"").then(source=>{
+if(!source)return;
+const registros=source.split(/\n(?=ID:\s*\d+)/).map(bloque=>{
+const dato=clave=>{const match=bloque.match(new RegExp(`^${clave}:\\s*(.+)$`,"mi"));return match?.[1]?.trim()||"";};
+const nombre=dato("EJERCICIO");
+return nombre?{id:`latino-${dato("ID")||nombre.toLowerCase().replace(/[^a-z0-9]+/gi,"-")}`,nombre,grupo:dato("CATEGORÍA"),equipo:dato("EQUIPAMIENTO"),musculoPrincipal:dato("MÚSCULO PRINCIPAL"),musculosSecundarios:dato("MÚSCULOS SECUNDARIOS"),sinonimos:dato("ETIQUETAS BÚSQUEDA (SINÓNIMOS)"),tipTecnico:dato("TIP TÉCNICO")}:null;
+}).filter(Boolean);
+const existentes=new Set(bibliotecaAtleta.map(ejercicio=>String(ejercicio.nombre||"").trim().toLowerCase()));
+registros.forEach(ejercicio=>{if(!existentes.has(ejercicio.nombre.toLowerCase())){bibliotecaAtleta.push(ejercicio);existentes.add(ejercicio.nombre.toLowerCase());}});
+cargarEjerciciosEnSelect();
+}).catch(error=>console.warn("No se pudo cargar la base latina de ejercicios",error));
 if(!nombresEjercicios.length){fetch("../Data/exercise-library.js").then(response=>response.text()).then(source=>{const inicio=source.indexOf("[");const fin=source.lastIndexOf("];" );if(inicio>=0&&fin>inicio){bibliotecaAtleta=JSON.parse(source.slice(inicio,fin+1));cargarEjerciciosEnSelect();}}).catch(error=>console.warn("No se pudo cargar la biblioteca de ejercicios",error));}
 const actualizarTipoRutina=()=>{semanaNombreWrap.hidden=atletaTipoRutina.value!=="semana";};
 atletaTipoRutina.addEventListener("change",actualizarTipoRutina);
