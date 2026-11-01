@@ -1,4 +1,5 @@
 (function(){
+  const PUBLIC_APP_ORIGIN="https://forjaentrenamiento.vercel.app";
   function backend(){ return window.FLOW_BACKEND || null; }
 
   async function profileFor(user){
@@ -35,7 +36,7 @@
     async resetPassword(email,captchaToken){
       const api=backend();
       if(!api?.ready) throw new Error("Supabase no está disponible.");
-      const redirect=`${window.location.origin}${window.location.pathname}?reset=1`;
+      const redirect=`${PUBLIC_APP_ORIGIN}${window.location.pathname}?reset=1`;
       const {error}=await api.client.auth.resetPasswordForEmail(email,{redirectTo:redirect,captchaToken});
       if(error) throw error;
     },
@@ -51,7 +52,7 @@
       const api=backend();
       if(!api?.ready) throw new Error("Supabase no está disponible.");
       sessionStorage.setItem("flowOAuthExpectedRole",expectedRole);
-      const {error}=await api.client.auth.signInWithOAuth({provider,options:{redirectTo:`${window.location.origin}${window.location.pathname}?oauth=1`}});
+      const {error}=await api.client.auth.signInWithOAuth({provider,options:{redirectTo:`${PUBLIC_APP_ORIGIN}${window.location.pathname}?oauth=1`}});
       if(error) throw error;
     },
     async finishOAuth(expectedRole){
