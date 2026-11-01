@@ -443,6 +443,7 @@ Revisa las asignaciones guardadas por cliente y elimina únicamente la rutina qu
 <script src="../Assets/js/backend.js"></script>
 <script src="../Assets/js/routine-sync.js"></script>
 <script src="../Data/exercise-library.js"></script>
+<script src="../Data/exercise-library-latino.js"></script>
 
 <script>
 const rutinaForm = document.getElementById("rutinaForm");
@@ -488,7 +489,8 @@ const bibliotecaFallback = [
 {id:"fullbody-peso-muerto",grupo:"Full body",subgrupo:"Fuerza global",nombre:"Peso muerto",equipo:"Barra",nivel:"Avanzado",entorno:"Gym",objetivo:"Fuerza",indicacion:"Prioriza tensión corporal completa y barra pegada durante toda la subida.",fuente:"Referencia externa: YouTube",videoUrl:"https://www.youtube.com/results?search_query=Powerexplosive+peso+muerto+tecnica"}
 ];
 
-let bibliotecaEjercicios = window.FLOW_EXERCISE_LIBRARY || bibliotecaFallback;
+const bibliotecaLatino = (window.FLOW_LATINO_EXERCISE_LIBRARY || []).map(ejercicio=>({...ejercicio,subgrupo:ejercicio.musculoPrincipal||"General",nivel:"General",entorno:"Gym",objetivo:"Hipertrofia",fuente:"Base latino de ejercicios"}));
+let bibliotecaEjercicios = [...bibliotecaLatino, ...(window.FLOW_EXERCISE_LIBRARY || bibliotecaFallback)];
 let plantillaEditable = [];
 let plantillaEditableNombre = "";
 
