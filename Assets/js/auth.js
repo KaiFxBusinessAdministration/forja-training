@@ -45,10 +45,6 @@
       const requestedRole=role === "trainer" && invite === "FORJA-TRAINER" ? "trainer" : "client";
       const {data,error}=await api.client.auth.signUp({email,password,options:{data:{full_name:fullName,requested_role:requestedRole},captchaToken}});
       if(error) throw error;
-      if(data.user && data.session){
-        const {error:profileError}=await api.client.from("profiles").insert({id:data.user.id,full_name:fullName,role:requestedRole});
-        if(profileError) throw profileError;
-      }
       return {needsConfirmation:!data.session,role:requestedRole};
     },
     async signInWithProvider(provider,expectedRole){
