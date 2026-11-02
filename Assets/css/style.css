@@ -2178,6 +2178,26 @@ button{
     font-size:20px;
 }
 
+.routine-muscle-group{
+    border-top:1px solid rgba(255,255,255,.12);
+    padding-top:10px;
+    margin-top:10px;
+}
+
+.routine-muscle-group:first-child{
+    border-top:0;
+    padding-top:0;
+    margin-top:0;
+}
+
+.routine-muscle-group h4{
+    color:var(--accent,#b7ff35);
+    font-size:12px;
+    letter-spacing:.04em;
+    margin:0 0 6px;
+    text-transform:uppercase;
+}
+
 .routine-day header span,
 .exercise-row span,
 .exercise-note{

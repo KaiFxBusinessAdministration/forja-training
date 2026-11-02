@@ -224,11 +224,17 @@ id:exercise.id,nombreSemana:rutina.name||"Rutina independiente",dia:rutina.day_n
 
 function warmupMarkup(pasos){return (pasos||[]).map(paso=>"<li>"+paso+"</li>").join("");}
 function routineExerciseMarkup(items,progressByName=new Map()){
-return (items||[]).map(item=>{
+const grupos=new Map();
+(items||[]).forEach(item=>{
+const grupo=String(item.grupoMuscular||"General").trim()||"General";
+if(!grupos.has(grupo))grupos.set(grupo,[]);
+grupos.get(grupo).push(item);
+});
+return [...grupos.entries()].sort((a,b)=>a[0].localeCompare(b[0],"es")).map(([grupo,ejercicios])=>`<section class="routine-muscle-group"><h4>${grupo}</h4>${ejercicios.sort((a,b)=>String(a.ejercicio||"").localeCompare(String(b.ejercicio||""),"es")).map(item=>{
 const avance=progressByName.get(String(item.ejercicio||"").trim().toLowerCase());
 const peso=avance?.weight!==null&&avance?.weight!==undefined&&avance?.weight!==""?` · último peso: ${avance.weight} kg`:" · sin peso registrado";
 return "<p><strong>"+(item.ejercicio||"Ejercicio")+"</strong> · "+(item.series||"-")+" series x "+(item.repeticiones||"-")+" repeticiones · descanso: "+(item.descanso||"Sin definir")+peso+"</p>";
-}).join("");
+}).join("")}</section>`).join("");
 }
 function warmupBlockMarkup(pasos,titulo="Calentamiento del día"){return pasos?.length?'<div class="client-warmup"><strong>'+titulo+'</strong><ol>'+warmupMarkup(pasos)+'</ol></div>':"";}
 let bloqueEnEdicion=null;let diaEnEdicion=null;
