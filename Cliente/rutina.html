@@ -111,7 +111,19 @@ const atletaRutinaKey = `flowRutinasIndependientes_${sessionStorage.getItem("flo
 const ejerciciosAtleta = document.getElementById("atletaEjercicio");
 let bibliotecaAtleta = [...(Array.isArray(window.FLOW_LATINO_EXERCISE_LIBRARY) ? window.FLOW_LATINO_EXERCISE_LIBRARY : []), ...(Array.isArray(window.FLOW_EXERCISE_LIBRARY) ? window.FLOW_EXERCISE_LIBRARY : (Array.isArray(window.FLOW_EXERCISE_NAMES) ? window.FLOW_EXERCISE_NAMES.map((nombre,index)=>({id:`name-${index}`,nombre})) : []))];
 let nombresEjercicios = [];
-function cargarEjerciciosEnSelect(){nombresEjercicios=[...new Set(bibliotecaAtleta.map(ejercicio=>ejercicio.nombre).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));ejerciciosAtleta.innerHTML='<option value="">Selecciona un ejercicio de la biblioteca</option>'+nombresEjercicios.map(nombre=>`<option value="${nombre.replace(/&/g,"&amp;").replace(/"/g,"&quot;")}">${nombre}</option>`).join("");}
+function agruparEjerciciosPorMusculo(){
+const grupos=new Map();
+bibliotecaAtleta.forEach(ejercicio=>{
+const nombre=String(ejercicio.nombre||"").trim();
+if(!nombre)return;
+const grupo=String(ejercicio.musculoPrincipal||ejercicio.subgrupo||ejercicio.grupo||"General").trim()||"General";
+if(!grupos.has(grupo))grupos.set(grupo,new Map());
+grupos.get(grupo).set(nombre.toLowerCase(),nombre);
+});
+return [...grupos.entries()].sort((a,b)=>a[0].localeCompare(b[0],"es")).map(([grupo,nombres])=>({grupo,nombres:[...nombres.values()].sort((a,b)=>a.localeCompare(b,"es"))}));
+}
+function ejerciciosAgrupadosMarkup(){return agruparEjerciciosPorMusculo().map(({grupo,nombres})=>`<optgroup label="${grupo.replace(/&/g,"&amp;").replace(/"/g,"&quot;")}">${nombres.map(nombre=>{const seguro=nombre.replace(/&/g,"&amp;").replace(/"/g,"&quot;");return `<option value="${seguro}">${nombre}</option>`;}).join("")}</optgroup>`).join("");}
+function cargarEjerciciosEnSelect(){nombresEjercicios=[...new Set(bibliotecaAtleta.map(ejercicio=>ejercicio.nombre).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));ejerciciosAtleta.innerHTML='<option value="">Selecciona un ejercicio de la biblioteca</option>'+ejerciciosAgrupadosMarkup();}
 cargarEjerciciosEnSelect();
 fetch("../FeedBack/base_datos_ejercicios_latino.txt").then(response=>response.ok?response.text():"").then(source=>{
 if(!source)return;
@@ -133,7 +145,7 @@ const diasSemanaOpciones=["Lunes","Martes","Miércoles","Jueves","Viernes","Sáb
 function filaDiaSemana(esPrimera=false,diaInicial="Lunes"){
 const fila=document.createElement("div");fila.className="form-grid week-day-row";
 const diasOptions=diasSemanaOpciones.map(dia=>`<option${dia===diaInicial?" selected":""}>${dia}</option>`).join("");
-const ejerciciosOptions=nombresEjercicios.map(nombre=>{const seguro=nombre.replace(/&/g,"&amp;").replace(/"/g,"&quot;");return `<option value="${seguro}">${nombre}</option>`;}).join("");
+const ejerciciosOptions=ejerciciosAgrupadosMarkup();
 const calentamiento=esPrimera?'<div><label>Calentamiento del día</label><textarea data-week-warmup rows="3" placeholder="Un paso por línea"></textarea></div>':"";
 fila.innerHTML='<div><label>Día</label><select data-week-day>'+diasOptions+'</select></div><div><label>Ejercicio</label><select data-week-exercise required><option value="">Selecciona un ejercicio</option>'+ejerciciosOptions+'</select></div><div><label>Series</label><input data-week-sets type="number" min="1" max="20" value="3" required></div><div><label>Repeticiones</label><input data-week-reps type="number" min="1" max="100" value="10" required></div><div><label>Descanso (segundos)</label><input data-week-rest type="number" min="0" value="90" required></div>'+calentamiento+'<button type="button" class="btn-secondary week-remove-row" data-week-remove>Eliminar ejercicio</button>';
 let grupo=[...semanaDiasLista.querySelectorAll(".week-day-group")].find(item=>item.dataset.day===diaInicial);
