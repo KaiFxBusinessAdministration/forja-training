@@ -122,7 +122,7 @@ grupos.get(grupo).set(nombre.toLowerCase(),nombre);
 });
 return [...grupos.entries()].sort((a,b)=>a[0].localeCompare(b[0],"es")).map(([grupo,nombres])=>({grupo,nombres:[...nombres.values()].sort((a,b)=>a.localeCompare(b,"es"))}));
 }
-function ejerciciosAgrupadosMarkup(){return agruparEjerciciosPorMusculo().map(({grupo,nombres})=>`<optgroup label="${grupo.replace(/&/g,"&amp;").replace(/"/g,"&quot;")}">${nombres.map(nombre=>{const seguro=nombre.replace(/&/g,"&amp;").replace(/"/g,"&quot;");return `<option value="${seguro}">${nombre}</option>`;}).join("")}</optgroup>`).join("");}
+function ejerciciosAgrupadosMarkup(){return agruparEjerciciosPorMusculo().map(({grupo,nombres})=>{const etiqueta=`Músculo · ${grupo}`;return `<optgroup label="${etiqueta.replace(/&/g,"&amp;").replace(/"/g,"&quot;")}">${nombres.map(nombre=>{const seguro=nombre.replace(/&/g,"&amp;").replace(/"/g,"&quot;");return `<option value="${seguro}" aria-label="${nombre} · ${grupo}">${nombre}</option>`;}).join("")}</optgroup>`;}).join("");}
 function cargarEjerciciosEnSelect(){nombresEjercicios=[...new Set(bibliotecaAtleta.map(ejercicio=>ejercicio.nombre).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));ejerciciosAtleta.innerHTML='<option value="">Selecciona un ejercicio de la biblioteca</option>'+ejerciciosAgrupadosMarkup();}
 cargarEjerciciosEnSelect();
 fetch("../FeedBack/base_datos_ejercicios_latino.txt").then(response=>response.ok?response.text():"").then(source=>{
