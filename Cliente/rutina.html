@@ -123,8 +123,25 @@ grupos.get(grupo).set(nombre.toLowerCase(),nombre);
 return [...grupos.entries()].sort((a,b)=>a[0].localeCompare(b[0],"es")).map(([grupo,nombres])=>({grupo,nombres:[...nombres.values()].sort((a,b)=>a.localeCompare(b,"es"))}));
 }
 function ejerciciosAgrupadosMarkup(){return agruparEjerciciosPorMusculo().map(({grupo,nombres})=>{const etiqueta=`Músculo · ${grupo}`;return `<optgroup label="${etiqueta.replace(/&/g,"&amp;").replace(/"/g,"&quot;")}">${nombres.map(nombre=>{const seguro=nombre.replace(/&/g,"&amp;").replace(/"/g,"&quot;");return `<option value="${seguro}" aria-label="${nombre} · ${grupo}">${nombre}</option>`;}).join("")}</optgroup>`;}).join("");}
+function activarSelectorEjercicios(select){
+if(!select)return;
+select.parentElement?.querySelector(":scope > .exercise-picker")?.remove();
+select.dataset.groupedPicker="1";
+const picker=document.createElement("details");picker.className="exercise-picker";
+const summary=document.createElement("summary");summary.textContent=select.options[0]?.textContent||"Selecciona un ejercicio";picker.appendChild(summary);
+const groups=agruparEjerciciosPorMusculo();
+groups.forEach(({grupo,nombres})=>{
+const group=document.createElement("details");group.className="exercise-picker-group";
+const groupSummary=document.createElement("summary");groupSummary.textContent=grupo;group.appendChild(groupSummary);
+const list=document.createElement("div");list.className="exercise-picker-options";
+nombres.forEach(nombre=>{const button=document.createElement("button");button.type="button";button.textContent=nombre;button.addEventListener("click",()=>{select.value=nombre;summary.textContent=nombre;select.dispatchEvent(new Event("change",{bubbles:true}));picker.open=false;});list.appendChild(button);});
+group.appendChild(list);picker.appendChild(group);
+});
+select.classList.add("exercise-source-select");select.parentElement?.appendChild(picker);
+}
 function cargarEjerciciosEnSelect(){nombresEjercicios=[...new Set(bibliotecaAtleta.map(ejercicio=>ejercicio.nombre).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));ejerciciosAtleta.innerHTML='<option value="">Selecciona un ejercicio de la biblioteca</option>'+ejerciciosAgrupadosMarkup();}
 cargarEjerciciosEnSelect();
+activarSelectorEjercicios(ejerciciosAtleta);
 fetch("../FeedBack/base_datos_ejercicios_latino.txt").then(response=>response.ok?response.text():"").then(source=>{
 if(!source)return;
 const registros=source.split(/\n(?=ID:\s*\d+)/).map(bloque=>{
@@ -134,7 +151,8 @@ return nombre?{id:`latino-${dato("ID")||nombre.toLowerCase().replace(/[^a-z0-9]+
 }).filter(Boolean);
 const existentes=new Set(bibliotecaAtleta.map(ejercicio=>String(ejercicio.nombre||"").trim().toLowerCase()));
 registros.forEach(ejercicio=>{if(!existentes.has(ejercicio.nombre.toLowerCase())){bibliotecaAtleta.push(ejercicio);existentes.add(ejercicio.nombre.toLowerCase());}});
-cargarEjerciciosEnSelect();
+ cargarEjerciciosEnSelect();
+ activarSelectorEjercicios(ejerciciosAtleta);
 }).catch(error=>console.warn("No se pudo cargar la base latina de ejercicios",error));
 if(!nombresEjercicios.length){fetch("../Data/exercise-library.js").then(response=>response.text()).then(source=>{const inicio=source.indexOf("[");const fin=source.lastIndexOf("];" );if(inicio>=0&&fin>inicio){bibliotecaAtleta=JSON.parse(source.slice(inicio,fin+1));cargarEjerciciosEnSelect();}}).catch(error=>console.warn("No se pudo cargar la biblioteca de ejercicios",error));}
 const actualizarTipoRutina=()=>{semanaNombreWrap.hidden=atletaTipoRutina.value!=="semana";};
@@ -151,6 +169,7 @@ fila.innerHTML='<div><label>Día</label><select data-week-day>'+diasOptions+'</s
 let grupo=[...semanaDiasLista.querySelectorAll(".week-day-group")].find(item=>item.dataset.day===diaInicial);
 if(!grupo){grupo=document.createElement("details");grupo.className="week-day-group";grupo.dataset.day=diaInicial;grupo.open=true;grupo.innerHTML='<summary>'+diaInicial+' <span class="form-help">Ejercicios del día</span></summary><div class="week-day-exercises"></div>';semanaDiasLista.appendChild(grupo);}
 grupo.querySelector(".week-day-exercises").appendChild(fila);
+activarSelectorEjercicios(fila.querySelector("[data-week-exercise]"));
 }function prepararEditorSemana(){if(atletaTipoRutina.value!=="semana"){semanaDiasEditor.hidden=true;return;}semanaDiasEditor.hidden=false;if(!semanaDiasLista.children.length){diasSemanaOpciones.slice(0,5).forEach(dia=>filaDiaSemana(true,dia));}}
 atletaTipoRutina.addEventListener("change",prepararEditorSemana);atletaTipoRutina.addEventListener("input",prepararEditorSemana);atletaTipoRutina.onchange=()=>{actualizarTipoRutina();prepararEditorSemana();};atletaTipoRutina.onclick=()=>setTimeout(prepararEditorSemana,0);agregarDiaSemana.addEventListener("click",()=>{const grupos=[...semanaDiasLista.querySelectorAll(".week-day-group")];if(!grupos.length){diasSemanaOpciones.slice(0,5).forEach(dia=>filaDiaSemana(true,dia));return;}const grupoActivo=grupos.find(grupo=>grupo.open)||grupos.at(-1);const diaActivo=grupoActivo?.dataset.day||"Lunes";filaDiaSemana(false,diaActivo);});agregarDiaNuevo.addEventListener("click",()=>{const grupos=[...semanaDiasLista.querySelectorAll(".week-day-group")];if(!grupos.length){diasSemanaOpciones.slice(0,5).forEach(dia=>filaDiaSemana(true,dia));return;}const usados=grupos.map(grupo=>grupo.dataset.day);const siguiente=diasSemanaOpciones.find(dia=>!usados.includes(dia))||"Lunes";filaDiaSemana(true,siguiente);});semanaDiasLista.addEventListener("click",event=>{const boton=event.target.closest("[data-week-remove]");if(!boton)return;const fila=boton.closest(".week-day-row");if(fila)fila.remove();});
 atletaRutinaForm.addEventListener("submit",async event=>{if(atletaTipoRutina.value!=="semana")return;event.preventDefault();event.stopImmediatePropagation();const nombre=atletaSemanaNombre.value==="Personalizado"?atletaSemanaPersonalizada.value.trim():atletaSemanaNombre.value;const filas=[...semanaDiasLista.querySelectorAll(".week-day-row")];if(!nombre||!filas.length){atletaRutinaEstado.textContent="Selecciona el enfoque y agrega al menos un día.";return;}let actuales=JSON.parse(localStorage.getItem(atletaRutinaKey)||"[]");if(diaEnEdicion){actuales=actuales.filter(item=>!(String(item.nombreSemana||"").toLowerCase()===String(nombre).toLowerCase()&&item.dia===diaEnEdicion));try{await window.FLOW_ROUTINE_SYNC?.deleteIndependentDay(nombre,diaEnEdicion);}catch(error){console.error("No se pudo reemplazar el día en Supabase",error);}}else if(bloqueEnEdicion){actuales=actuales.filter(item=>String(item.nombreSemana||"").toLowerCase()!==String(bloqueEnEdicion).toLowerCase());try{await window.FLOW_ROUTINE_SYNC?.deleteIndependentBlock(bloqueEnEdicion);}catch(error){console.error("No se pudo reemplazar el bloque en Supabase",error);}}const ahora=new Date().toISOString();let sincronizados=0;const diasReemplazados=new Set();for(const fila of filas){const rutina={tipo:"semana",nombreSemana:nombre,dia:fila.querySelector("[data-week-day]").value,ejercicio:fila.querySelector("[data-week-exercise]").value.trim(),series:fila.querySelector("[data-week-sets]").value,repeticiones:fila.querySelector("[data-week-reps]").value,descanso:fila.querySelector("[data-week-rest]").value,calentamiento:fila.querySelector("[data-week-warmup]")?.value.trim()||"",fecha:ahora};if(!rutina.ejercicio)continue;const index=actuales.findIndex(item=>item.tipo==="semana"&&String(item.nombreSemana).toLowerCase()===nombre.toLowerCase()&&item.dia===rutina.dia&&String(item.ejercicio).toLowerCase()===rutina.ejercicio.toLowerCase());if(index>=0)actuales[index]=rutina;else actuales.push(rutina);try{const resultado=await window.FLOW_ROUTINE_SYNC?.saveIndependentRoutine({name:nombre,day:rutina.dia,exercise:rutina.ejercicio,sets:rutina.series,reps:rutina.repeticiones,restSeconds:rutina.descanso,warmupSteps:rutina.calentamiento.split(/\n+/).map(p=>p.trim()).filter(Boolean)});if(resultado?.synced)sincronizados++;}catch(error){console.error("No se pudo sincronizar el día semanal",error);}}const unicos=new Map();actuales.forEach(item=>{const clave=[item.tipo,item.nombreSemana,item.dia,item.ejercicio].map(valor=>String(valor||"").toLowerCase()).join("|");unicos.set(clave,item);});actuales=[...unicos.values()];localStorage.setItem(atletaRutinaKey,JSON.stringify(actuales));atletaRutinaEstado.textContent=`Semana guardada con ${filas.length} día${filas.length===1?"":"s"}${sincronizados?" y sincronizada en Supabase":" localmente"}.`;semanaDiasLista.innerHTML="";semanaDiasEditor.hidden=true;atletaRutinaForm.reset();},{capture:true});
