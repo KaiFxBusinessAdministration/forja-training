@@ -109,12 +109,13 @@ const agregarDiaSemana = document.getElementById("agregarDiaSemana");
 const agregarDiaNuevo = document.getElementById("agregarDiaNuevo");
 const atletaRutinaKey = `flowRutinasIndependientes_${sessionStorage.getItem("flowClienteActivoId") || "99"}`;
 const ejerciciosAtleta = document.getElementById("atletaEjercicio");
-let bibliotecaAtleta = [...(Array.isArray(window.FLOW_LATINO_EXERCISE_LIBRARY) ? window.FLOW_LATINO_EXERCISE_LIBRARY : []), ...(Array.isArray(window.FLOW_EXERCISE_LIBRARY) ? window.FLOW_EXERCISE_LIBRARY : (Array.isArray(window.FLOW_EXERCISE_NAMES) ? window.FLOW_EXERCISE_NAMES.map((nombre,index)=>({id:`name-${index}`,nombre})) : []))];
+let bibliotecaAtleta = [...(Array.isArray(window.FLOW_LATINO_EXERCISE_LIBRARY) ? window.FLOW_LATINO_EXERCISE_LIBRARY : [])];
 let nombresEjercicios = [];
+function nombreEjercicioCanonico(nombre){return String(nombre||"").replace(/^Variante pesada:\s*/i,"").replace(/\s*\(Unilateral\)/gi,"").replace(/\s+/g," ").trim();}
 function agruparEjerciciosPorMusculo(){
 const grupos=new Map();
 bibliotecaAtleta.forEach(ejercicio=>{
-const nombre=String(ejercicio.nombre||"").trim();
+const nombre=nombreEjercicioCanonico(ejercicio.nombre);
 if(!nombre)return;
 const grupo=String(ejercicio.musculoPrincipal||ejercicio.subgrupo||ejercicio.grupo||"General").trim()||"General";
 if(!grupos.has(grupo))grupos.set(grupo,new Map());
@@ -149,12 +150,11 @@ const dato=clave=>{const match=bloque.match(new RegExp(`^${clave}:\\s*(.+)$`,"mi
 const nombre=dato("EJERCICIO");
 return nombre?{id:`latino-${dato("ID")||nombre.toLowerCase().replace(/[^a-z0-9]+/gi,"-")}`,nombre,grupo:dato("CATEGORÍA"),equipo:dato("EQUIPAMIENTO"),musculoPrincipal:dato("MÚSCULO PRINCIPAL"),musculosSecundarios:dato("MÚSCULOS SECUNDARIOS"),sinonimos:dato("ETIQUETAS BÚSQUEDA (SINÓNIMOS)"),tipTecnico:dato("TIP TÉCNICO")}:null;
 }).filter(Boolean);
-const existentes=new Set(bibliotecaAtleta.map(ejercicio=>String(ejercicio.nombre||"").trim().toLowerCase()));
-registros.forEach(ejercicio=>{if(!existentes.has(ejercicio.nombre.toLowerCase())){bibliotecaAtleta.push(ejercicio);existentes.add(ejercicio.nombre.toLowerCase());}});
- cargarEjerciciosEnSelect();
- activarSelectorEjercicios(ejerciciosAtleta);
+const existentes=new Set(bibliotecaAtleta.map(ejercicio=>nombreEjercicioCanonico(ejercicio.nombre).toLowerCase()));
+registros.forEach(ejercicio=>{const nombre=nombreEjercicioCanonico(ejercicio.nombre);if(nombre&&!existentes.has(nombre.toLowerCase())){bibliotecaAtleta.push({...ejercicio,nombre});existentes.add(nombre.toLowerCase());}});
+cargarEjerciciosEnSelect();
+activarSelectorEjercicios(ejerciciosAtleta);
 }).catch(error=>console.warn("No se pudo cargar la base latina de ejercicios",error));
-if(!nombresEjercicios.length){fetch("../Data/exercise-library.js").then(response=>response.text()).then(source=>{const inicio=source.indexOf("[");const fin=source.lastIndexOf("];" );if(inicio>=0&&fin>inicio){bibliotecaAtleta=JSON.parse(source.slice(inicio,fin+1));cargarEjerciciosEnSelect();}}).catch(error=>console.warn("No se pudo cargar la biblioteca de ejercicios",error));}
 const actualizarTipoRutina=()=>{semanaNombreWrap.hidden=atletaTipoRutina.value!=="semana";};
 atletaTipoRutina.addEventListener("change",actualizarTipoRutina);
 atletaTipoRutina.addEventListener("input",actualizarTipoRutina);

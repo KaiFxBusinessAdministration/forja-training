@@ -489,8 +489,9 @@ const bibliotecaFallback = [
 {id:"fullbody-peso-muerto",grupo:"Full body",subgrupo:"Fuerza global",nombre:"Peso muerto",equipo:"Barra",nivel:"Avanzado",entorno:"Gym",objetivo:"Fuerza",indicacion:"Prioriza tensión corporal completa y barra pegada durante toda la subida.",fuente:"Referencia externa: YouTube",videoUrl:"https://www.youtube.com/results?search_query=Powerexplosive+peso+muerto+tecnica"}
 ];
 
-const bibliotecaLatino = (window.FLOW_LATINO_EXERCISE_LIBRARY || []).map(ejercicio=>({...ejercicio,subgrupo:ejercicio.musculoPrincipal||"General",nivel:"General",entorno:"Gym",objetivo:"Hipertrofia",fuente:"Base latino de ejercicios"}));
-let bibliotecaEjercicios = [...bibliotecaLatino, ...(window.FLOW_EXERCISE_LIBRARY || bibliotecaFallback)];
+const nombreEjercicioCanonico=nombre=>String(nombre||"").replace(/^Variante pesada:\s*/i,"").replace(/\s*\(Unilateral\)/gi,"").replace(/\s+/g," ").trim();
+const bibliotecaLatino = [...new Map((window.FLOW_LATINO_EXERCISE_LIBRARY || []).map(ejercicio=>{const nombre=nombreEjercicioCanonico(ejercicio.nombre);return [nombre.toLowerCase(),{...ejercicio,nombre,subgrupo:ejercicio.musculoPrincipal||"General",nivel:"General",entorno:"Gym",objetivo:"Hipertrofia",fuente:"Base latino de ejercicios"}];})).values()];
+let bibliotecaEjercicios = [...bibliotecaLatino];
 let plantillaEditable = [];
 let plantillaEditableNombre = "";
 
