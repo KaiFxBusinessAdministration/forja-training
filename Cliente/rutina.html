@@ -89,7 +89,6 @@
 <script src="../Data/exercise-names.js"></script>
 <script src="../Data/exercise-library.js"></script>
 <script src="../Data/exercise-library-latino.js"></script>
-<script src="../Data/openGym-demo.js"></script>
 <script>
 const rutinaHoy = document.getElementById("rutinaHoy");
 const atletaRutinaForm = document.getElementById("atletaRutinaForm");
@@ -253,50 +252,25 @@ return `<article class="routine-day" data-block-name="${bloque.replace(/"/g,"&qu
 function cargarBloqueEnEditor(nombre,dia){const vistos=new Set();const local=JSON.parse(localStorage.getItem(atletaRutinaKey)||"[]").filter(item=>String(item.nombreSemana||"").toLowerCase()===String(nombre).toLowerCase() && (!dia || item.dia===dia)).filter(item=>{const clave=[item.nombreSemana,item.dia,item.ejercicio,item.series,item.repeticiones,item.descanso].map(value=>String(value??"").trim().toLowerCase()).join("|");if(vistos.has(clave))return false;vistos.add(clave);return true;});if(!local.length){atletaRutinaEstado.textContent="Este día se puede editar cuando sus datos estén cargados en este dispositivo.";return;}bloqueEnEdicion=dia?null:nombre;diaEnEdicion=dia||null;atletaTipoRutina.value="semana";atletaSemanaNombre.value=nombre;actualizarTipoRutina();semanaDiasLista.innerHTML="";local.forEach((item,index)=>{filaDiaSemana(index===0,item.dia);const grupo=[...semanaDiasLista.querySelectorAll(".week-day-group")].find(itemGrupo=>itemGrupo.dataset.day===item.dia);const fila=grupo?.querySelector(".week-day-row:last-child");if(fila){fila.querySelector("[data-week-exercise]").value=item.ejercicio;fila.querySelector("[data-week-sets]").value=item.series;fila.querySelector("[data-week-reps]").value=item.repeticiones;fila.querySelector("[data-week-rest]").value=item.descanso;const warmup=fila.querySelector("[data-week-warmup]");if(warmup)warmup.value=item.calentamiento||"";}});semanaDiasEditor.hidden=false;atletaRutinaEstado.textContent=dia?`Día ${dia} cargado para editar. Los demás días no se modificarán.`:"Bloque cargado para editar.";window.scrollTo({top:0,behavior:"smooth"});}semanaDiasLista.closest(".week-builder")?.addEventListener("click",()=>{});
 document.getElementById("rutinasGuardadas")?.addEventListener("click",async event=>{const card=event.target.closest("[data-block-name]");if(!card)return;const nombre=card.dataset.blockName;const dia=card.dataset.blockDay;const local=JSON.parse(localStorage.getItem(atletaRutinaKey)||"[]");if(event.target.closest("[data-edit-block]")){cargarBloqueEnEditor(nombre,dia);return;}if(!event.target.closest("[data-delete-block]"))return;if(!window.confirm(`¿Eliminar el bloque "${nombre}" completo?`))return;localStorage.setItem(atletaRutinaKey,JSON.stringify(local.filter(item=>String(item.nombreSemana||"").toLowerCase()!==String(nombre).toLowerCase())));try{await window.FLOW_ROUTINE_SYNC?.deleteIndependentBlock(nombre);atletaRutinaEstado.textContent="Bloque eliminado de este dispositivo y Supabase.";}catch(error){console.error(error);atletaRutinaEstado.textContent="Bloque eliminado de este dispositivo; Supabase no respondió.";}const cloud=await rutinasCloudCliente();renderRutinasGuardadas(cloud?convertirRutinasCloud(cloud):rutinasAsignadasCliente());});
 
-fetch("../Data/openGym-demo.json")
-.then(response=>response.json())
-.then(async data=>{
-const plan = data.rutinaActual;
-const hoy = plan.semana[0];
-const cloud = await rutinasCloudCliente();
-const asignadas = cloud ? convertirRutinasCloud(cloud) : rutinasAsignadasCliente();
+(async()=>{
+try{
+const cloud=await rutinasCloudCliente();
+const asignadas=cloud ? convertirRutinasCloud(cloud) : rutinasAsignadasCliente();
 renderRutinasGuardadas(asignadas);
-rutinaHoy.innerHTML = hoy.ejercicios.map(ejercicio=>
-`<p>${ejercicio.nombre}: ${ejercicio.series} x ${ejercicio.repeticiones} · ${ejercicio.peso}</p>`
-).join("");
-const planBase = plan.semana.map(dia=>{
-const delDia=asignadas.filter(rutina=>rutina.dia===dia.dia);
-const calentamiento=delDia[0]?.calentamiento;
-return `
-<article class="routine-day">
-<header>
-<h3>${dia.dia}</h3>
-<span>${dia.enfoque}</span>
-</header>
-${warmupBlockMarkup(calentamiento)}
-${dia.ejercicios.map(ejercicioMarkup).join("")}
-</article>
-`;}).join("");
-const asignadasMarkup = asignadas.length ? `
-<article class="routine-day routine-assigned">
-<header>
-<h3>Asignado por entrenador</h3>
-<span>${asignadas.length} ejercicio${asignadas.length === 1 ? "" : "s"}</span>
-</header>
-${asignadas.filter((rutina,index)=>rutina.calentamiento?.length && !asignadas.slice(0,index).some(item=>item.dia===rutina.dia)).map(rutina=>warmupBlockMarkup(rutina.calentamiento,rutina.dia+": calentamiento del día")).join("")}
-${asignadas.map(rutinaAsignadaMarkup).join("")}
-</article>
-` : "";
-// El registro de cargas y repeticiones se realiza exclusivamente en Progreso.
-})
-.catch(()=>{
-const data = window.FLOW_OPEN_GYM_DEMO;
-const plan = data.rutinaActual;
-const hoy = plan.semana[0];
-const asignadas = rutinasAsignadasCliente();
-renderRutinasGuardadas(asignadas);
-rutinaHoy.innerHTML = hoy.ejercicios.map(ejercicio=>`<p>${ejercicio.nombre}: ${ejercicio.series} x ${ejercicio.repeticiones} · ${ejercicio.peso}</p>`).join("");
-});
+const dias=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
+const hoy=dias[new Date().getDay()];
+const ejercicios=asignadas.filter(item=>String(item.dia||"").toLowerCase()===hoy);
+if(!ejercicios.length){
+rutinaHoy.innerHTML='<p class="empty-state">Todavía no hay ejercicios guardados para hoy.</p>';
+return;
+}
+const calentamiento=ejercicios.find(item=>item.calentamiento?.length)?.calentamiento||[];
+rutinaHoy.innerHTML=`<p><strong>${hoy[0].toUpperCase()+hoy.slice(1)}</strong></p>${warmupBlockMarkup(calentamiento)}${routineExerciseMarkup(ejercicios)}`;
+}catch(error){
+console.error("No se pudo cargar la rutina real del día",error);
+rutinaHoy.innerHTML='<p class="empty-state">No se pudo cargar la rutina guardada.</p>';
+}
+})();
 </script>
 </body>
 </html>
