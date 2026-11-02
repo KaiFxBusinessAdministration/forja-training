@@ -223,7 +223,13 @@ id:exercise.id,nombreSemana:rutina.name||"Rutina independiente",dia:rutina.day_n
 }
 
 function warmupMarkup(pasos){return (pasos||[]).map(paso=>"<li>"+paso+"</li>").join("");}
-function routineExerciseMarkup(items){return (items||[]).map(item=>"<p><strong>"+(item.ejercicio||"Ejercicio")+"</strong> · "+(item.series||"-")+" series x "+(item.repeticiones||"-")+" repeticiones · descanso: "+(item.descanso||"Sin definir")+"</p>").join("");}
+function routineExerciseMarkup(items,progressByName=new Map()){
+return (items||[]).map(item=>{
+const avance=progressByName.get(String(item.ejercicio||"").trim().toLowerCase());
+const peso=avance?.weight!==null&&avance?.weight!==undefined&&avance?.weight!==""?` · último peso: ${avance.weight} kg`:" · sin peso registrado";
+return "<p><strong>"+(item.ejercicio||"Ejercicio")+"</strong> · "+(item.series||"-")+" series x "+(item.repeticiones||"-")+" repeticiones · descanso: "+(item.descanso||"Sin definir")+peso+"</p>";
+}).join("");
+}
 function warmupBlockMarkup(pasos,titulo="Calentamiento del día"){return pasos?.length?'<div class="client-warmup"><strong>'+titulo+'</strong><ol>'+warmupMarkup(pasos)+'</ol></div>':"";}
 let bloqueEnEdicion=null;let diaEnEdicion=null;
 function normalizarBloque(items){return (items||[]).map(item=>({tipo:"semana",nombreSemana:item.nombreSemana||"Fuerza",dia:item.dia||"Lunes",ejercicio:item.ejercicio||"",series:item.series||3,repeticiones:item.repeticiones||10,descanso:String(item.descanso||"").replace(/\D/g,"")||90,calentamiento:Array.isArray(item.calentamiento)?item.calentamiento.join("\n"):item.calentamiento||"",fecha:new Date().toISOString()}));}
@@ -265,7 +271,10 @@ rutinaHoy.innerHTML='<p class="empty-state">Todavía no hay ejercicios guardados
 return;
 }
 const calentamiento=ejercicios.find(item=>item.calentamiento?.length)?.calentamiento||[];
-rutinaHoy.innerHTML=`<p><strong>${hoy[0].toUpperCase()+hoy.slice(1)}</strong></p>${warmupBlockMarkup(calentamiento)}${routineExerciseMarkup(ejercicios)}`;
+const progress=await window.FLOW_ROUTINE_SYNC?.listProgress(sessionStorage.getItem("flowClienteActivoId"));
+const progressByName=new Map();
+(progress||[]).forEach(item=>{const key=String(item.exercise_name||"").trim().toLowerCase();if(key&&!progressByName.has(key))progressByName.set(key,item);});
+rutinaHoy.innerHTML=`<p><strong>${hoy[0].toUpperCase()+hoy.slice(1)}</strong></p>${warmupBlockMarkup(calentamiento)}${routineExerciseMarkup(ejercicios,progressByName)}`;
 }catch(error){
 console.error("No se pudo cargar la rutina real del día",error);
 rutinaHoy.innerHTML='<p class="empty-state">No se pudo cargar la rutina guardada.</p>';
