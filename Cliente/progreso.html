@@ -52,10 +52,6 @@
 <div class="kpi-card"><h3>Última sesión</h3><strong id="progresoConsistencia">-</strong></div>
 </section>
 <section class="dashboard-panel">
-<h2>Última revisión</h2>
-<div class="metric-list" id="progresoMarcas"><p class="empty-state">Todavía no hay avances registrados.</p></div>
-</section>
-<section class="dashboard-panel">
 <div class="panel-heading-row"><div><h2>Avances registrados</h2><p>Registros de carga y repeticiones enviados desde tu rutina.</p></div></div>
 <div class="metric-list" id="avancesRutina"><p class="empty-state">Todavía no hay avances registrados.</p></div>
 </section>
@@ -75,7 +71,6 @@
 const progresoFuerza = document.getElementById("progresoFuerza");
 const progresoPeso = document.getElementById("progresoPeso");
 const progresoConsistencia = document.getElementById("progresoConsistencia");
-const progresoMarcas = document.getElementById("progresoMarcas");
 const avancesRutina = document.getElementById("avancesRutina");
 const clienteAvanceForm = document.getElementById("clienteAvanceForm");
 const clienteAvanceEstado = document.getElementById("clienteAvanceEstado");
@@ -129,7 +124,6 @@ panel.hidden=true;
 progresoFuerza.textContent="0";
 progresoPeso.textContent="-";
 progresoConsistencia.textContent="-";
-progresoMarcas.innerHTML=`<p class="empty-state">Todavía no hay avances registrados.</p>`;
 return;
 }
 panel.hidden=false;
@@ -139,7 +133,6 @@ const ultima=avances[avances.length-1].fecha || "-";
 progresoFuerza.textContent=String(avances.length);
 progresoPeso.textContent=mejorCarga;
 progresoConsistencia.textContent=ultima;
-progresoMarcas.innerHTML=avances.slice().reverse().map(item=>`<div class="metric-row"><span>${item.exerciseName}<small>${item.fecha}</small></span><strong>${item.peso || "-"} kg · ${item.seriesLogradas || "-"} series · ${item.repeticiones || "-"} reps</strong></div>`).join("");
 document.getElementById("indicadoresRendimiento").innerHTML=`<p><strong>Total de registros</strong><span>${avances.length}</span></p><p><strong>Ejercicios registrados</strong><span>${new Set(avances.map(item=>item.exerciseName)).size}</span></p><p><strong>Último registro</strong><span>${ultima}</span></p>`;
 }
 const clienteIdActual=sessionStorage.getItem("flowClienteActivoId") || "99";

@@ -43,8 +43,12 @@
 <div class="kpi-card"><h3>Último registro</h3><strong id="clientLastProgress">-</strong></div>
 </section>
 <section class="dashboard-panel">
+<div class="panel-heading-row"><div><h2>Entrenamiento de hoy</h2><p>Solo aparece la sesión que tienes guardada para este día.</p></div><a class="btn-secondary" href="rutina.html">Ver rutinas</a></div>
+<div class="activity" id="clientTodayWorkout"><p class="empty-state">Todavía no hay una rutina guardada para hoy.</p></div>
+</section>
+<section class="dashboard-panel">
 <h2>Próximas acciones</h2>
-<div class="activity" id="clientNextActions"><p class="empty-state">Todavía no hay acciones registradas.</p></div>
+<div class="activity" id="clientNextActions"><p class="empty-state">No hay acciones pendientes registradas.</p></div>
 </section>
 <section class="dashboard-panel performance-panel" data-performance-panel hidden>
 <div class="panel-heading-row"><div><h2>Seguimiento de rendimiento</h2><p>Información deportiva avanzada disponible para este perfil.</p></div><span class="status-badge" data-client-field="tipoSeguimiento">Atleta de rendimiento</span></div>
@@ -63,7 +67,28 @@
 <script src="../Assets/js/routine-sync.js"></script>
 <script src="../Assets/js/app.js"></script>
 <script>
-(async()=>{const id=sessionStorage.getItem("flowClienteActivoId");const sync=window.FLOW_ROUTINE_SYNC;if(!id||!sync)return;try{const avances=await sync.listProgress(id);if(avances?.length){document.getElementById("clientProgressCount").textContent=avances.length;document.getElementById("clientLastProgress").textContent=new Date(avances[0].recorded_at).toLocaleDateString("es-EC");document.getElementById("clientSessions").textContent=new Set(avances.map(item=>new Date(item.recorded_at).toLocaleDateString("es-EC"))).size;document.getElementById("clientNextActions").innerHTML='<p>Continúa registrando tus avances en Progreso.</p>';} }catch(error){console.error("No se pudieron cargar los indicadores reales",error);}})();
+(async()=>{
+const id=sessionStorage.getItem("flowClienteActivoId");
+const sync=window.FLOW_ROUTINE_SYNC;
+if(!id||!sync)return;
+try{
+const [avances,rutinas]=await Promise.all([sync.listProgress(id),sync.listForClient(id)]);
+const registros=avances||[];
+document.getElementById("clientProgressCount").textContent=String(registros.length);
+if(registros.length){
+document.getElementById("clientLastProgress").textContent=new Date(registros[0].recorded_at).toLocaleDateString("es-EC");
+document.getElementById("clientSessions").textContent=String(new Set(registros.map(item=>new Date(item.recorded_at).toLocaleDateString("es-EC"))).size);
+document.getElementById("clientNextActions").innerHTML='<p>Continúa registrando tus avances en <a href="progreso.html">Progreso</a>.</p>';
+}
+const dias=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
+const hoy=dias[new Date().getDay()];
+const ejercicios=(rutinas||[]).flatMap(bloque=>(bloque.routine_exercises||[]).filter(item=>String(item.day_name||"").toLowerCase()===hoy));
+const destino=document.getElementById("clientTodayWorkout");
+if(ejercicios.length){
+destino.innerHTML=`<p><strong>${hoy[0].toUpperCase()+hoy.slice(1)}</strong></p>`+ejercicios.map(item=>`<p>${item.exercise_name} · ${item.sets??"-"} series · ${item.reps??"-"} repeticiones · ${item.rest_seconds??"-"} s descanso</p>`).join("");
+}
+}catch(error){console.error("No se pudieron cargar los datos reales del dashboard",error);}
+})();
 </script>
 </body>
 </html>
