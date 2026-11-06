@@ -2546,6 +2546,8 @@ button{
 .exercise-picker-options{display:grid;gap:2px;padding:0 .5rem .5rem}
 .exercise-picker-options button{border:0;border-radius:6px;background:transparent;color:#E7F0EA;padding:.55rem .65rem;text-align:left;cursor:pointer;font:inherit}
 .exercise-picker-options button:hover,.exercise-picker-options button:focus-visible{background:rgba(143,211,200,.16);color:#FFFFFF}
+.exercise-help{grid-column:1/-1;border-left:3px solid #8FD3C8;border-radius:8px;background:rgba(143,211,200,.09);padding:.8rem 1rem;color:#E7F0EA}
+.exercise-help strong{color:#F4E7D3}.exercise-help p{margin:.35rem 0}.exercise-help small{color:#8FD3C8}
 @media (max-width: 640px) { .performance-grid { grid-template-columns: 1fr; } }
 
 .template-day-start { display: grid; gap: 8px; margin: 10px 0 14px; padding: 14px; border: 1px solid var(--border); border-radius: 10px; background: var(--primary-soft); }
