@@ -5,7 +5,7 @@
   async function profileFor(user){
     const api=backend();
     if(!api?.ready){ throw new Error("Backend no configurado."); }
-    const {data,error}=await api.client.from("profiles").select("id,full_name,role,age,goal,weight_kg,height_cm,emergency_contact_name,emergency_contact_phone").eq("id",user.id).single();
+    const {data,error}=await api.client.from("profiles").select("id,full_name,role,age,goal,weight_kg,height_cm,phone_country,phone,sex,emergency_contact_name,emergency_contact_phone").eq("id",user.id).single();
     if(error) throw error;
     return data;
   }
@@ -44,7 +44,8 @@
       const api=backend();
       if(!api?.ready) throw new Error("Supabase no está disponible.");
       const requestedRole=role === "trainer" && invite === "FORJA-TRAINER" ? "trainer" : "client";
-      const {data,error}=await api.client.auth.signUp({email,password,options:{data:{full_name:fullName,requested_role:requestedRole},captchaToken}});
+      const details=window.FLOW_REGISTRATION_DETAILS||{};
+      const {data,error}=await api.client.auth.signUp({email,password,options:{data:{full_name:fullName,requested_role:requestedRole,phone_country:details.phoneCountry||null,phone:details.phone||null,sex:details.sex||null,age:details.age||null,height_cm:details.height||null},captchaToken}});
       if(error) throw error;
       return {needsConfirmation:!data.session,role:requestedRole};
     },

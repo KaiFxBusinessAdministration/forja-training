@@ -12,6 +12,9 @@
 <div class="landing-container"><div class="logo-box"><a class="auth-logo" href="index.html" aria-label="Volver al home"><img src="Assets/img/forja-training-logo.png" alt="FORJA TRAINING"></a><p id="registerTitle">Crear acceso de atleta</p></div>
 <form class="client-form" id="registerForm" style="width:100%;max-width:460px;text-align:left">
 <label for="fullName">Nombre completo</label><input id="fullName" required>
+<label for="phoneCountry">Teléfono celular</label><div class="phone-field"><select id="phoneCountry" aria-label="Código de país"><option value="+593">🇪🇨 +593</option><option value="+57">🇨🇴 +57</option><option value="+1">🇺🇸 +1</option><option value="+34">🇪🇸 +34</option><option value="+52">🇲🇽 +52</option><option value="+51">🇵🇪 +51</option><option value="+56">🇨🇱 +56</option><option value="+54">🇦🇷 +54</option></select><input id="phone" type="tel" inputmode="tel" placeholder="999 999 999" required></div>
+<label for="sex">Sexo</label><select id="sex" required><option value="">Selecciona una opción</option><option value="Masculino">Masculino</option><option value="Femenino">Femenino</option></select>
+<div class="register-two-columns"><div><label for="age">Edad</label><input id="age" type="number" min="10" max="100" required></div><div><label for="height">Estatura (cm)</label><input id="height" type="number" min="80" max="250" step="0.1" required></div></div>
 <label for="email">Correo electrónico</label><input id="email" type="email" required>
 <label for="password">Contraseña</label><input id="password" type="password" minlength="8" required>
 <label for="confirm">Repetir contraseña</label><input id="confirm" type="password" minlength="8" required>
@@ -34,6 +37,7 @@ let captchaToken=""; window.FLOW_AUTH.renderCaptcha("turnstileRegister",token=>c
 if(role==="trainer" && invite!=="FORJA-TRAINER"){document.getElementById("registerTitle").textContent="Registro de entrenador por invitación";document.getElementById("registerStatus").textContent="Este enlace de entrenador no es válido.";document.getElementById("registerForm").querySelector("button").disabled=true;}
 if(role==="trainer")document.getElementById("backLogin").href="Entrenador/login.html";
 const legalDialog=document.getElementById("legalDialog");let registroPendiente=null;
+document.getElementById("registerForm").addEventListener("submit",()=>{window.FLOW_REGISTRATION_DETAILS={phoneCountry:document.getElementById("phoneCountry").value,phone:document.getElementById("phone").value.trim(),sex:document.getElementById("sex").value,age:Number(document.getElementById("age").value),height:Number(document.getElementById("height").value)};},{capture:true});
 function cerrarDisclaimer(){legalDialog.hidden=true;registroPendiente=null;}
 document.getElementById("rejectLegal").addEventListener("click",()=>{cerrarDisclaimer();document.getElementById("registerStatus").textContent="Debes aceptar el descargo para crear tu cuenta.";});
 document.getElementById("acceptLegal").addEventListener("click",async()=>{const pendiente=registroPendiente;cerrarDisclaimer();if(pendiente)await pendiente();});
