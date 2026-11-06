@@ -2239,6 +2239,12 @@ button{
     margin-top:4px;
 }
 
+#atletaCalentamiento[readonly],
+[data-week-warmup][readonly]{
+    cursor:not-allowed;
+    opacity:.78;
+}
+
 .exercise-video-link:hover,
 .exercise-video-link:focus{
     color:#fff;
