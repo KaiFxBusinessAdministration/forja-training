@@ -21,7 +21,8 @@
         if(expectedRole!=="client") throw error;
         const fullName=data.user.user_metadata?.full_name||data.user.user_metadata?.name||data.user.email?.split("@")[0]||"Atleta";
         const {data:created,error:creationError}=await api.client.from("profiles").insert({id:data.user.id,full_name:fullName,role:"client"}).select("id,full_name,role,age,goal,weight_kg,height_cm,emergency_contact_name,emergency_contact_phone").single();
-        if(creationError) throw creationError; profile=created;
+        if(creationError?.code === "23505") profile=await profileFor(data.user);
+        else if(creationError) throw creationError; else profile=created;
       }
       if(expectedRole && profile.role !== expectedRole){
         await api.client.auth.signOut();
@@ -65,7 +66,8 @@
         if(expectedRole!=="client") throw error;
         const fullName=data.session.user.user_metadata?.full_name||data.session.user.user_metadata?.name||data.session.user.email?.split("@")[0]||"Atleta";
         const {data:created,error:creationError}=await api.client.from("profiles").insert({id:data.session.user.id,full_name:fullName,role:"client"}).select("id,full_name,role,age,goal,weight_kg,height_cm,emergency_contact_name,emergency_contact_phone").single();
-        if(creationError) throw creationError; profile=created;
+        if(creationError?.code === "23505") profile=await profileFor(data.session.user);
+        else if(creationError) throw creationError; else profile=created;
       }
       if(profile.role!==expectedRole){await api.client.auth.signOut();throw new Error("El rol de esta cuenta no corresponde a este acceso.");}
       sessionStorage.setItem("flowAuthRole",profile.role);sessionStorage.setItem("flowAuthProfile",JSON.stringify(profile));return profile;
