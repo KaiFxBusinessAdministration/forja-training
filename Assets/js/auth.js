@@ -44,7 +44,7 @@
     async register({email,password,fullName,role,invite,captchaToken}){
       const api=backend();
       if(!api?.ready) throw new Error("Supabase no está disponible.");
-      const requestedRole=role === "trainer" && invite === "FORJA-TRAINER" ? "trainer" : "client";
+      const requestedRole=role === "trainer" ? "trainer" : "client";
       const details=window.FLOW_REGISTRATION_DETAILS||{};
       const {data,error}=await api.client.auth.signUp({email,password,options:{data:{full_name:fullName,requested_role:requestedRole,phone_country:details.phoneCountry||null,phone:details.phone||null,sex:details.sex||null,age:details.age||null,height_cm:details.height||null},captchaToken}});
       if(error) throw error;
