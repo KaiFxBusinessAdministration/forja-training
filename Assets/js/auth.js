@@ -83,7 +83,7 @@
       if(mount())return;const timer=setInterval(()=>{if(mount())clearInterval(timer);},200);
     },
     destination(role){
-      return role === "client" ? "dashboard.html" : "../Entrenador/dashboard.html";
+      return role === "client" ? "dashboard.html" : role === "admin" ? "../Admin/dashboard.html" : "../Entrenador/dashboard.html";
     }
   };
 })();
