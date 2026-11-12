@@ -43,6 +43,7 @@ Dashboard
 <a href="clientes.html">
 Clientes
 </a>
+<a href="pagos.html">Pagos</a>
 
 <a href="entrenamiento.html">
 Entrenamientos
@@ -119,6 +120,11 @@ Entrenador
 <div><label for="trainerSpecialties">Especialidades</label><input id="trainerSpecialties" maxlength="200" placeholder="Fuerza, hipertrofia, preparación competitiva"></div>
 <div><label for="trainerServiceMode">Modalidad de atención</label><select id="trainerServiceMode"><option value="">Selecciona una opción</option><option>Presencial</option><option>Remoto</option><option>Presencial y remoto</option></select></div>
 <div><label for="trainerLocation">Ciudad o gimnasio</label><input id="trainerLocation" maxlength="160" placeholder="Ciudad, gimnasio o zona de atención"></div>
+<div><label for="trainerFee">Tarifa de mis servicios</label><input id="trainerFee" type="number" min="0" step="0.01" placeholder="0.00"></div>
+<div><label for="trainerFeeFrequency">Frecuencia de cobro</label><select id="trainerFeeFrequency"><option value="">Selecciona una opción</option><option>Por sesión</option><option>Semanal</option><option>Mensual</option></select></div>
+<div><label for="trainerGymIncluded">¿El gimnasio está incluido?</label><select id="trainerGymIncluded"><option value="false">No, se paga aparte</option><option value="true">Sí, está incluido</option></select></div>
+<div><label for="trainerGymFee">Costo del gimnasio si va aparte</label><input id="trainerGymFee" type="number" min="0" step="0.01" placeholder="0.00"></div>
+<div><label for="trainerPaymentTerms">Condiciones de pago</label><textarea id="trainerPaymentTerms" rows="3" maxlength="400" placeholder="Explica qué incluye tu servicio y cuándo se paga."></textarea></div>
 <button class="btn-primary" type="submit">Guardar mis datos</button>
 <p class="form-status" id="trainerProfileStatus" aria-live="polite"></p>
 </form>
@@ -306,9 +312,14 @@ Nueva rutina creada para Ana
     document.getElementById("trainerSpecialties").value=profile.trainer_specialties||"";
     document.getElementById("trainerServiceMode").value=profile.trainer_service_mode||"";
     document.getElementById("trainerLocation").value=profile.trainer_location||"";
+    document.getElementById("trainerFee").value=profile.trainer_fee??"";
+    document.getElementById("trainerFeeFrequency").value=profile.trainer_fee_frequency||"";
+    document.getElementById("trainerGymIncluded").value=String(profile.trainer_gym_included??false);
+    document.getElementById("trainerGymFee").value=profile.trainer_gym_fee??"";
+    document.getElementById("trainerPaymentTerms").value=profile.trainer_payment_terms||"";
     document.getElementById("trainerProfileForm").addEventListener("submit",async event=>{
       event.preventDefault(); status.textContent="Guardando...";
-const {data:updated,error:updateError}=await window.FLOW_BACKEND.client.from("profiles").update({full_name:document.getElementById("trainerFullName").value.trim(),age:Number(document.getElementById("trainerAge").value)||null,emergency_contact_name:document.getElementById("trainerEmergencyName").value.trim()||null,emergency_contact_phone:document.getElementById("trainerPhone").value.trim()||null,trainer_bio:document.getElementById("trainerBio").value.trim()||null,trainer_specialties:document.getElementById("trainerSpecialties").value.trim()||null,trainer_service_mode:document.getElementById("trainerServiceMode").value||null,trainer_location:document.getElementById("trainerLocation").value.trim()||null}).eq("id",user.id).select("full_name,trainer_bio,trainer_specialties,trainer_service_mode,trainer_location").single();
+const {data:updated,error:updateError}=await window.FLOW_BACKEND.client.from("profiles").update({full_name:document.getElementById("trainerFullName").value.trim(),age:Number(document.getElementById("trainerAge").value)||null,emergency_contact_name:document.getElementById("trainerEmergencyName").value.trim()||null,emergency_contact_phone:document.getElementById("trainerPhone").value.trim()||null,trainer_bio:document.getElementById("trainerBio").value.trim()||null,trainer_specialties:document.getElementById("trainerSpecialties").value.trim()||null,trainer_service_mode:document.getElementById("trainerServiceMode").value||null,trainer_location:document.getElementById("trainerLocation").value.trim()||null,trainer_fee:Number(document.getElementById("trainerFee").value)||null,trainer_fee_frequency:document.getElementById("trainerFeeFrequency").value||null,trainer_gym_included:document.getElementById("trainerGymIncluded").value==="true",trainer_gym_fee:Number(document.getElementById("trainerGymFee").value)||null,trainer_payment_terms:document.getElementById("trainerPaymentTerms").value.trim()||null}).eq("id",user.id).select("full_name,trainer_bio,trainer_specialties,trainer_service_mode,trainer_location,trainer_fee,trainer_fee_frequency,trainer_gym_included,trainer_gym_fee,trainer_payment_terms").single();
       if(updateError) throw updateError;
       document.getElementById("trainerWelcome").textContent=`Bienvenido ${updated.full_name}`; document.getElementById("trainerName").textContent=updated.full_name; sessionStorage.setItem("flowAuthProfile",JSON.stringify({...profile,...updated})); status.textContent="Datos guardados y sincronizados.";
     });
