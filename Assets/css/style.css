@@ -2951,3 +2951,4 @@ button{
     padding-top: 12px;
     border-top: 1px solid var(--border-color, rgba(255,255,255,.08));
 }
+html, body { overflow-x: hidden; }
