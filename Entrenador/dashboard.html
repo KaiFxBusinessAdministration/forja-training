@@ -279,6 +279,7 @@ Nueva rutina creada para Ana
 </section>
 
 
+<section class="dashboard-panel"><div class="panel-heading-row"><div><h2>Solicitudes de atletas</h2><p>Acepta o rechaza solicitudes antes de asignar un plan.</p></div></div><div id="trainerRequests" class="activity"><p class="empty-state">Cargando solicitudes...</p></div></section>
 </main>
 
 
@@ -338,6 +339,9 @@ actividad.innerHTML = eventos.concat([...actividad.children].map(elemento=>eleme
 });
 </script>
 
+<script>
+(async()=>{const box=document.getElementById("trainerRequests"),api=window.FLOW_BACKEND;if(!box||!api?.ready)return;try{const user=await api.requireUser();const {data,error}=await api.client.from("trainer_clients").select("client_id,status,created_at,profiles!trainer_clients_client_id_fkey(full_name)").eq("trainer_id",user.id).order("created_at",{ascending:false});if(error)throw error;box.innerHTML=data?.length?data.map(item=>`<article class="activity-item"><div><strong>${item.profiles?.full_name||"Atleta"}</strong><p>Solicitud · Estado: ${item.status}</p></div>${item.status==="pending"?`<div class="form-actions"><button class="btn-primary" data-request-action="active" data-client="${item.client_id}">Aceptar</button><button class="btn-secondary danger" data-request-action="inactive" data-client="${item.client_id}">Rechazar</button></div>`:""}</article>`).join(""):"<p class=\"empty-state\">No hay solicitudes pendientes.</p>";box.querySelectorAll("[data-request-action]").forEach(button=>button.addEventListener("click",async()=>{button.disabled=true;await api.client.from("trainer_clients").update({status:button.dataset.requestAction}).eq("trainer_id",user.id).eq("client_id",button.dataset.client);location.reload();}));}catch(error){console.error(error);box.innerHTML='<p class="empty-state">No se pudieron cargar las solicitudes.</p>';}})();
+</script>
 </body>
 
 </html>
