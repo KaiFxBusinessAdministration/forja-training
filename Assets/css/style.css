@@ -2699,6 +2699,7 @@ button{
     line-height: 0;
 }
 .brand-home { display: block; color: inherit; text-decoration: none; }
+.sidebar .brand-home { padding: 0; margin: 0; background: transparent; }
 .brand-home:focus-visible { outline: 2px solid var(--primary); outline-offset: 4px; border-radius: 4px; }
 
 /* En los portales la marca debe leerse con claridad dentro del sidebar. */
