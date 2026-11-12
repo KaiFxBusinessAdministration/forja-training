@@ -2953,3 +2953,10 @@ button{
     border-top: 1px solid var(--border-color, rgba(255,255,255,.08));
 }
 html, body { overflow-x: hidden; }
+.trainer-profile-editor .client-form { width: 100%; max-width: 720px; box-sizing: border-box; }
+.trainer-profile-editor textarea, .trainer-profile-editor input, .trainer-profile-editor select { max-width: 100%; box-sizing: border-box; resize: vertical; }
+.form-row-inline { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; width: 100%; }
+.form-row-inline > * { min-width: 0; }
+.file-picker-row { display: flex; align-items: center; gap: 10px; width: 100%; }
+.file-picker-row input { flex: 1; min-width: 0; }
+@media (max-width: 640px) { .form-row-inline { grid-template-columns: 1fr; } .file-picker-row { align-items: stretch; flex-direction: column; } }
