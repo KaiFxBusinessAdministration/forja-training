@@ -115,6 +115,10 @@ Entrenador
 <div><label for="trainerAge">Edad</label><input id="trainerAge" type="number" min="18" max="100"></div>
 <div><label for="trainerEmergencyName">Contacto de emergencia</label><input id="trainerEmergencyName"></div>
 <div><label for="trainerPhone">Teléfono de emergencia</label><input id="trainerPhone" type="tel"></div>
+<div><label for="trainerBio">Presentación profesional</label><textarea id="trainerBio" rows="3" maxlength="500" placeholder="Cuéntales a los atletas cómo trabajas."></textarea></div>
+<div><label for="trainerSpecialties">Especialidades</label><input id="trainerSpecialties" maxlength="200" placeholder="Fuerza, hipertrofia, preparación competitiva"></div>
+<div><label for="trainerServiceMode">Modalidad de atención</label><select id="trainerServiceMode"><option value="">Selecciona una opción</option><option>Presencial</option><option>Remoto</option><option>Presencial y remoto</option></select></div>
+<div><label for="trainerLocation">Ciudad o gimnasio</label><input id="trainerLocation" maxlength="160" placeholder="Ciudad, gimnasio o zona de atención"></div>
 <button class="btn-primary" type="submit">Guardar mis datos</button>
 <p class="form-status" id="trainerProfileStatus" aria-live="polite"></p>
 </form>
@@ -297,9 +301,13 @@ Nueva rutina creada para Ana
     document.getElementById("trainerAge").value=profile.age||"";
     document.getElementById("trainerEmergencyName").value=profile.emergency_contact_name||"";
     document.getElementById("trainerPhone").value=profile.emergency_contact_phone||"";
+    document.getElementById("trainerBio").value=profile.trainer_bio||"";
+    document.getElementById("trainerSpecialties").value=profile.trainer_specialties||"";
+    document.getElementById("trainerServiceMode").value=profile.trainer_service_mode||"";
+    document.getElementById("trainerLocation").value=profile.trainer_location||"";
     document.getElementById("trainerProfileForm").addEventListener("submit",async event=>{
       event.preventDefault(); status.textContent="Guardando...";
-      const {data:updated,error:updateError}=await window.FLOW_BACKEND.client.from("profiles").update({full_name:document.getElementById("trainerFullName").value.trim(),age:Number(document.getElementById("trainerAge").value)||null,emergency_contact_name:document.getElementById("trainerEmergencyName").value.trim()||null,emergency_contact_phone:document.getElementById("trainerPhone").value.trim()||null}).eq("id",user.id).select("full_name").single();
+const {data:updated,error:updateError}=await window.FLOW_BACKEND.client.from("profiles").update({full_name:document.getElementById("trainerFullName").value.trim(),age:Number(document.getElementById("trainerAge").value)||null,emergency_contact_name:document.getElementById("trainerEmergencyName").value.trim()||null,emergency_contact_phone:document.getElementById("trainerPhone").value.trim()||null,trainer_bio:document.getElementById("trainerBio").value.trim()||null,trainer_specialties:document.getElementById("trainerSpecialties").value.trim()||null,trainer_service_mode:document.getElementById("trainerServiceMode").value||null,trainer_location:document.getElementById("trainerLocation").value.trim()||null}).eq("id",user.id).select("full_name,trainer_bio,trainer_specialties,trainer_service_mode,trainer_location").single();
       if(updateError) throw updateError;
       document.getElementById("trainerWelcome").textContent=`Bienvenido ${updated.full_name}`; document.getElementById("trainerName").textContent=updated.full_name; sessionStorage.setItem("flowAuthProfile",JSON.stringify({...profile,...updated})); status.textContent="Datos guardados y sincronizados.";
     });
