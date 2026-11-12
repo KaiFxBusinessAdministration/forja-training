@@ -13,6 +13,12 @@ for update to authenticated
 using (trainer_id = auth.uid())
 with check (trainer_id = auth.uid() and status in ('active','inactive','pending'));
 
+drop policy if exists trainer_clients_client_renew on public.trainer_clients;
+create policy trainer_clients_client_renew on public.trainer_clients
+for update to authenticated
+using (client_id = auth.uid())
+with check (client_id = auth.uid() and status = 'pending');
+
 drop policy if exists trainer_profiles_directory_read on public.profiles;
 create policy trainer_profiles_directory_read on public.profiles
 for select to authenticated
