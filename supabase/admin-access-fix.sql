@@ -1,6 +1,13 @@
 -- Reparación de acceso administrativo para Forja-Training.
 -- Ejecutar en el proyecto correcto: upeqqzpilnkqysmgfgcy.
 
+alter table public.profiles
+  add column if not exists trainer_verification_status text not null default 'pending'
+    check (trainer_verification_status in ('pending','verified','rejected')),
+  add column if not exists trainer_certifications text,
+  add column if not exists trainer_certificate_url text,
+  add column if not exists trainer_verification_notes text;
+
 do $$
 declare
   admin_id uuid;
